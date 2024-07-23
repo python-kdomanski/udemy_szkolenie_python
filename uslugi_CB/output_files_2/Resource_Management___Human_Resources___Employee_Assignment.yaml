@@ -1,0 +1,1672 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Resource Management * Human Resources * Employee Assignment
+host: 10.17.202.119:8580
+basePath: /application/api/employee-assignment
+tags:
+- name: business-departments
+  description: Bank's organizational structure
+- name: business-departments / roles
+  description: Role in a bank's organizational unit
+paths:
+  /business-departments:
+    get:
+      tags:
+      - business-departments
+      summary: Get business departments
+      operationId: getAllOfBusinessDepartments
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfBusinessDepartment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - business-departments
+      summary: Add new business department
+      operationId: addNewOfBusinessDepartments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessDepartment'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/BusinessDepartment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{businessDepartmentId}/roles:
+    get:
+      tags:
+      - business-departments / roles
+      summary: Get business department roles
+      operationId: getAllOfBusinessDepartmentsRoles
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfBusinessDepartmentRole'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - business-departments / roles
+      summary: Add new business department role
+      operationId: addNewOfBusinessDepartmentsRoles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessDepartmentRole'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/BusinessDepartmentRole'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{businessDepartmentId}/roles/{id}:
+    get:
+      tags:
+      - business-departments / roles
+      summary: Get business department role
+      operationId: getOneOfBusinessDepartmentsRoles
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartmentRole'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - business-departments / roles
+      summary: Remove business department role
+      operationId: removeOfBusinessDepartmentsRoles
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartmentRole'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{businessDepartmentId}/roles/{id}/editable:
+    post:
+      tags:
+      - business-departments / roles
+      summary: Provide editable version of business department role
+      operationId: provideEditableOfBusinessDepartmentsRoles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartmentRole'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - business-departments / roles
+      summary: Update editable version of business department role
+      operationId: updateEditableOfBusinessDepartmentsRoles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessDepartmentRole'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartmentRole'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{businessDepartmentId}/roles/{id}/editable/accept:
+    post:
+      tags:
+      - business-departments / roles
+      summary: Accept new or edited business department role
+      operationId: acceptEditedOfBusinessDepartmentsRoles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{businessDepartmentId}/roles/{id}/editable/reject:
+    post:
+      tags:
+      - business-departments / roles
+      summary: Reject new or edited business department role
+      operationId: rejectEditedOfBusinessDepartmentsRoles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessDepartmentId
+        in: path
+        description: businessDepartmentId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{id}:
+    get:
+      tags:
+      - business-departments
+      summary: Get business department
+      operationId: getOneOfBusinessDepartments
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - business-departments
+      summary: Remove business department
+      operationId: removeOfBusinessDepartments
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartment'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{id}/editable:
+    post:
+      tags:
+      - business-departments
+      summary: Provide editable version of business department
+      operationId: provideEditableOfBusinessDepartments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - business-departments
+      summary: Update editable version of business department
+      operationId: updateEditableOfBusinessDepartments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/BusinessDepartment'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/BusinessDepartment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{id}/editable/accept:
+    post:
+      tags:
+      - business-departments
+      summary: Accept new or edited business department
+      operationId: acceptEditedOfBusinessDepartments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /business-departments/{id}/editable/reject:
+    post:
+      tags:
+      - business-departments
+      summary: Reject new or edited business department
+      operationId: rejectEditedOfBusinessDepartments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  BusinessDepartment:
+    type: object
+    required:
+    - departmentName
+    - symbol
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      departmentName:
+        type: string
+        description: 'Validations: @Length(max = 200, min = 0) @NotEmpty'
+      deputyOfManagerId:
+        type: integer
+        format: int64
+        description: Deputy manager
+      description:
+        type: string
+        description: Description
+        readOnly: true
+      descriptionId:
+        readOnly: true
+        $ref: '#/definitions/TranslationInfo'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      managerId:
+        type: integer
+        format: int64
+        description: Manager
+      masterId:
+        type: integer
+        format: int64
+      nodeName:
+        type: string
+        readOnly: true
+      symbol:
+        type: string
+        description: 'Symbol
+
+          Validations: @NotEmpty @Length(max = 50, min = 0)'
+      translationId:
+        type: integer
+        format: int64
+        readOnly: true
+      translations:
+        type: object
+        description: 'Map of translations, e.g. {"EN": "Text","PL": "Tekst"}'
+        additionalProperties:
+          type: string
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: BusinessDepartment
+  BusinessDepartmentRole:
+    type: object
+    required:
+    - businessDepartmentId
+    - description
+    - roleType
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      businessDepartmentId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      description:
+        type: string
+        description: 'Description
+
+          Validations: @Length(max = 100, min = 0) @NotEmpty'
+      descriptionId:
+        readOnly: true
+        $ref: '#/definitions/TranslationInfo'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      roleType:
+        type: string
+        description: 'Role type
+
+          Validations: @NotNull'
+        enum:
+        - EMPLOYEE
+        - MANAGER
+      symbol:
+        type: string
+        description: Symbol
+        readOnly: true
+      translationId:
+        type: integer
+        format: int64
+        readOnly: true
+      translations:
+        type: object
+        description: 'Map of translations, e.g. {"EN": "Text","PL": "Tekst"}'
+        additionalProperties:
+          type: string
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: BusinessDepartmentRole
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  EntityState:
+    type: object
+    properties:
+      active:
+        type: boolean
+        readOnly: true
+      canceled:
+        type: boolean
+        readOnly: true
+      copy:
+        type: boolean
+        readOnly: true
+      finished:
+        type: boolean
+        readOnly: true
+      forAccept:
+        type: boolean
+        readOnly: true
+      new:
+        type: boolean
+        readOnly: true
+      source:
+        type: boolean
+        readOnly: true
+    title: EntityState
+  PageOfBusinessDepartment:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/BusinessDepartment'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfBusinessDepartment
+  PageOfBusinessDepartmentRole:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/BusinessDepartmentRole'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfBusinessDepartmentRole
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort
+  TranslationInfo:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      property:
+        type: string
+    title: TranslationInfo

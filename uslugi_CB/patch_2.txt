@@ -1,0 +1,3 @@
+#PATCH http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}
+PATCH {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions/{{pricing_cond_id}}/editable
+PATCH {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions/{{pricing_cond_id}}/editable

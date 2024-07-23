@@ -1,0 +1,6185 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Resource Management * Human Resources * Employee Access
+host: 10.17.202.119:8580
+basePath: /application/api/employee-access
+tags:
+- name: access-profiles
+  description: Sand Box Access Profile Controller
+- name: access-profiles / items
+  description: Permission for operation
+- name: access-profiles / login-profiles
+  description: Assigned profiles
+- name: access-profiles / operation-accesses
+  description: GL permission dictionary
+- name: authority-for-change-interest-rate
+  description: Competence to change interest rates
+- name: authority-for-operation
+  description: Permission to accept documents in products
+- name: authority-for-operation-amount
+  description: Permission to accept documents in products - amounts
+- name: authority-for-operation-message
+  description: Permission to accept documents in products - messages
+- name: connections-profiles
+  description: Managing the access profile
+- name: employee-actions
+  description: Register of actions in a session
+- name: failed-login-attempts
+  description: Register of failed login attempts
+- name: view-accesses
+  description: view accesses logs
+- name: work-sessions
+  description: Work session is a kind of a clamp fastening the employee activity between
+    her login and logout (or unexpected interruption)
+paths:
+  /access-profiles:
+    get:
+      tags:
+      - access-profiles
+      summary: Get all profiles
+      operationId: getAllOfAccessProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfAccessProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/operation-accesses:
+    get:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Get operation accesses
+      operationId: getAllOfAccessProfilesOperationAccesses
+      produces:
+      - '*/*'
+      parameters:
+      - name: moduleId
+        in: query
+        description: moduleId
+        required: false
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: predefined
+        in: query
+        description: predefined
+        required: false
+        type: boolean
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfOperationAccess'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Add new operation access
+      operationId: addNewOfAccessProfilesOperationAccesses
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/OperationAccess'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/OperationAccess'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/operation-accesses/{id}:
+    get:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Get operation access
+      operationId: getOneOfAccessProfilesOperationAccesses
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OperationAccess'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Remove operation access
+      operationId: removeOfAccessProfilesOperationAccesses
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OperationAccess'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/operation-accesses/{id}/editable:
+    post:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Provide editable version of operation access
+      operationId: provideEditableOfAccessProfilesOperationAccesses
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OperationAccess'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Update editable version of operation access
+      operationId: updateEditableOfAccessProfilesOperationAccesses
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/OperationAccess'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OperationAccess'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/operation-accesses/{id}/editable/accept:
+    post:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Accept new or edited operation access
+      operationId: acceptEditedOfAccessProfilesOperationAccesses
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/operation-accesses/{id}/editable/reject:
+    post:
+      tags:
+      - access-profiles / operation-accesses
+      summary: Reject new or edited operation access
+      operationId: rejectEditedOfAccessProfilesOperationAccesses
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/sandbox:
+    get:
+      tags:
+      - access-profiles
+      summary: Get access profiles for SANDBOX users
+      operationId: getAllOfAccessProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SandBoxAccessProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{accessProfileId}/items:
+    get:
+      tags:
+      - access-profiles / items
+      summary: Get access profile items
+      operationId: getAllOfAccessProfilesItems
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfAccessProfileItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{accessProfileId}/items/{id}:
+    get:
+      tags:
+      - access-profiles / items
+      summary: Get access profile item
+      operationId: getOneOfAccessProfilesItems
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessProfileItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{accessProfileId}/login-profiles:
+    get:
+      tags:
+      - access-profiles / login-profiles
+      summary: Get login profiles
+      operationId: getAllOfAccessProfilesLoginProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLoginProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - access-profiles / login-profiles
+      summary: Add new login profile
+      operationId: addNewOfAccessProfilesLoginProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/LoginProfile'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/LoginProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{accessProfileId}/login-profiles/{id}:
+    get:
+      tags:
+      - access-profiles / login-profiles
+      summary: Get login profile
+      operationId: getOneOfAccessProfilesLoginProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - access-profiles / login-profiles
+      summary: Remove login profile
+      operationId: removeOfAccessProfilesLoginProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginProfile'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{accessProfileId}/login-profiles/{id}/editable:
+    post:
+      tags:
+      - access-profiles / login-profiles
+      summary: Provide editable version of login profile
+      operationId: provideEditableOfAccessProfilesLoginProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - access-profiles / login-profiles
+      summary: Update editable version of login profile
+      operationId: updateEditableOfAccessProfilesLoginProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/LoginProfile'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{accessProfileId}/login-profiles/{id}/editable/accept:
+    post:
+      tags:
+      - access-profiles / login-profiles
+      summary: Accept new or edited login profile
+      operationId: acceptEditedOfAccessProfilesLoginProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{accessProfileId}/login-profiles/{id}/editable/reject:
+    post:
+      tags:
+      - access-profiles / login-profiles
+      summary: Reject new or edited login profile
+      operationId: rejectEditedOfAccessProfilesLoginProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: accessProfileId
+        in: path
+        description: accessProfileId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /access-profiles/{id}:
+    get:
+      tags:
+      - access-profiles
+      summary: Get profile
+      operationId: getOneOfAccessProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation:
+    get:
+      tags:
+      - authority-for-operation
+      summary: Get all authority for operation by product type
+      operationId: getAllOfAuthorityForOperation
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: productType
+        in: query
+        description: productType
+        required: true
+        type: string
+        enum:
+        - CREDIT
+        - CREDIT_LINE
+        - CURRENT_ACCOUNT
+        - DEPOSIT
+        - FACTORING
+        - SPECIAL_ACCOUNT
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfAuthorityForOperation'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - authority-for-operation
+      summary: Add new authority for operation
+      operationId: addNewAuthorityForOperationOfAuthorityForOperation
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorityForOperation'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/AuthorityForOperation'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation/amount:
+    get:
+      tags:
+      - authority-for-operation-amount
+      summary: Get all threshold by authority for operation Id
+      operationId: getAllOfAuthorityForOperationAmount
+      produces:
+      - '*/*'
+      parameters:
+      - name: authorityForOperationId
+        in: query
+        description: authorityForOperationId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfAuthorityForOperationAmountConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - authority-for-operation-amount
+      summary: Add new authority for operation amount threshold
+      operationId: addNewAuthorityForOperationAmountConstraintOfAuthorityForOperationAmount
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorityForOperationAmountConstraint'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/AuthorityForOperationAmountConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation/amount/{id}:
+    get:
+      tags:
+      - authority-for-operation-amount
+      summary: Get authority for operation amount threshold
+      operationId: getOneOfAuthorityForOperationAmount
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForOperationAmountConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - authority-for-operation-amount
+      summary: Remove authority for operation amount threshold
+      operationId: removeOfAuthorityForOperationAmount
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForOperationAmountConstraint'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation/amount/{id}/editable:
+    patch:
+      tags:
+      - authority-for-operation-amount
+      summary: Update editable version of authority for operation amount threshold
+      operationId: updateEditableOfAuthorityForOperationAmount
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorityForOperationAmountConstraint'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForOperationAmountConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation/message:
+    get:
+      tags:
+      - authority-for-operation-message
+      summary: Get all messages by authority for operation id
+      operationId: getAllOfAuthorityForOperationMessage
+      produces:
+      - '*/*'
+      parameters:
+      - name: authorityForOperationId
+        in: query
+        description: authorityForOperationId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfAuthorityForOperationMessageConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - authority-for-operation-message
+      summary: Add new authority for operation message
+      operationId: addNewAuthorityForOperationMessageConstraintOfAuthorityForOperationMessage
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorityForOperationMessageConstraint'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/AuthorityForOperationMessageConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation/message/{id}:
+    get:
+      tags:
+      - authority-for-operation-message
+      summary: Get authority for operation message
+      operationId: getOneOfAuthorityForOperationMessage
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForOperationMessageConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - authority-for-operation-message
+      summary: Remove authority for operation message
+      operationId: removeOfAuthorityForOperationMessage
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForOperationMessageConstraint'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation/message/{id}/editable:
+    patch:
+      tags:
+      - authority-for-operation-message
+      summary: Update editable version of authority for operation message
+      operationId: updateEditableOfAuthorityForOperationMessage
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorityForOperationMessageConstraint'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForOperationMessageConstraint'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /authority-for-operation/{id}:
+    get:
+      tags:
+      - authority-for-operation
+      summary: Get authority for operation
+      operationId: getOneOfAuthorityForOperation
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForOperation'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /connection-profiles:
+    get:
+      tags:
+      - connections-profiles
+      summary: Get connection profiles
+      operationId: getAllOfConnectionsProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfConnectionProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - connections-profiles
+      summary: Add new connection profile
+      operationId: addNewOfConnectionsProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/ConnectionProfile'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/ConnectionProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /connection-profiles/{id}:
+    get:
+      tags:
+      - connections-profiles
+      summary: Get connection profile
+      operationId: getOneOfConnectionsProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConnectionProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - connections-profiles
+      summary: Remove connection profile
+      operationId: removeOfConnectionsProfiles
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConnectionProfile'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /connection-profiles/{id}/editable:
+    post:
+      tags:
+      - connections-profiles
+      summary: Provide editable version of connection profile
+      operationId: provideEditableOfConnectionsProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConnectionProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - connections-profiles
+      summary: Update editable version of connection profile
+      operationId: updateEditableOfConnectionsProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/ConnectionProfile'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConnectionProfile'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /connection-profiles/{id}/editable/accept:
+    post:
+      tags:
+      - connections-profiles
+      summary: Accept new or edited connection profile
+      operationId: acceptEditedOfConnectionsProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /connection-profiles/{id}/editable/reject:
+    post:
+      tags:
+      - connections-profiles
+      summary: Reject new or edited connection profile
+      operationId: rejectEditedOfConnectionsProfiles
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /employee-actions:
+    get:
+      tags:
+      - employee-actions
+      summary: Get many employee actions
+      operationId: getAllOfEmployeeActions
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfEmployeeAction'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /employee-actions/{id}:
+    get:
+      tags:
+      - employee-actions
+      summary: Get employee action
+      operationId: getOneOfEmployeeActions
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EmployeeAction'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /failed-login-attempts:
+    get:
+      tags:
+      - failed-login-attempts
+      summary: Get many failed login attempts
+      operationId: getManyOfFailedLoginAttempts
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfFailedLoginAttempt'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /failed-login-attempts/{id}:
+    get:
+      tags:
+      - failed-login-attempts
+      summary: Get failed login attempt
+      operationId: getOneOfFailedLoginAttempts
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/FailedLoginAttempt'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /interest-rates/authorities:
+    get:
+      tags:
+      - authority-for-change-interest-rate
+      summary: Get all authorities for change interest rate
+      operationId: getAllOfAuthorityForChangeInterestRate
+      produces:
+      - '*/*'
+      parameters:
+      - name: operationAccess
+        in: query
+        description: Operation access symbol
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfAuthorityForChangeInterestRate'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - authority-for-change-interest-rate
+      summary: Add new authority for change interest rate
+      operationId: addNewAuthorityForOperationOfAuthorityForChangeInterestRate
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/AuthorityForChangeInterestRate'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/AuthorityForChangeInterestRate'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /interest-rates/authorities/{id}:
+    get:
+      tags:
+      - authority-for-change-interest-rate
+      summary: Get authority for change interest rate
+      operationId: getOneOfAuthorityForChangeInterestRate
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForChangeInterestRate'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - authority-for-change-interest-rate
+      summary: Delete authority for change interest rate
+      operationId: deleteOfAuthorityForChangeInterestRate
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/AuthorityForChangeInterestRate'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /interest-rates/authorities/{id}/editable/accept:
+    post:
+      tags:
+      - authority-for-change-interest-rate
+      summary: Accept new or edited authority for change interest rate
+      operationId: acceptEditedOfAuthorityForChangeInterestRate
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /interest-rates/authorities/{id}/editable/reject:
+    post:
+      tags:
+      - authority-for-change-interest-rate
+      summary: Reject new or edited authority for change interest rate
+      operationId: rejectEditedOfAuthorityForChangeInterestRate
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /view-accesses:
+    get:
+      tags:
+      - view-accesses
+      summary: Get all view access logs
+      operationId: getAllOfViewAccesses
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfViewAccessLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /view-accesses/{id}:
+    get:
+      tags:
+      - view-accesses
+      summary: Get view access log
+      operationId: getOneOfViewAccesses
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ViewAccessLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /work-sessions/active:
+    get:
+      tags:
+      - work-sessions
+      summary: Get active employee work sessions
+      operationId: getManyActiveOfWorkSessions
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfActiveEmployeeWorkSession'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /work-sessions/closed:
+    get:
+      tags:
+      - work-sessions
+      summary: Get closed employee work sessions
+      operationId: getManyClosedOfWorkSessions
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfClosedEmployeeWorkSession'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /work-sessions/{id}:
+    get:
+      tags:
+      - work-sessions
+      summary: Get employee work session
+      operationId: getOneOfWorkSessions
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EmployeeWorkSession'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  AccessProfile:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      authority:
+        type: string
+        description: 'Dictionary: OperationAccessItem (OPERATION_ACCESSES)'
+        readOnly: true
+      description:
+        type: string
+        description: 'Description
+
+          Description of dictionary entry'
+      descriptionId:
+        readOnly: true
+        $ref: '#/definitions/TranslationInfo'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      operationAccess:
+        type: string
+        description: 'Symbol of operation access item
+
+
+          Dictionary: OperationAccessItem (OPERATION_ACCESSES)'
+      symbol:
+        type: string
+        description: 'Symbol
+
+          Symbol of dictionary Validations: @Length(max = 15, min = 0)'
+      translated:
+        type: string
+        readOnly: true
+      translationId:
+        type: integer
+        format: int64
+        readOnly: true
+      translations:
+        type: object
+        description: 'Map of translations, e.g. {"EN": "Text","PL": "Tekst"}'
+        additionalProperties:
+          type: string
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: AccessProfile
+  AccessProfileItem:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      accessProfile:
+        type: string
+        description: 'Dictionary: UserProfileItem (USER_PROFILES)'
+      appId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      guiauthority:
+        type: string
+        readOnly: true
+        enum:
+        - ALL
+        - NGUI
+        - OGUI
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      operationAccess:
+        description: 'Authorization
+
+          Operation access dictionary'
+        $ref: '#/definitions/OperationAccess'
+      operationLevel:
+        type: integer
+        format: int32
+        description: Access level
+      urlAccess:
+        $ref: '#/definitions/UrlAccess'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: AccessProfileItem
+  ActiveEmployeeWorkSession:
+    type: object
+    required:
+    - application
+    - host
+    - login
+    - loginTime
+    - serialNo
+    - sid
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      application:
+        type: string
+        description: 'Application
+
+          Validations: @NotNull'
+        enum:
+        - NGUI
+        - OGUI
+        - SCORPION
+      businessUnit:
+        type: string
+        description: 'Dictionary: BusinessUnitItem (BANK_UNITS)'
+      contractId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+      employeeLoginUnitId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      exitType:
+        type: string
+        readOnly: true
+        enum:
+        - DISCONNECT
+        - LOGOUT
+      host:
+        type: string
+        description: 'Desk IP address
+
+          Validations: @Length(max = 50, min = 0) @NotNull'
+      iasHost:
+        type: string
+        description: 'Server IP address
+
+          Validations: @Length(max = 50, min = 0)'
+      id:
+        type: integer
+        format: int64
+        description: Identifier of session
+        readOnly: true
+      lastChangeTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Date and time of the last change
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      login:
+        type: string
+        description: 'Login
+
+          Validations: @Length(max = 30, min = 0) @NotNull'
+      loginDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      loginTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: 'Date and time of entry
+
+          Validations: @NotNull'
+      logoutTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      serialNo:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      sid:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: ActiveEmployeeWorkSession
+  AuthorityForChangeInterestRate:
+    type: object
+    required:
+    - interestRateRange
+    - operationAccess
+    - rightsLevel
+    - symbol
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      interestRateRange:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/PercentRange'
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      operationAccess:
+        type: string
+        description: 'Competence to change interest rates
+
+          Validations: @NotNull
+
+
+          Dictionary: OperationAccessItem (OPERATION_ACCESSES)'
+      rightsLevel:
+        type: integer
+        format: int64
+        description: 'Level
+
+          Validations: @NotNull'
+      symbol:
+        type: string
+        description: 'Symbol
+
+          Validations: @NotNull'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: AuthorityForChangeInterestRate
+  AuthorityForOperation:
+    type: object
+    required:
+    - currencyConversionRequired
+    - operationAccess
+    - productType
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      currencyConversionRequired:
+        type: boolean
+        description: 'FX
+
+          Validations: @NotNull'
+      documentGroup:
+        type: string
+        description: 'Group of documents and orders
+
+          Dictionary: DocumentGroupItem (DIC_DOCUMENTS_GROUPS)'
+      entityType:
+        type: string
+        readOnly: true
+      functionalArea:
+        type: string
+        description: 'Functional area
+
+          Dictionary: FunctionalAreaItem (DIC_FUNCTIONAL_AREAS)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      operationAccess:
+        type: string
+        description: 'Permission
+
+          Validations: @NotNull
+
+
+          Dictionary: OperationAccessItem (OPERATION_ACCESSES)'
+      ownAccountType:
+        type: string
+        description: 'Own account type
+
+          Dictionary: OwnAccountTypeItem (ACCOUNTS_OWN_TYPES)'
+      productId:
+        type: integer
+        format: int64
+        description: Product
+      productType:
+        type: string
+        description: 'Type
+
+          Validations: @NotNull'
+        enum:
+        - CREDIT
+        - CREDIT_LINE
+        - CURRENT_ACCOUNT
+        - DEPOSIT
+        - FACTORING
+        - SPECIAL_ACCOUNT
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: AuthorityForOperation
+  AuthorityForOperationAmountConstraint:
+    type: object
+    required:
+    - acceptRightLevel
+    - authorityForOperationId
+    - threshold
+    - twoPhaseAcceptNeeded
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      acceptRightLevel:
+        type: integer
+        format: int64
+        description: 'Permission level for acceptance
+
+          Validations: @NotNull @Max(value = 99) @Min(value = 1)'
+        minimum: 1
+        maximum: 99
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      authorityForOperationId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      changedViaAccessChannel:
+        type: string
+        description: 'Channel
+
+          Dictionary: AccessChannelItem (DIC_CHANNEL_CONTR_ACCESS)'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      insertRightLevel:
+        type: integer
+        format: int64
+        description: 'Permission level for an entry
+
+          Validations: @Max(value = 99) @Min(value = 1)'
+        minimum: 1
+        maximum: 99
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      threshold:
+        description: 'Permissions for amounts above
+
+          Validations: @MoneyMin(inclusive = true, value = 0.0) @NotNull'
+        $ref: '#/definitions/Money'
+      twoPhaseAcceptNeeded:
+        type: boolean
+        description: "Always second-party acceptance \nValidations: @NotNull"
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: AuthorityForOperationAmountConstraint
+  AuthorityForOperationMessageConstraint:
+    type: object
+    required:
+    - acceptMessagePurpose
+    - authorityForOperationId
+    - messageId
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      acceptMessagePurpose:
+        type: string
+        description: 'Destination
+
+          Validations: @NotNull'
+        enum:
+        - INSUFFICIENT_LEVEL_OF_AUTHORITY_WHEN_INSERTING_A_DOCUMENT
+        - INSUFFICIENT_LEVEL_OF_AUTHORITY_WHEN_ISSUING_A_DOCUMENT
+        - NO_PERMISSION_WHEN_ACCEPTING_A_DOCUMENT
+        - NO_PERMISSION_WHEN_INSERTING_DOCUMENT
+      authorityForOperationId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      messageId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      text:
+        type: string
+        description: Message content
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: AuthorityForOperationMessageConstraint
+  ClosedEmployeeWorkSession:
+    type: object
+    required:
+    - application
+    - host
+    - login
+    - loginTime
+    - serialNo
+    - sid
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      application:
+        type: string
+        description: 'Application
+
+          Validations: @NotNull'
+        enum:
+        - NGUI
+        - OGUI
+        - SCORPION
+      businessUnit:
+        type: string
+        description: 'Dictionary: BusinessUnitItem (BANK_UNITS)'
+      contractId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+      employeeLoginUnitId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      exitType:
+        type: string
+        description: Exit kind
+        enum:
+        - DISCONNECT
+        - LOGOUT
+      host:
+        type: string
+        description: 'Desk IP address
+
+          Validations: @Length(max = 50, min = 0) @NotNull'
+      iasHost:
+        type: string
+        description: 'Server IP address
+
+          Validations: @Length(max = 50, min = 0)'
+      id:
+        type: integer
+        format: int64
+        description: Identifier of session
+        readOnly: true
+      lastChangeTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Date and time of the last change
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      login:
+        type: string
+        description: 'Login
+
+          Validations: @Length(max = 30, min = 0) @NotNull'
+      loginDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      loginTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: 'Date and time of entry
+
+          Validations: @NotNull'
+      logoutTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Date and time of exit
+      serialNo:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      sid:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: ClosedEmployeeWorkSession
+  ConnectionProfile:
+    type: object
+    required:
+    - profilePasswordLimit
+    - symbol
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      description:
+        type: string
+        description: 'Description
+
+          Validations: @Length(max = 300, min = 0)'
+      descriptionId:
+        readOnly: true
+        $ref: '#/definitions/TranslationInfo'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      isDefault:
+        type: boolean
+        description: Default profile
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      profilePasswordLimit:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/ProfilePasswordLimit'
+      symbol:
+        type: string
+        description: 'Symbol
+
+          Validations: @NotNull @Length(max = 30, min = 0)'
+      translated:
+        type: string
+        readOnly: true
+      translationId:
+        type: integer
+        format: int64
+        readOnly: true
+      translations:
+        type: object
+        description: 'Map of translations, e.g. {"EN": "Text","PL": "Tekst"}'
+        additionalProperties:
+          type: string
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: ConnectionProfile
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  EmployeeAction:
+    type: object
+    properties:
+      actionSubjectId:
+        type: integer
+        format: int64
+      actionTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Date and time
+      actionType:
+        type: string
+        description: 'Action type
+
+          Dictionary: EmployeeActionTypeItem (DIC_INTERAPP_ACTION_TYPES)'
+      details:
+        type: string
+      employeeWorkSessionId:
+        type: integer
+        format: int64
+      entityId:
+        type: integer
+        format: int64
+      entityName:
+        type: string
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      subjectType:
+        type: string
+    title: EmployeeAction
+  EmployeeWorkSession:
+    type: object
+    required:
+    - application
+    - host
+    - login
+    - loginTime
+    - serialNo
+    - sid
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      application:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - NGUI
+        - OGUI
+        - SCORPION
+      businessUnit:
+        type: string
+        description: 'Dictionary: BusinessUnitItem (BANK_UNITS)'
+      contractId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+      employeeLoginUnitId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      exitType:
+        type: string
+        readOnly: true
+        enum:
+        - DISCONNECT
+        - LOGOUT
+      host:
+        type: string
+        description: 'Validations: @Length(max = 50, min = 0) @NotNull'
+      iasHost:
+        type: string
+        description: 'Validations: @Length(max = 50, min = 0)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangeTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      login:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0) @NotNull'
+      loginDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      loginTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: 'Validations: @NotNull'
+      logoutTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      serialNo:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      sid:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: EmployeeWorkSession
+  EntityData:
+    type: object
+    properties:
+      forAccept:
+        type: boolean
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      inputStatus:
+        type: integer
+        format: int32
+      inputVersion:
+        type: integer
+        format: int32
+      outputStatus:
+        type: integer
+        format: int32
+      outputVersion:
+        type: integer
+        format: int32
+      type:
+        type: string
+    title: EntityData
+  EntityState:
+    type: object
+    properties:
+      active:
+        type: boolean
+        readOnly: true
+      canceled:
+        type: boolean
+        readOnly: true
+      copy:
+        type: boolean
+        readOnly: true
+      finished:
+        type: boolean
+        readOnly: true
+      forAccept:
+        type: boolean
+        readOnly: true
+      new:
+        type: boolean
+        readOnly: true
+      source:
+        type: boolean
+        readOnly: true
+    title: EntityState
+  FailedLoginAttempt:
+    type: object
+    properties:
+      eventTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Date and time
+      host:
+        type: string
+        description: Address
+      iasHost:
+        type: string
+        description: Server address
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      infoSource:
+        type: string
+        enum:
+        - INTERAPP_FAILED_LOGINS
+        - UNIFIED_AUDIT_TRAIL
+      login:
+        type: string
+        description: Provided username
+      result:
+        type: string
+      resultDescription:
+        type: string
+        readOnly: true
+    title: FailedLoginAttempt
+  LoginProfile:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      accessProfile:
+        type: string
+        description: 'Profile
+
+          Dictionary: UserProfileItem (USER_PROFILES)'
+      appId:
+        type: integer
+        format: int64
+      employeeLoginUnitId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      guiauthority:
+        type: string
+        readOnly: true
+        enum:
+        - ALL
+        - NGUI
+        - OGUI
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      operationAccess:
+        type: string
+        description: 'Operation symbol
+
+          Dictionary: OperationAccessItem (OPERATION_ACCESSES)'
+      operationLevel:
+        type: integer
+        format: int32
+        description: Access level
+      operationSymbol:
+        type: string
+        description: Operation symbol
+        readOnly: true
+      urlAccess:
+        $ref: '#/definitions/UrlAccess'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: LoginProfile
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @NotNull'
+      currency:
+        type: string
+        description: 'Validations: @NotNull'
+    title: Money
+  OperationAccess:
+    type: object
+    required:
+    - symbol
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      description:
+        type: string
+        description: 'Description
+
+          Description of dictionary entry Validations: @Length(max = 100, min = 0)'
+      descriptionId:
+        readOnly: true
+        $ref: '#/definitions/TranslationInfo'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      isRightForBlockades:
+        type: boolean
+      isRightForNegotiation:
+        type: boolean
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      module:
+        type: string
+        description: 'Dictionary: ModuleItem (DIC_MODULES)'
+      moduleCB:
+        type: string
+        description: 'Module
+
+          Dictionary: ModuleCBItem (DIC_CB_MODULES)'
+      predefined:
+        type: boolean
+      symbol:
+        type: string
+        description: 'Symbol
+
+          Symbol of dictionary Validations: @Length(max = 20, min = 0) @NotBlank'
+      translated:
+        type: string
+        readOnly: true
+      translationId:
+        type: integer
+        format: int64
+        readOnly: true
+      translations:
+        type: object
+        description: 'Map of translations, e.g. {"EN": "Text","PL": "Tekst"}'
+        additionalProperties:
+          type: string
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: OperationAccess
+  PageOfAccessProfile:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/AccessProfile'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfAccessProfile
+  PageOfAccessProfileItem:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/AccessProfileItem'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfAccessProfileItem
+  PageOfActiveEmployeeWorkSession:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/ActiveEmployeeWorkSession'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfActiveEmployeeWorkSession
+  PageOfAuthorityForChangeInterestRate:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/AuthorityForChangeInterestRate'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfAuthorityForChangeInterestRate
+  PageOfAuthorityForOperation:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/AuthorityForOperation'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfAuthorityForOperation
+  PageOfAuthorityForOperationAmountConstraint:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/AuthorityForOperationAmountConstraint'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfAuthorityForOperationAmountConstraint
+  PageOfAuthorityForOperationMessageConstraint:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/AuthorityForOperationMessageConstraint'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfAuthorityForOperationMessageConstraint
+  PageOfClosedEmployeeWorkSession:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/ClosedEmployeeWorkSession'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfClosedEmployeeWorkSession
+  PageOfConnectionProfile:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/ConnectionProfile'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfConnectionProfile
+  PageOfEmployeeAction:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/EmployeeAction'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfEmployeeAction
+  PageOfFailedLoginAttempt:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/FailedLoginAttempt'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfFailedLoginAttempt
+  PageOfLoginProfile:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/LoginProfile'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfLoginProfile
+  PageOfOperationAccess:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/OperationAccess'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfOperationAccess
+  PageOfViewAccessLog:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/ViewAccessLog'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfViewAccessLog
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  PercentRange:
+    type: object
+    properties:
+      max:
+        type: number
+        description: 'Validations: @PositiveOrZero @DecimalMax(inclusive = true, value
+          = 100)'
+        maximum: 100
+        exclusiveMaximum: false
+      min:
+        type: number
+        description: 'Validations: @PositiveOrZero @DecimalMax(inclusive = true, value
+          = 100)'
+        maximum: 100
+        exclusiveMaximum: false
+    title: PercentRange
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  ProfilePasswordLimit:
+    type: object
+    required:
+    - passwordMinLength
+    properties:
+      failedLoginAttempts:
+        type: integer
+        format: int64
+        description: 'Validations: @Min(value = 0) @Max(value = 9999)'
+        minimum: 0
+        maximum: 9999
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      passwordAdvancementLevel:
+        type: string
+        enum:
+        - PASSOWRD_REQUIRES_LOWERCASE_UPPERCASE_LETTERS_AND_SPECIAL_CHARACTERS
+        - PASSOWRD_REQUIRES_LOWERCASE_UPPERCASE_LETTERS_OR_DIGITS_OR_SPECIAL_CHARACTERS
+        - PASSSWORD_DOES_NOT_REQUIRE_DIGITS_SPECIAL_CHARACTERS_OR_UPPERCASE_LETTERS
+        - PASSWORD_REQUIRES_LOWERCASE_AND_UPPERCASE_LETTERS
+        - PASSWORD_REQUIRES_LOWERCASE_UPPERCASE_LATTERS_AND_DIGITS
+        - PASSWORD_REQUIRES_SPECIAL_CHARACTERS_DIGITS_UPPERCASE_AND_LOWERCASE_LETTERS
+      passwordGraceTime:
+        type: integer
+        format: int64
+        description: 'Validations: @Min(value = 0) @Max(value = 9999)'
+        minimum: 0
+        maximum: 9999
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      passwordLifeTime:
+        type: integer
+        format: int64
+        description: 'Validations: @Min(value = 0) @Max(value = 9999)'
+        minimum: 0
+        maximum: 9999
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      passwordLockTime:
+        type: integer
+        format: int64
+        description: 'Validations: @Min(value = 0) @Max(value = 9999)'
+        minimum: 0
+        maximum: 9999
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      passwordLockTimeScale:
+        type: string
+        enum:
+        - DAYS
+        - HOURS
+        - MINUTES
+        - SECONDS
+      passwordLoginPart:
+        type: boolean
+      passwordMinLength:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull @Min(value = 0) @Max(value = 30)'
+        minimum: 0
+        maximum: 30
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      passwordReuseMax:
+        type: integer
+        format: int64
+        description: 'Validations: @Min(value = 0) @Max(value = 9999)'
+        minimum: 0
+        maximum: 9999
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      passwordReuseTime:
+        type: integer
+        format: int64
+        description: 'Validations: @Min(value = 0) @Max(value = 9999)'
+        minimum: 0
+        maximum: 9999
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+    title: ProfilePasswordLimit
+  SandBoxAccessProfile:
+    type: object
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      symbol:
+        type: string
+    title: SandBoxAccessProfile
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort
+  TranslationInfo:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      property:
+        type: string
+    title: TranslationInfo
+  UrlAccess:
+    type: object
+    properties:
+      link:
+        type: string
+    title: UrlAccess
+  ViewAccessLog:
+    type: object
+    properties:
+      employeeWorkSessionId:
+        type: integer
+        format: int64
+      entityData:
+        $ref: '#/definitions/EntityData'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      viewData:
+        $ref: '#/definitions/ViewData'
+    title: ViewAccessLog
+  ViewData:
+    type: object
+    properties:
+      closeTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      entryTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      mode:
+        type: string
+        enum:
+        - ACCEPT
+        - ADD
+        - AUDIT_VIEW
+        - EDIT
+        - NON_ACTIVE_VIEW
+        - SELECT_VIEW
+        - VIEW
+      name:
+        type: string
+        description: 'Validations: @Length(max = 80, min = 0)'
+      parameters:
+        type: string
+        description: 'Validations: @Length(max = 500, min = 0)'
+      stack:
+        type: string
+        description: 'Validations: @Length(max = 800, min = 0)'
+      state:
+        type: string
+        description: 'Validations: @Length(max = 20, min = 0)'
+        enum:
+        - CLOSED
+        - OPEN
+    title: ViewData

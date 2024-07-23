@@ -1,0 +1,369 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Products * Cards * Credit/Charge Card 2
+host: 10.17.202.119:8580
+basePath: /application/api/credit-charge-card-2
+tags:
+- name: credit-charge-card-2
+  description: Credit charge cards 2
+paths:
+  /system-information/application:
+    get:
+      tags:
+      - credit-charge-card-2
+      summary: Gets information about the application
+      operationId: getApplicationInformationOfCreditChargeCard2
+      produces:
+      - '*/*'
+      parameters:
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationInformation'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /updateCard:
+    post:
+      tags:
+      - credit-charge-card-2
+      summary: Add new or update existing card
+      operationId: updateCardOfCreditChargeCard2
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: body
+        description: body
+        required: true
+        schema:
+          $ref: '#/definitions/Body'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/UpdateCardResponse'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  ApplicationInformation:
+    type: object
+    properties:
+      buildTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      responseHeader:
+        $ref: '#/definitions/ResponseHeader'
+      version:
+        type: string
+    title: ApplicationInformation
+  Body:
+    type: object
+    properties:
+      cardData:
+        $ref: '#/definitions/CardData'
+      requestHeader:
+        $ref: '#/definitions/RequestHeader'
+    title: Body
+  CardData:
+    type: object
+    properties:
+      endRelationDate:
+        type: string
+      idCustomer:
+        type: string
+      p10TypKarty:
+        type: string
+      p11Wydawca:
+        type: string
+      p12IdentyfikatorProfiluOplat:
+        type: string
+      p13NazwaProfiluOplat:
+        type: string
+      p14StatusKarty:
+        type: string
+      p15StatusISOKarty:
+        type: string
+      p16LimitMiesiecznyKarty:
+        type: string
+      p17LimitMiesiecznyRachunkuKarty:
+        type: string
+      p18LimitDziennyLaczny:
+        type: string
+      p19LimitDziennyGotowkowy:
+        type: string
+      p20LimitDziennyBezgotowkwy:
+        type: string
+      p21DataZlozeniaWniosku:
+        type: string
+      p22DataProdukcji:
+        type: string
+      p23DataWaznosci:
+        type: string
+      p24DataZastrzezenia:
+        type: string
+      p25FlagaAktywnosci:
+        type: string
+      p26Imie:
+        type: string
+      p27Nazwisko:
+        type: string
+      p28PESEL:
+        type: string
+      p29DataUrodzenia:
+        type: string
+      p2NumerKarty:
+        type: string
+      p30MiejsceUrodzenia:
+        type: string
+      p31NazwiskoRodoweMatki:
+        type: string
+      p32NumerDowodu:
+        type: string
+      p33NumerPaszportu:
+        type: string
+      p34AKUlica:
+        type: string
+      p35AKMiasto:
+        type: string
+      p36AKKodPocztowy:
+        type: string
+      p37AKPoczta:
+        type: string
+      p38AKKraj:
+        type: string
+      p39AZUlica:
+        type: string
+      p3StatusBICISOKarty:
+        type: string
+      p40AZMiasto:
+        type: string
+      p41AZKodPocztowy:
+        type: string
+      p42AZPoczta:
+        type: string
+      p43AZKraj:
+        type: string
+      p44Telefon:
+        type: string
+      p45Email:
+        type: string
+      p46ZgodaMarketingowa:
+        type: string
+      p47KodWalutyRachunku:
+        type: string
+      p4NumerRachunku:
+        type: string
+      p5NapisNaKarcie:
+        type: string
+      p6NazwaFirmyNaKarcie:
+        type: string
+      p7RodzajKarty:
+        type: string
+      p8NrBIN:
+        type: string
+      p9IdentyfikatorProduktu:
+        type: string
+      startRelationDate:
+        type: string
+    title: CardData
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  RequestHeader:
+    type: object
+    properties:
+      requestId:
+        type: string
+      sendDate:
+        type: string
+    title: RequestHeader
+  ResponseHeader:
+    type: object
+    properties:
+      requestId:
+        type: string
+      sendDate:
+        type: string
+    title: ResponseHeader
+  UpdateCardResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      responseHeader:
+        $ref: '#/definitions/ResponseHeader'
+    title: UpdateCardResponse

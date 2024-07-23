@@ -1,0 +1,3 @@
+Hello
+Opening door to the EXIT
+Closing door to the EXIT

@@ -1,0 +1,424 @@
+### Get Oauth token
+POST {{CB_BASE_URL}}/application/oauth/token
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic R0w6cXFx
+
+grant_type=client_credentials
+
+> {%
+  client.global.set("auth_token", response.body.access_token);
+%}
+
+
+### STEP 3
+POST {{CB_BASE_URL}}/application/api/loan/loans
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "amount": 24600.0,
+  "businessUnit": "CENTRALA",
+  "currency": "PLN",
+  "intendedUsage": "21",
+  "intendedUsageDescription": "Dowolny cel konsumpcyjny",
+  "interestRate": {
+    "calculationWay": "TABLE",
+    "formula": {
+      "factor": 1,
+      "offset": 7.100,
+      "tableId": 741
+    },
+    "type": "VARIABLE"
+  },
+  "masterProductId": 36464,
+  "paymentTransferInstruction": {
+    "accountNo": "87823000072002000006730001",
+    "contractId": 751475,
+    "transferPaymentType": "INTERNAL_TRANSFER"
+  },
+  "period": {
+    "quantity": 38,
+    "unit": "MONTH"
+  },
+  "productId": 39715,
+  "repaymentTransferInstruction": {
+    "transferRepaymentType": "OTHER"
+  },
+  "requestedSchedule": {
+    "capitalFirstRepaymentDate": "2025-06-29",
+    "interestFirstRepaymentDate": "2025-06-29"
+  },
+  "rootNo": 683,
+  "startDate": "2025-06-07"
+}
+
+> {%
+  client.global.set("contract_id", response.body.id);
+%}
+
+### STEP 5
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"METOD_UPROSZCZ","value":"215"}
+
+
+### STEP 5a
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"APO_OFFER_ID","value":"OFF-2025-00000040"}
+
+
+### STEP 5b
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/753180/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"APO_OFFER_ID","value":"OFF-2025-00000040"}
+
+
+### STEP 6
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"amount":{"amount":1476.0,"currency":"PLN"},"chargeCredit":false,"chargeType":"CHARGE","commissionCharge":"1700","plannedDateOfPayment":"2025-06-07"}
+
+> {%
+  client.global.set("charge_id", response.body.id);
+  client.global.set("charge_version", response.body.version);
+%}
+
+### STEP 6a
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}/editable/accept
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+If-Match: {{charge_version}}
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+
+### STEP 7
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "capitalPeriod": {
+    "dayOfMonth": 29,
+    "installmentQuantity": 38,
+    "isLastDay": false,
+    "period": {
+      "quantity": 1,
+      "unit": "MONTH"
+    },
+    "startDate": "2025-06-29"
+  },
+  "denominator": 365,
+  "interestCalculationVariant": "ANNUITY",
+  "interestNumeratorDenominator": "EN_366_365",
+  "interestPeriod": {
+    "dayOfMonth": 29,
+    "installmentQuantity": 38,
+    "isLastDay": false,
+    "period": {
+      "quantity": 1,
+      "unit": "MONTH"
+    },
+    "startDate": "2025-06-29"
+  },
+  "interestRate": {
+    "calculationWay": "TABLE",
+    "tableFormula": {
+      "factor": 1,
+      "offset": 7.100,
+      "tableId": 741
+    },
+    "type": "VARIABLE"
+  },
+  "isScheduleProlongEnabled": false,
+  "restToFirstInstallment": false,
+  "startDate": "2025-06-07",
+  "trancheAvailDate": "2025-06-28"
+}
+
+> {%
+  client.global.set("schedule_id", response.body.id);
+%}
+
+
+### STEP 7a optional - interest rate change
+POST http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/rate
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "formula": {
+    "factor": 1,
+    "offset": 0,
+    "tableId": 818
+  },
+  "rate": 0,
+  "resultRate": 0,
+  "validityPeriod": {
+    "from": "2025-06-29",
+    "to": "2026-06-29"
+  }
+}
+
+
+#### STEP 7a optional - update schedule version
+#GET http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}
+#X-Request-ID: {{$uuid}}
+#Authorization: Bearer {{auth_token}}
+#X-Correlation-ID: {{correlation_id}}
+#
+#> {%
+#    client.global.set("schedule_version", response.body.version);
+#%}
+
+#### STEP 8 optional - insert surcharge period for surcharged product
+#PATCH http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}
+#X-Request-ID: {{$uuid}}
+#Authorization: Bearer {{auth_token}}
+#Content-Type: application/json
+#If-Match: {{schedule_version}}
+#X-Correlation-ID: {{correlation_id}}
+#
+#{
+#   "surchargePeriod": {
+#    "from": "2025-07-19",
+#    "to": "2026-07-17"
+#  }
+#}
+
+### STEP 9
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/costs/recalculate
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### STEP 10
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "actualValue": {
+    "amount": 24600.0,
+    "currency": "PLN"
+  },
+  "collateralOwnerId": 328696,
+  "collateralType": "4201",
+  "collateralTypeStatus": "1",
+  "exposureDate": "2025-06-07",
+  "finalDate": "2028-07-29",
+  "initialValue": {
+    "amount": 24600.0,
+    "currency": "PLN"
+  },
+  "position": null
+}
+
+> {%
+  client.global.set("collateral_id", response.body.id);
+%}
+
+### STEP 10a
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral/{{collateral_id}}/owners
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"customerId":328696}
+
+
+### STEP 10b
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "accountNumber": "87823000072002000006730001",
+  "actualValue": {
+    "amount": 0.0,
+    "currency": "PLN"
+  },
+  "collateralOwnerId": 328696,
+  "collateralType": "9301",
+  "collateralTypeStatus": "1",
+  "exposureDate": "2025-06-07",
+  "finalDate": "2028-07-29",
+  "initialValue": {
+    "amount": 24600.0,
+    "currency": "PLN"
+  },
+  "owner": "EWA BYK",
+  "position": null
+}
+
+> {%
+  client.global.set("collateral_id", response.body.id);
+%}
+
+### STEP 10c
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral/{{collateral_id}}/owners
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"customerId":328696}
+
+### STEP 12
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/costs/recalculate
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### STEP 13
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {%
+  client.global.set("pricing_cond_id", response.body.content[0].id);
+  client.global.set("pricing_cond_version", response.body.content[0].version);
+%}
+
+### STEP 13a
+PATCH {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions/{{pricing_cond_id}}/editable
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+If-Match: {{pricing_cond_version}}
+X-Correlation-ID: {{correlation_id}}
+
+{"dateFrom":"2025-06-07","pricingConditions":"BSPLONSK_KREDYT KOMFORT"}
+
+
+### STEP 13b
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {%
+    client.global.set("pricing_cond_id", response.body.content[0].id);
+    client.global.set("pricing_cond_version", response.body.content[0].version);
+%}
+
+### STEP 14
+PATCH {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions/{{pricing_cond_id}}/editable
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+If-Match: {{pricing_cond_version}}
+X-Correlation-ID: {{correlation_id}}
+
+{"dateFrom":"2025-06-07","pricingConditions":"BSPLONSK_KREDYT KOMFORT"}
+
+### STEP 15
+POST {{CB_BASE_URL}}/application/api/systems-operations/api-operations/bulk-accept?correlationId={{correlation_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### STEP 16
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+
+> {%
+  client.global.set("charge_id", response.body.content[0].id);
+%}
+
+### STEP 17
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+
+> {%
+  client.global.set("charge_id", response.body.id);
+  client.global.set("charge_version", response.body.version);
+%}
+
+### STEP 18
+DELETE {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+If-Match: {{charge_version}}
+
+{}
+
+> {%
+  client.global.set("charge_version", response.body.version);
+%}
+
+### STEP 19
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}/editable/accept
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+If-Match: {{charge_version}}
+
+{}
+
+
+### STEP 20
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/positions?size=2147483647&type=TRANCHE
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+
+> {%
+  client.global.set("tranche_id", response.body.content[0].id);
+  client.global.set("tranche_version", response.body.content[0].version);
+%}
+
+
+### STEP 21
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/tranches/{{tranche_id}}/payments
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+If-Match: {{tranche_version}}
+
+{"beneficiaryAccount":"87823000072002000006730001","transferPaymentType":"INTERNAL_TRANSFER"}

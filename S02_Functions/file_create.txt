@@ -1,0 +1,2 @@
+Action FILE_CREATE executed on d:\Projekty\PyCharm\pythonCourse\S02_Functions\dummy_file.txt on 2024-06-28 11:16:36
+Action FILE_CREATE executed on d:\Projekty\PyCharm\pythonCourse\S02_Functions\dummy_file.txt on 2024-06-28 11:16:36

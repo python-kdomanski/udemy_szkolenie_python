@@ -1,0 +1,11 @@
+--------------------
+Function "ChangePosition" started at 2024-06-28T11:12:17.680190
+Following arguments were used:
+Kowalski architect
+
+--------------------
+Function "ChangePosition" started at 2024-06-28T11:12:53.148041
+Following arguments were used:
+Kowalski architect
+
+Function returned architect

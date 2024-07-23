@@ -1,0 +1,37 @@
+POST {{CB_BASE_URL}}/application/oauth/token;post;/application/oauth;token
+GET {{CB_BASE_URL}}/application/api/general-settings/dictionaries/ProductItem;get;application/api/general-settings;dictionaries
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}};get;/application/api/product-directory;products
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}}/properties;get;/application/api/product-directory;products / properties
+POST {{CB_BASE_URL}}/application/api/party-data-management/customers/persons/328349/editable;post;/application/api/party-data-management;customers / persons
+GET {{CB_BASE_URL}}/application/api/customer-agreement/root-numbers?involvedParties=%5B%7B%22customerId%22:%22328349%22,%22roles%22:%5B%22OWNER%22%5D%7D%5D&size=2147483647;get;/application/api/customer-agreement;root-numbers
+GET {{CB_BASE_URL}}/application/api/credit-common/credits/{{contract_id}};get;/application/api/credit-common;credits
+POST {{CB_BASE_URL}}/application/api/systems-operations/api-operations/bulk-accept?correlationId={{correlation_id}};post;/application/api/systems-operations;api-operations
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/tranches/{{tranche_id}}/payments;post;/application/api/loan;loans / tranches / payments  
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/rate;post;/application/api/loan;loans / payment-schedules / rate
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules;post;/application/api/loan;loans / payment-schedules
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/costs/recalculate;post;/application/api/loan;loans / costs / recalculatet
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{insurance_id}}/editable/accept;post;/application/api/loan;loans / charges / esitable / accept
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}/editable/accept;post;/application/api/loan;loans / charges / esitable / accept
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges;post;/application/api/loan;loans / charges
+POST {{CB_BASE_URL}}/application/api/loan/loans;post;/application/api/loan;loans
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/insurances;post;/application/api/contract-common;contracts / insurances 
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data;post;/application/api/contract-common;contracts / extra-data
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral/{{collateral_id}}/owners;post;/application/api/contract-common;contracts / collateral / owners
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral;post;/application/api/contract-common;contracts / collateral
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/753180/extra-data;post;/application/api/contract-common;contracts / extra-data
+POST {{CB_BASE_URL}}/application/api/collateral-allocation/{{collateral_id}}/extra-data;post;/application/api/;collateral-allocation / extra-data 
+POST http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/rate;post;/application/api/loan;loans / payment-schedules 
+PATCH {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};patch;/application/api/loan;loans / payment-schedules 
+PATCH {{CB_BASE_URL}}/application/api/credit-common/credits/{{contract_id}}/editable;patch;/application/api/credit-common;credits
+PATCH {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions/{{pricing_cond_id}}/editable;patch;/application/api/contract-common;contracts
+GET {{CB_BASE_URL}}/application/api/systems-operations/system-state/accounting;get;/application/api/loan;loans / payment-schedules / positions  
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/positions?size=2147483647&type=TRANCHE;get;/application/api/loan;loans / payment-schedules / positions
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};get;/application/api/loan;loans / payment-schedules
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{evidence_charge_id}};get;/application/api/loan;loans / charges 
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}};get;/application/api/loan;loans / charges
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges;get;/application/api/loan;loans / charges
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts?contractNo=56823000072002000003470001&size=1;get;/application/api/contract-common;contracts
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions;get;/application/api/contract-common;contracts / pricing-conditions
+DELETE {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}};delete;/application/api/loan;loans / charges / delete
+#PATCH http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};patch;/application/api/loan;loans / payment-schedules
+#GET http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};get;/application/api/loan;loans / payment-schedules

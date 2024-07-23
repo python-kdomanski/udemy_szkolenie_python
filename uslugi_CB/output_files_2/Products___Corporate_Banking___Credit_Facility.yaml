@@ -1,0 +1,1490 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Products * Corporate Banking * Credit Facility
+host: 10.17.202.119:8580
+basePath: /application/api/credit-facility
+tags:
+- name: lines-of-credit
+  description: Account handling with the use of barcode reader
+paths:
+  /lines-of-credit:
+    get:
+      tags:
+      - lines-of-credit
+      summary: Get lines of credit
+      operationId: getAllOfLinesOfCredit
+      produces:
+      - '*/*'
+      parameters:
+      - name: involvedParties
+        in: query
+        description: Finds credit lines related to given involved parties, e.g. [{"customerId":1,"roles":["OWNER","C_ATTORNEY"]},{"customerId":2,"roles":["OWNER"]}]
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfCreditLine'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - lines-of-credit
+      summary: Add new credit line
+      operationId: addNewOfLinesOfCredit
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/CreditLine'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/CreditLine'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /lines-of-credit/{id}:
+    get:
+      tags:
+      - lines-of-credit
+      summary: Get line of credit
+      operationId: getOneOfLinesOfCredit
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CreditLine'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - lines-of-credit
+      summary: Remove credit line
+      operationId: removeOfLinesOfCredit
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CreditLine'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /lines-of-credit/{id}/editable:
+    post:
+      tags:
+      - lines-of-credit
+      summary: Provide editable version of credit line
+      operationId: provideEditableOfLinesOfCredit
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CreditLine'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - lines-of-credit
+      summary: Update editable version of credit line
+      operationId: updateEditableOfLinesOfCredit
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/CreditLine'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CreditLine'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /lines-of-credit/{id}/editable/accept:
+    post:
+      tags:
+      - lines-of-credit
+      summary: Accept new or edited credit line
+      operationId: acceptEditedOfLinesOfCredit
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /lines-of-credit/{id}/editable/reject:
+    post:
+      tags:
+      - lines-of-credit
+      summary: Reject new or edited credit line
+      operationId: rejectEditedOfLinesOfCredit
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  CollateralRole:
+    type: object
+    properties:
+      isCollateral:
+        type: boolean
+      securedContractType:
+        type: string
+        enum:
+        - CREDIT
+        - CREDIT_CARD
+        - CURRENT_ACCOUNT
+        - LETTER_OF_CREDIT
+    title: CollateralRole
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  ContractAddressData:
+    type: object
+    properties:
+      address:
+        type: string
+        description: 'Address
+
+          Validations: @Length(max = 48, min = 0)'
+        readOnly: true
+      apartmentNumber:
+        type: string
+        description: 'Apartment no
+
+          Validations: @Length(max = 4, min = 0)'
+      builtAddress:
+        type: string
+        readOnly: true
+      commune:
+        type: string
+        description: 'Municipality
+
+          Validations: @Length(max = 24, min = 0)'
+      country:
+        type: string
+        description: 'Country
+
+          Dictionary: CountryItem (DIC_COUNTRIES)'
+      houseNumber:
+        type: string
+        description: 'Building no
+
+          Validations: @Length(max = 10, min = 0)'
+      locationDataId:
+        type: integer
+        format: int64
+      post:
+        type: string
+        description: 'Post office
+
+          Validations: @Length(max = 24, min = 0)'
+      postCode:
+        type: string
+        description: 'Postal code
+
+          Validations: @Length(max = 10, min = 0)'
+      province:
+        type: string
+        description: 'Voivodship
+
+          Dictionary: ProvinceItem (DIC_PROVINCES)'
+      provincePart:
+        type: string
+        description: 'Poviat
+
+          Dictionary: ProvincePartItem (VDIC_PROVINCE_PARTS)'
+      street:
+        type: string
+        description: 'Street
+
+          Validations: @Length(max = 35, min = 0)'
+      streetPrefix:
+        type: string
+        description: Prefix
+        enum:
+        - AV
+        - EMPTY
+        - PL
+        - SQ
+        - ST
+      town:
+        type: string
+        description: 'Town
+
+          Validations: @TownLength'
+    title: ContractAddressData
+  ContractRiskClass:
+    type: object
+    properties:
+      baseWeight:
+        type: number
+      ccf1Factor:
+        type: number
+      ccfFactor:
+        type: number
+      ccfSeparation:
+        type: boolean
+      currentWeight:
+        type: number
+      riskClass:
+        type: string
+        description: 'Dictionary: RiskClassItem (DIC_RISK_CLASSES)'
+    title: ContractRiskClass
+  ContractRiskGroupFactors:
+    type: object
+    properties:
+      isRiskGroupPriority:
+        type: boolean
+      riskGroup:
+        type: string
+        readOnly: true
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+      riskGroupFromCustomer:
+        type: string
+        readOnly: true
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+      riskGroupFromLine:
+        type: string
+        readOnly: true
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+      riskGroupFromProduct:
+        type: string
+        readOnly: true
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+      riskGroupFromThisContract:
+        type: string
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+      riskGroupOnStartDate:
+        type: string
+        readOnly: true
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+    title: ContractRiskGroupFactors
+  CreditLine:
+    type: object
+    required:
+    - amount
+    - currency
+    - intendedUsage
+    - intendedUsageDescription
+    - masterProductId
+    - maturityDate
+    - productId
+    - rootNo
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      accessChannel:
+        type: string
+        description: 'Dictionary: AccessChannelItem (DIC_CHANNEL_CONTR_ACCESS)'
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @NotNull @DecimalMin(inclusive = false, value = 0)'
+        minimum: 0
+        exclusiveMinimum: true
+      amountInBaseCurrency:
+        type: number
+      annualBalanceConfirmation:
+        type: boolean
+      applicationSignDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      autoReclassificationAllowed:
+        type: boolean
+      available:
+        type: boolean
+        description: Available contract
+      balanceConfirmation:
+        type: string
+        enum:
+        - 'NO'
+        - 'YES'
+      bookingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Booking date
+        readOnly: true
+      businessUnit:
+        type: string
+        description: 'Bank Unit
+
+          Validations: @NotNull
+
+
+          Dictionary: BusinessUnitItem (BANK_UNITS)'
+      channelContractId:
+        type: integer
+        format: int64
+        readOnly: true
+      collateralRole:
+        $ref: '#/definitions/CollateralRole'
+      commissionContractId:
+        type: integer
+        format: int64
+      commissionsToBeCollected:
+        description: Sum of commissions to be collected in future periods
+        readOnly: true
+        $ref: '#/definitions/Money'
+      consortiumAgreement:
+        type: string
+        enum:
+        - BANK_IS_THE_ORGANIZER_OF_THE_CONSORTIUM
+        - BANK_IS_THE_PARTY_TO_THE_CONSORTIUM
+        - REGULAR_NOT_IN_CONSORTIUM
+      consortiumAgreementInfo:
+        type: string
+        enum:
+        - BANK_IS_A_CONSORTIUM_ORGANIZER_HANDLING_OFF_THE_SYSTEM
+        - BANK_IS_A_CONSORTIUM_PARTICIPANT_HANDLING_OFF_THE_SYSTEM
+        - STANDARD_NOT_IN_CONSORTIUM
+      consortiumContractId:
+        type: integer
+        format: int64
+      consortiumRole:
+        type: string
+        enum:
+        - CUSTOMER
+        - ORGANIZER
+        - PARTICIPANT
+      contractId:
+        type: integer
+        format: int64
+        description: Current account number
+        readOnly: true
+      contractNo:
+        type: string
+        description: 'BAN
+
+          Validations: @Length(max = 30, min = 0)'
+        readOnly: true
+      correspondenceAddress:
+        $ref: '#/definitions/ContractAddressData'
+      costCenter:
+        type: string
+        description: 'Validations: @Length(max = 20, min = 0)'
+      creationDateOfAnyKindOfArrears:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      creationDateOfArrears:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      creationDateOfArrearsFee:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      creditLineContractId:
+        type: integer
+        format: int64
+        readOnly: true
+      currency:
+        type: string
+        description: 'Currency
+
+          Validations: @NotNull'
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      dateOfSigning:
+        type: string
+        format: date
+        example: '2000-12-31'
+      deactivationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      denominator:
+        type: integer
+        format: int64
+      email:
+        type: string
+        description: 'E-mail
+
+          Validations: @Length(max = 200, min = 0) @Pattern(flags = [], regexp = ([a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9._%+-]+@[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9.-]+\.[a-zA-Z]{2,4}[
+          ]*[,|;]?[ ]*)+)'
+        pattern: ([a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9._%+-]+@[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9.-]+\.[a-zA-Z]{2,4}[
+          ]*[,|;]?[ ]*)+
+      endDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: End date
+      entityType:
+        type: string
+        readOnly: true
+      excludedFromAutoProcessing:
+        type: boolean
+      fromMigrationNo:
+        type: string
+        description: 'Migration no.
+
+          Validations: @Length(max = 50, min = 0)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      incomeDocumentId:
+        type: integer
+        format: int64
+        readOnly: true
+      initialDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: First term start date
+      intendedUsage:
+        type: string
+        description: 'Loan intended usage
+
+          Intended usage Validations: @NotNull
+
+
+          Dictionary: IntendedUseItem (DIC_DESTINATIONS)'
+      intendedUsageDescription:
+        type: string
+        description: 'Loan intended usage
+
+          Validations: @Length(max = 200, min = 0) @NotEmpty'
+      interestValueOnStartDate:
+        type: number
+      isLimitBlocked:
+        type: boolean
+        description: Total limit blockade
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      lastPaymentReminderDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      lastPaymentReminderNo:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 99) @Min(value = 0)'
+        readOnly: true
+        minimum: 0
+        maximum: 99
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      limitConstraintPercent:
+        type: number
+        description: 'Constraint factor [%]
+
+          Validations: @DecimalMin(inclusive = false, value = 0) @DecimalMax(inclusive
+          = true, value = 100)'
+        minimum: 0
+        maximum: 100
+        exclusiveMinimum: true
+        exclusiveMaximum: false
+      lineLimit:
+        readOnly: true
+        $ref: '#/definitions/CreditLineLimit'
+      managedExternally:
+        type: boolean
+      masterCreditLineId:
+        type: integer
+        format: int64
+        description: Master line
+      masterProductId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      maturityDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Maturity date
+
+          Validations: @NotNull'
+      migrationId:
+        type: integer
+        format: int64
+      minArrearsAmount:
+        type: number
+      minArrearsAmountAllowed:
+        type: boolean
+      nameAddress:
+        type: string
+        description: 'Addressee name
+
+          Validations: @Length(max = 200, min = 0)'
+      noOfContractPages:
+        type: integer
+        format: int64
+      notes:
+        type: string
+        description: 'Comments on contract
+
+          Validations: @Length(max = 2000, min = 0)'
+      numerator:
+        type: integer
+        format: int64
+      oldContractNo:
+        type: string
+        description: Old account number
+        readOnly: true
+      oldNo:
+        type: string
+        description: 'Contract no.
+
+          Validations: @Length(max = 50, min = 0)'
+      originalCreationDateOfArrears:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      overdraftDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      parentContractId:
+        type: integer
+        format: int64
+      partOfSyndicatedContract:
+        type: boolean
+        readOnly: true
+      personalTitle:
+        type: string
+        description: 'Return
+
+          Dictionary: PersonalTitleItem (DIC_RETURNS)'
+      plannedEndDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      preceditorId:
+        type: integer
+        format: int64
+      primaryOwnerId:
+        type: integer
+        format: int64
+      probabilityOfBadDebt:
+        type: boolean
+      product:
+        type: string
+        description: 'Dictionary: ProductItem (PRODUCTS)'
+        readOnly: true
+      productId:
+        type: integer
+        format: int64
+        description: 'Product
+
+          Validations: @NotNull'
+      referenceNo:
+        type: string
+        description: 'Reference number
+
+          Validations: @Length(max = 20, min = 0)'
+        readOnly: true
+      registrationDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: 'Registration date
+
+          Validations: @NotNull'
+        readOnly: true
+      repaymentTransferInstruction:
+        $ref: '#/definitions/CreditRepaymentInstruction'
+      rightsLevel:
+        type: integer
+        format: int64
+        description: Security level
+      riskClass:
+        description: Risk class symbol
+        $ref: '#/definitions/ContractRiskClass'
+      riskGroupFactors:
+        $ref: '#/definitions/ContractRiskGroupFactors'
+      riskGroupOnStartDate:
+        type: string
+        description: Minimal risk group
+        readOnly: true
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+      rootNo:
+        type: integer
+        format: int64
+        description: 'Modulo
+
+          Root number Validations: @NotNull'
+      rootNoId:
+        type: integer
+        format: int64
+        description: Modulo
+        readOnly: true
+      signingEmployeeLoginId:
+        type: integer
+        format: int64
+        description: ID of employee in unit
+      startDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Activation date
+
+          Validations: @NotNull'
+      subType:
+        type: string
+        enum:
+        - CASH_LOAN
+        - CONSUMMER_CREDIT
+        - CREDIT_2PRC
+        - CREDIT_CARD
+        - CREDIT_INDEXED
+        - CREDIT_RESTRUCTURING
+        - DEPOSIT_INTEREST_PAYABLE_UP_FRONT
+        - FACTORING
+        - FDP_CREDIT_CARD
+        - GUARANTEE
+        - IKE_DEPOSIT
+        - INVESTMENT_LOAN
+        - INVESTMENT_POLICY
+        - LEASING
+        - ORDERED_CREDIT
+        - PROGRESSIVE_DEPOSIT
+        - RENTIER_DEPOSIT
+        - STANDARD_DEPOSIT
+        - SURCHARGE_CREDIT
+        - SURCHARGE_DEPOSIT
+        - TURNOVER_CREDIT
+      syndicatedCustomerContract:
+        type: boolean
+        readOnly: true
+      terminationInProgress:
+        type: boolean
+        readOnly: true
+      transferContractId:
+        type: integer
+        format: int64
+        readOnly: true
+      type:
+        type: string
+        description: 'Account type
+
+          Validations: @NotNull'
+        readOnly: true
+        enum:
+        - CREDIT
+        - CREDIT_LINE
+        - CURRENT_ACCOUNT
+        - DEPOSIT
+        - FACTORING
+        - SPECIAL_ACCOUNT
+      unifiedWithContractId:
+        type: integer
+        format: int64
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: CreditLine
+  CreditLineLimit:
+    type: object
+    properties:
+      accessibleAssets:
+        $ref: '#/definitions/Money'
+      availableLimit:
+        $ref: '#/definitions/Money'
+      limit:
+        $ref: '#/definitions/Money'
+      minFactor:
+        type: number
+      usedLimit:
+        $ref: '#/definitions/Money'
+    title: CreditLineLimit
+  CreditRepaymentInstruction:
+    type: object
+    properties:
+      accountNo:
+        type: string
+        description: 'Account for repayment
+
+          Validations: @Length(max = 30, min = 0)'
+      bankNo:
+        type: integer
+        format: int64
+        description: Repayment bank
+        readOnly: true
+      contractId:
+        type: integer
+        format: int64
+        description: Current account No.
+      customerName:
+        type: string
+        description: 'Owner of the repayment account
+
+          Validations: @Length(max = 148, min = 0)'
+      ownAccountId:
+        type: integer
+        format: int64
+        description: Own account
+      transferRepaymentType:
+        type: string
+        description: Repayment method
+        enum:
+        - EXTERNAL_PAYMENT_ORDER
+        - INTERNAL_PAYMENT_ORDER
+        - OTHER
+    title: CreditRepaymentInstruction
+  EntityState:
+    type: object
+    properties:
+      active:
+        type: boolean
+        readOnly: true
+      canceled:
+        type: boolean
+        readOnly: true
+      copy:
+        type: boolean
+        readOnly: true
+      finished:
+        type: boolean
+        readOnly: true
+      forAccept:
+        type: boolean
+        readOnly: true
+      new:
+        type: boolean
+        readOnly: true
+      source:
+        type: boolean
+        readOnly: true
+    title: EntityState
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @NotNull'
+      currency:
+        type: string
+        description: 'Validations: @NotNull'
+    title: Money
+  PageOfCreditLine:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/CreditLine'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfCreditLine
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort

@@ -1,0 +1,36 @@
+swagger: '2.0'
+info:
+  description: "---\n\nThe design of this API aims to be compliant with the [REST](http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm)\
+    \ principles up to Level 2 of the [maturity model](https://martinfowler.com/articles/richardsonMaturityModel.html).\
+    \ An idea of resources partitioning and an ubiquitous language used follows the\
+    \ [BIAN Reference Model](https://bian.org/servicelandscape-8-0/index.html) and\
+    \ [ISO 20022](https://www.iso20022.org/financial_repository.page) if apply.\n\n\
+    ---\n\n**Asseco CB** system is divided into eight areas taken from the [Value\
+    \ Chain](https://bian.org/servicelandscape-8-0/views/view_28750.html) of the BIAN:\n\
+    - **Business Direction** - provides policy definition, direction and management\
+    \ oversight of the whole business activity.\n- **Resource Management** - supports\
+    \ management, administration and deployment of diverse organizational resources\
+    \ (business units / staff / systems operations etc.).\n- **Business Development**\
+    \ - covers the development of new business, products and services. Contains the\
+    \ central directory of products.\n- **Operations** - brings together capabilities\
+    \ that tend to be shared across multiple products, often as a centralized operational\
+    \ capability. Includes execution of assets transfers of many kinds.\n- **Products**\
+    \ - includes the full range of product fulfillment activities for wholesale and\
+    \ retail banking, including shared operational capabilities and all front, middle\
+    \ and back office activities. Provides passive and active capabilities of the\
+    \ whole spectrum of customers banking products such as accounts, loans and deposits.\n\
+    - **Customers** - provides an environment to maintain customer details and insights\
+    \ and provide customer specific control over execution across products.\n- **Channels**\
+    \ - handles all channel related activity including public and market information\
+    \ streams and communication channels for financial operations.\n- **Finance and\
+    \ Risk** - provides financial risk/reward oversight of business activity including\
+    \ fraud and AML resolution and limit management.\n\nEach area is represented by\
+    \ one or more **business domains** containing **service domains** with **resources**\
+    \ accessible by their URIs and REST operations.\n\n*To access specific API resources,\
+    \ please choose appropriate item from the 'Select a spec' list at the header bar\
+    \ above...*\n\n---\n\n "
+  version: 14.407.221.99
+  title: Asseco Core Banking REST API
+  contact: {}
+  license: {}
+host: 10.17.202.119:8580

@@ -1,0 +1,12 @@
+grep GET wpi4pl*comp* > get_1.txt
+grep GET wpi4pl*full* > get_2.txt
+grep POST wpi4pl*comp* > post_1.txt
+grep POST wpi4pl*full* > post_2.txt
+grep PATCH wpi4pl*comp* > patch_1.txt
+grep PATCH wpi4pl*full* > patch_2.txt
+grep DELETE wpi4pl*comp* > delete_1.txt
+grep DELETE wpi4pl*full* > delete_2.txt
+
+cat get_1.txt get_2.txt post_1.txt post_2.txt patch_1.txt patch_2.txt delete_1.txt delete_2.txt > wywolania.txt
+
+

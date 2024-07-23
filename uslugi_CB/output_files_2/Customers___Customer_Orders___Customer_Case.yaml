@@ -1,0 +1,2014 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Customers * Customer Orders * Customer Case
+host: 10.17.202.119:8580
+basePath: /application/api/customer-case
+tags:
+- name: applications / credit-applications
+  description: Loan applications
+- name: contracts | applications / collaterals
+  description: Collaterals are assets pledged by a debtor to secure a loan or an exposure
+    and subject to seizure in the event of default.
+- name: contracts | applications / collaterals /  owners
+  description: Collateral owners
+- name: loans / fee-payment-schedule
+  description: Credit fee payments schedule
+- name: loans / purposes
+  description: Loan purposes
+paths:
+  /applications/credit-applications:
+    get:
+      tags:
+      - applications / credit-applications
+      summary: Get credit applications
+      operationId: getAllOfApplicationsCreditApplications
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfCreditApplication'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /applications/credit-applications/{applicationId}/fee-schedules:
+    get:
+      tags:
+      - loans / fee-payment-schedule
+      summary: Get credit application fee payments schedules
+      operationId: getAllOfLoansFeePaymentSchedule
+      produces:
+      - '*/*'
+      parameters:
+      - name: applicationId
+        in: path
+        description: applicationId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfCyclicFeePaymentSchedule'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /applications/credit-applications/{applicationId}/fee-schedules/{id}:
+    get:
+      tags:
+      - loans / fee-payment-schedule
+      summary: Get credit application fee payment schedule
+      operationId: getOneOfLoansFeePaymentSchedule
+      produces:
+      - '*/*'
+      parameters:
+      - name: applicationId
+        in: path
+        description: applicationId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CyclicFeePaymentSchedule'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /applications/credit-applications/{applicationId}/purposes:
+    post:
+      tags:
+      - loans / purposes
+      summary: Add new credit purpose
+      operationId: addNewForApplicationOfLoansPurposes
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: applicationId
+        in: path
+        description: applicationId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/CreditPurpose'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/CreditPurpose'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /applications/credit-applications/{id}:
+    get:
+      tags:
+      - applications / credit-applications
+      summary: Get credit application
+      operationId: getOneOfApplicationsCreditApplications
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CreditApplication'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /applications/{applicationId}/collateral:
+    get:
+      tags:
+      - contracts | applications / collaterals
+      summary: Get application collaterals
+      operationId: getAllOfContracts|applicationsCollaterals
+      produces:
+      - '*/*'
+      parameters:
+      - name: applicationId
+        in: path
+        description: applicationId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfCollateral'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /applications/{applicationId}/collateral/{collateralId}/owners:
+    get:
+      tags:
+      - contracts | applications / collaterals /  owners
+      summary: Get application collateral owners
+      operationId: getAllByApplicationOfContracts|applicationsCollateralsOwners
+      produces:
+      - '*/*'
+      parameters:
+      - name: applicationId
+        in: path
+        description: applicationId
+        required: true
+        type: integer
+        format: int64
+      - name: collateralId
+        in: path
+        description: collateralId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfCollateralOwner'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /applications/{applicationId}/collateral/{collateralId}/owners/{id}:
+    get:
+      tags:
+      - contracts | applications / collaterals /  owners
+      summary: Get application collateral owner
+      operationId: getOneByApplicationOfContracts|applicationsCollateralsOwners
+      produces:
+      - '*/*'
+      parameters:
+      - name: applicationId
+        in: path
+        description: applicationId
+        required: true
+        type: integer
+        format: int64
+      - name: collateralId
+        in: path
+        description: collateralId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CollateralOwner'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  Collateral:
+    type: object
+    required:
+    - actualValue
+    - collateralType
+    - initialValue
+    - position
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      accountNumber:
+        type: string
+        description: 'Validations: @Size(max = 80, min = 0)'
+        minLength: 0
+        maxLength: 80
+      accountType:
+        type: string
+      actSignature:
+        type: string
+        description: 'Validations: @Size(max = 200, min = 0)'
+        minLength: 0
+        maxLength: 200
+      actualValue:
+        description: 'Current value
+
+          Validations: @NotNull @MoneyMin(inclusive = true, value = 0.0)'
+        $ref: '#/definitions/Money'
+      address:
+        type: string
+        description: 'Validations: @Size(max = 80, min = 0)'
+        minLength: 0
+        maxLength: 80
+      annexId:
+        type: integer
+        format: int64
+      appealDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      applicationEstablishmentDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      applicationId:
+        type: integer
+        format: int64
+        readOnly: true
+      applicationPledgerStatus:
+        type: string
+        enum:
+        - CALCULATED_CURRENCY_RATE
+        - CONFISCATED
+        - ERRORS_IN_CONTRACT
+        - INCORRECT
+        - INQUIRY_TO_CBI_SENT_SYSTEM_IS_WAITING_FOR_RETURN_REPORT
+        - NEW_PLEDGE_CONTRACT_RECEIVED_FROM_CLIENT
+        - NEW_PLEDGE_CONTRACT_SENT_NUZ_TO_COURT
+        - NEW_PLEDGE_CONTRACT_SENT_NUZ_TO_XLIENT
+        - PASSED_TO_COURT
+        - RETURN
+      applicationSendingToCourtDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      applicationToCourtDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      appraiserId:
+        type: integer
+        format: int64
+      appraiserRoleId:
+        type: integer
+        format: int64
+        readOnly: true
+      areaNumber:
+        type: string
+        description: 'Validations: @Size(max = 40, min = 0)'
+        minLength: 0
+        maxLength: 40
+      areaSize:
+        type: number
+      autoActualValue:
+        type: boolean
+        description: Automatic determination
+      balanceValueDecreasingReserve:
+        description: From balance
+        $ref: '#/definitions/Money'
+      bank:
+        type: string
+        description: 'Validations: @Size(max = 120, min = 0)'
+        minLength: 0
+        maxLength: 120
+      bookingValue:
+        description: Booking value
+        $ref: '#/definitions/Money'
+      buildYear:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 9999)'
+        maximum: 9999
+        exclusiveMaximum: false
+      businessUnit:
+        type: string
+        description: 'Dictionary: BusinessUnitItem (BANK_UNITS)'
+      cedingPersonId:
+        type: integer
+        format: int64
+      cessionInsuranceExpirationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      collateralCessionInsuranceId:
+        type: integer
+        format: int64
+      collateralIssuerId:
+        type: integer
+        format: int64
+      collateralMortgageType:
+        type: string
+        enum:
+        - BAIL
+        - CONTRACTUAL
+        - MORTGAGE_COLLATERAL
+        - OBLIGATORY
+        - REGULAR
+      collateralOwnerId:
+        type: integer
+        format: int64
+      collateralProviderId:
+        type: integer
+        format: int64
+      collateralProviderRoleId:
+        type: integer
+        format: int64
+        readOnly: true
+      collateralShareBonds:
+        type: string
+        enum:
+        - ACTIONS
+        - DEPOSIT_CERTIFICATE
+        - FOREIGN_BONDS
+        - MONEY_BILLS
+        - MORTGAGE_BONDS
+        - NATIONAL_BANK_BONDS
+        - PUBLIC_MORTGAGE_BONDS
+        - TREASURY_BILLS
+      collateralType:
+        type: string
+        description: 'Collateral type
+
+          Validations: @NotNull
+
+
+          Dictionary: CollateralTypeItem (DIC_PROTECTIONS)'
+      collateralTypeStatus:
+        type: string
+        description: 'Collateral status symbol
+
+          Dictionary: CollateralStatusItem (DIC_STATUS_PROTECTIONS)'
+      comment:
+        type: string
+        description: 'Validations: @Length(max = 500, min = 0)'
+      comments:
+        type: string
+        description: 'Validations: @Size(max = 280, min = 0)'
+        minLength: 0
+        maxLength: 280
+      companyName:
+        type: string
+        description: 'Validations: @Size(max = 80, min = 0)'
+        minLength: 0
+        maxLength: 80
+      consortiumCollateralAmount:
+        type: number
+      contractId:
+        type: integer
+        format: int64
+        readOnly: true
+      contribution:
+        type: number
+      court:
+        type: string
+        description: 'Dictionary: CourtItem (DIC_COURTS)'
+      courtRegister:
+        type: string
+        description: 'Validations: @Size(max = 200, min = 0)'
+        minLength: 0
+        maxLength: 200
+      creditPurposeId:
+        type: integer
+        format: int64
+      currentAccountId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      decreaseValue:
+        type: number
+      deliveryDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      depositAccount:
+        type: string
+        description: 'Validations: @Size(max = 80, min = 0)'
+        minLength: 0
+        maxLength: 80
+      description:
+        type: string
+        description: 'Description
+
+          Validations: @Size(max = 120, min = 0)'
+        minLength: 0
+        maxLength: 120
+      duplicateDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      effectiveAmount:
+        type: number
+      entityType:
+        type: string
+        readOnly: true
+      entryReceiptDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      estateKind:
+        type: string
+        description: 'Dictionary: EstateKindItem (DIC_ESTATE_KINDS)'
+      estimatingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Revaluation date
+      evaluationKind:
+        type: string
+        enum:
+        - EXTERNAL_EVALUATION
+        - INTERNAL_EVALUATION
+        - OTHER
+      examiningToPledgeCourtId:
+        type: string
+        description: 'Dictionary: CourtItem (DIC_COURTS)'
+      expert:
+        type: string
+        description: 'Validations: @Size(max = 255, min = 0)'
+        minLength: 0
+        maxLength: 255
+      exposureDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Establishing date
+      feeAmount:
+        type: number
+      finalDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Validity date
+      gettingInToDebtId:
+        type: integer
+        format: int64
+      gettingInToDebtRoleId:
+        type: integer
+        format: int64
+        readOnly: true
+      guarantorId:
+        type: integer
+        format: int64
+      guarantorRoleId:
+        type: integer
+        format: int64
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        description: ID
+        readOnly: true
+      indexationRule:
+        type: string
+        description: 'Validations: @Size(max = 200, min = 0)'
+        minLength: 0
+        maxLength: 200
+      individualRiskWeight:
+        type: integer
+        format: int64
+      initialValue:
+        description: 'Initial value
+
+          Validations: @NotNull @MoneyMin(inclusive = true, value = 0.0)'
+        $ref: '#/definitions/Money'
+      inspectionDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      insurerId:
+        type: integer
+        format: int64
+      insurerRoleId:
+        type: integer
+        format: int64
+        readOnly: true
+      isEffective:
+        type: boolean
+      isExposureDateChanged:
+        type: boolean
+      isMortgageFirst:
+        type: boolean
+      isMortgageTotal:
+        type: boolean
+      isReport:
+        type: boolean
+      isStandardValueReserve:
+        type: boolean
+        description: Standard size of the provision base
+      issuer:
+        type: string
+        description: 'Validations: @Size(max = 120, min = 0)'
+        minLength: 0
+        maxLength: 120
+      kirBankId:
+        type: integer
+        format: int64
+      landRegisterNumber:
+        type: string
+        description: 'Validations: @Size(max = 40, min = 0)'
+        minLength: 0
+        maxLength: 40
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      masterCollateralId:
+        type: integer
+        format: int64
+      monitDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      mortgageLendingValueAmount:
+        type: number
+      mortgageLendingValueCurrency:
+        type: string
+      mortgageTotalCollateralId:
+        type: integer
+        format: int64
+      newPledgeAgreementRecepitDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      newPledgeAgreementSendingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      newPledgeAgreementSingingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      offBalanceValueDecreasingReserve:
+        description: From off-balance
+        $ref: '#/definitions/Money'
+      owner:
+        type: string
+        description: 'Validations: @Size(max = 120, min = 0)'
+        minLength: 0
+        maxLength: 120
+      paymentFrequency:
+        type: string
+        description: 'Validations: @Size(max = 40, min = 0)'
+        minLength: 0
+        maxLength: 40
+      percentageArrearsCapital:
+        type: number
+        description: 'Principal debt [%]
+
+          Validations: @DecimalMin(inclusive = true, value = 0.0)'
+        minimum: 0.0
+        exclusiveMinimum: false
+      policyNumber:
+        type: string
+        description: 'Validations: @Size(max = 80, min = 0)'
+        minLength: 0
+        maxLength: 80
+      position:
+        type: integer
+        format: int64
+        description: 'Number
+
+          Validations: @NotNull'
+      priorityInDecreasingReserve:
+        type: integer
+        format: int64
+        description: Set
+      quantity:
+        type: integer
+        format: int64
+      registerNumber:
+        type: string
+        description: 'Validations: @Size(max = 40, min = 0)'
+        minLength: 0
+        maxLength: 40
+      regon:
+        type: string
+        description: 'Validations: @Size(max = 20, min = 0)'
+        minLength: 0
+        maxLength: 20
+      releaseDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of release
+      securingContractId:
+        type: integer
+        format: int64
+      seiozCollateralId:
+        type: string
+        description: 'Identifier of collateral from the external SEiOZ system
+
+          Validations: @Length(max = 100, min = 0)'
+      seiozObjectId:
+        type: string
+        description: 'Identifier of the subject of collateral from the external SEiOZ
+          system
+
+          Validations: @Length(max = 100, min = 0)'
+      serialNumber:
+        type: string
+        description: 'Validations: @Size(max = 50, min = 0)'
+        minLength: 0
+        maxLength: 50
+      sponsorId:
+        type: integer
+        format: int64
+      sponsorRoleId:
+        type: integer
+        format: int64
+        readOnly: true
+      tenant:
+        type: string
+        description: 'Validations: @Size(max = 120, min = 0)'
+        minLength: 0
+        maxLength: 120
+      validationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      valuationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Valuation date
+      vehicleBrand:
+        type: string
+        description: 'Validations: @Size(max = 200, min = 0)'
+        minLength: 0
+        maxLength: 200
+      vehicleCardNumber:
+        type: string
+        description: 'Validations: @Size(max = 13, min = 0)'
+        minLength: 0
+        maxLength: 13
+      vehicleCardPlannedReturningDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      vehicleCardRealReturningDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      vehicleCardRentalDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      vehicleCardStatus:
+        type: string
+        enum:
+        - GIVEN_OUT_TO_CLIENT
+        - IN_BANK
+      vehicleIdentificationNumber:
+        type: string
+        description: 'Validations: @Size(max = 100, min = 0)'
+        minLength: 0
+        maxLength: 100
+      vehicleModel:
+        type: string
+        description: 'Validations: @Size(max = 200, min = 0)'
+        minLength: 0
+        maxLength: 200
+      vehicleRegistrationNumber:
+        type: string
+        description: 'Validations: @Size(max = 100, min = 0)'
+        minLength: 0
+        maxLength: 100
+      vehicleType:
+        type: string
+        description: 'Validations: @Size(max = 100, min = 0)'
+        minLength: 0
+        maxLength: 100
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+      writeDownValue:
+        description: Decreasing value the basis for write-down
+        $ref: '#/definitions/Money'
+    title: Collateral
+  CollateralOwner:
+    type: object
+    required:
+    - customerId
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      collateralId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+        readOnly: true
+      contractId:
+        type: integer
+        format: int64
+        readOnly: true
+      customerId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      preceditorId:
+        type: integer
+        format: int64
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: CollateralOwner
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  CreditApplication:
+    type: object
+    required:
+    - creditAmount
+    - 'no'
+    - rootNumberId
+    - unit
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      amountInBaseCurrency:
+        type: number
+      applicationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Application date
+      applicationStatus:
+        type: string
+        description: 'Application status
+
+          Dictionary: ApplicationStatus (DIC_MOTION_STATS)'
+      consortiumType:
+        type: string
+        enum:
+        - ORGANIZER
+        - PARTICIPANT
+        - WITHOUT_CONSORTIUM
+      creditAmount:
+        description: 'Amount
+
+          Validations: @NotNull'
+        $ref: '#/definitions/Money'
+      creditEndDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      creditOpened:
+        type: boolean
+      creditRefNo:
+        type: string
+        description: Reference no.
+      dealerId:
+        type: integer
+        format: int64
+        description: BIR code
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      'no':
+        type: string
+        description: 'Application number
+
+          Validations: @NotNull'
+      period:
+        $ref: '#/definitions/Period'
+      productId:
+        type: integer
+        format: int64
+      rootNumberId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      unit:
+        type: string
+        description: 'Validations: @NotNull
+
+
+          Dictionary: BusinessUnitItem (BANK_UNITS)'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: CreditApplication
+  CreditPurpose:
+    type: object
+    required:
+    - symbol
+    - type
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      actualApartmentsNo:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999999)'
+        maximum: 999999
+        exclusiveMaximum: false
+      actualArea:
+        type: number
+      actualCost:
+        type: number
+      actualEndDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      actualSettlementDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      actualSettlerDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      address:
+        type: string
+        description: 'Validations: @Length(max = 50, min = 0)'
+      agreementAmount:
+        type: number
+      bodyColor:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0)'
+      bodyNo:
+        type: string
+        description: 'Body no.
+
+          Validations: @Length(max = 60, min = 0)'
+      buildingSiteArea:
+        type: number
+      capitalAmount:
+        type: number
+      collapsible:
+        type: boolean
+      commune:
+        type: string
+        description: 'Validations: @Length(max = 96, min = 0)'
+      companyVehicle:
+        type: boolean
+      contract:
+        type: boolean
+        readOnly: true
+      creditApplicationId:
+        type: integer
+        format: int64
+        readOnly: true
+      creditId:
+        type: integer
+        format: int64
+        readOnly: true
+      cylinderCapacity:
+        type: integer
+        format: int64
+      engine:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0)'
+      engineNo:
+        type: string
+        description: 'Motor no.
+
+          Validations: @Length(max = 60, min = 0)'
+      entityType:
+        type: string
+        readOnly: true
+      estateKind:
+        type: string
+        description: 'Dictionary: EstateKindItem (DIC_ESTATE_KINDS)'
+      floorspace:
+        type: number
+        description: 'Validations: @NonNegativeDigits(fraction = 2, integer = 5)'
+      garagesArea:
+        type: number
+      gearbox:
+        type: string
+        description: 'Validations: @Length(max = 40, min = 0)'
+      generalContractorName:
+        type: string
+        description: 'Validations: @Length(max = 80, min = 0)'
+      gusCode:
+        type: string
+        description: 'Validations: @Length(max = 200, min = 0)'
+      hirePrice:
+        type: number
+      houseUsableArea:
+        type: number
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      investOwnershipForm:
+        type: string
+        enum:
+        - LIMITED_MATERIAL_RIGHT
+        - OWNERSHIP
+        - PERPETUAL_USUFRUCT
+      investRegion:
+        type: string
+        description: 'Dictionary: InvestRegionItem (DIC_INVEST_REGIONS)'
+      invoiceNo:
+        type: string
+        description: 'Validations: @Length(max = 50, min = 0)'
+      invoiceTransactionNo:
+        type: string
+        description: 'Validations: @Length(max = 20, min = 0)'
+      landRegisterNumber:
+        type: string
+        description: 'Validations: @Length(max = 60, min = 0)'
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      manufactureYear:
+        type: string
+        format: date
+        example: '2000-12-31'
+      marketValue:
+        type: number
+      marketValueBasisCalculation:
+        type: string
+        description: 'Dictionary: MarketValueBasisCalculationItem (DIC_MARKET_VALUE_FUNDS)'
+      masterCreditPurposeId:
+        type: integer
+        format: int64
+      mileage:
+        type: integer
+        format: int64
+      motion:
+        type: boolean
+        readOnly: true
+      name:
+        type: string
+        description: 'Validations: @Length(max = 2000, min = 0)'
+      numberOfBathrooms:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999999)'
+        maximum: 999999
+        exclusiveMaximum: false
+      numberOfGarages:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999999)'
+        maximum: 999999
+        exclusiveMaximum: false
+      numberOfKitchen:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999999)'
+        maximum: 999999
+        exclusiveMaximum: false
+      numberOfRooms:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999999)'
+        maximum: 999999
+        exclusiveMaximum: false
+      optionalAccessoriesDescription:
+        type: string
+        description: 'Validations: @Length(max = 265, min = 0)'
+      optionalAccessoriesValue:
+        type: number
+      originalApartmentsNo:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999999)'
+        maximum: 999999
+        exclusiveMaximum: false
+      originalArea:
+        type: number
+      outBalanceLiabilitiesAmount:
+        type: number
+      ownCommitmentAmount:
+        type: number
+      ownCommitmentPercent:
+        type: number
+      plannedApartmentsNo:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999999)'
+        maximum: 999999
+        exclusiveMaximum: false
+      plannedArea:
+        type: number
+      plannedAverageRentAmount:
+        type: number
+      plannedCost:
+        type: number
+      plannedEndDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      plannedSettlementDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      plannedSettlerDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      plannedStartDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      plannedWaiveDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      postCode:
+        type: string
+        description: 'Validations: @Length(max = 6, min = 0)'
+      pricing:
+        type: number
+      productionMonth:
+        type: string
+        enum:
+        - APRIL
+        - AUGUST
+        - DECEMBER
+        - FEBRUARY
+        - JANUARY
+        - JULY
+        - JUNE
+        - MARCH
+        - MAY
+        - NOVEMBER
+        - OCTOBER
+        - SEPTEMBER
+      purchaseInvoiceNo:
+        type: string
+        description: 'Validations: @Length(max = 20, min = 0)'
+      realEstateKind:
+        type: string
+        description: 'Dictionary: EstateKindItem (DIC_ESTATE_KINDS)'
+      realEstateLocation:
+        type: string
+        description: 'Dictionary: RealEstateLocationItem (DIC_LOCALIZATIONS)'
+      realEstateType:
+        type: string
+        enum:
+        - BUILDING
+        - BUSINESS_PREMISES
+      realEstateTypeId:
+        type: integer
+        format: int64
+      registrationCertificateNo:
+        type: string
+        description: 'Validations: @Length(max = 20, min = 0)'
+      registrationNo:
+        type: string
+        description: 'Registration no.
+
+          Validations: @Length(max = 20, min = 0)'
+      seatsNo:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 999)'
+        maximum: 999
+        exclusiveMaximum: false
+      settlementOfInvestment:
+        type: boolean
+      standard:
+        type: string
+      suggestDefaultVehicleGroup:
+        type: boolean
+      symbol:
+        type: string
+        description: 'Name
+
+          Validations: @NotEmpty'
+      technology:
+        type: string
+        description: 'Dictionary: InvestmentTechnologyItem (DIC_TECHNOLOGY)'
+      town:
+        type: string
+        description: 'Validations: @Length(max = 50, min = 0)'
+      transactionNo:
+        type: integer
+        format: int64
+      type:
+        type: string
+        description: 'Type of subject of loan
+
+          Validations: @NotNull
+
+
+          Dictionary: CreditPurposeTypeItem (DIC_CREDIT_OBJECT_TYPES)'
+      upholsteryColor:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0)'
+      value:
+        type: number
+        description: Value
+      vehicleBrand:
+        type: string
+        description: 'Brand
+
+          Dictionary: VehicleBrandItem (DIC_CREDIT_OBJECT_BRANDS)'
+      vehicleCardNo:
+        type: string
+        description: 'Validations: @Length(max = 60, min = 0)'
+      vehicleCode:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0)'
+      vehicleCondition:
+        type: string
+        enum:
+        - DEMONSTRATION
+        - NEW
+        - POST_LEASING
+        - USED
+        - USED_FROM_IMPORTER
+      vehicleFirstRegistrationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      vehicleFromOwnNetwork:
+        type: boolean
+      vehicleGroup:
+        type: string
+        description: 'Dictionary: VehicleGroupItem (DIC_CREDIT_OBJ_GROUPS)'
+      vehicleModel:
+        type: string
+        description: 'Model
+
+          Dictionary: VehicleModelItem (DIC_CREDIT_OBJ_BRA_MODELS)'
+      vehicleModelType:
+        type: string
+        description: 'Type
+
+          Dictionary: VehicleModelTypeItem (DIC_CREDIT_OBJ_MOD_TYPES)'
+      vehiclePayload:
+        type: integer
+        format: int64
+      vehicleRegistrationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      vehicleType:
+        type: string
+        enum:
+        - LORRY
+        - OTHER
+        - PASSENGER
+      vehicleUnladenMass:
+        type: integer
+        format: int64
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+      vin:
+        type: string
+      wholeHouseArea:
+        type: number
+    title: CreditPurpose
+  CyclicFeePaymentSchedule:
+    type: object
+    required:
+    - adjustedAmount
+    properties:
+      adjustedAmount:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/Money'
+      applicationId:
+        type: integer
+        format: int64
+      contractId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      dateOfPayment:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      feeType:
+        type: string
+        description: 'Name
+
+          Dictionary: FeeTypeItem (VDIC_FEES)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      originalAmount:
+        $ref: '#/definitions/Money'
+      registrationDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      scheduledDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      sourceId:
+        type: integer
+        format: int64
+        readOnly: true
+    title: CyclicFeePaymentSchedule
+  EntityState:
+    type: object
+    properties:
+      active:
+        type: boolean
+        readOnly: true
+      canceled:
+        type: boolean
+        readOnly: true
+      copy:
+        type: boolean
+        readOnly: true
+      finished:
+        type: boolean
+        readOnly: true
+      forAccept:
+        type: boolean
+        readOnly: true
+      new:
+        type: boolean
+        readOnly: true
+      source:
+        type: boolean
+        readOnly: true
+    title: EntityState
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @NotNull'
+      currency:
+        type: string
+        description: 'Validations: @NotNull'
+    title: Money
+  PageOfCollateral:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/Collateral'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfCollateral
+  PageOfCollateralOwner:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/CollateralOwner'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfCollateralOwner
+  PageOfCreditApplication:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/CreditApplication'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfCreditApplication
+  PageOfCyclicFeePaymentSchedule:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/CyclicFeePaymentSchedule'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfCyclicFeePaymentSchedule
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  Period:
+    type: object
+    properties:
+      quantity:
+        type: integer
+        format: int64
+        description: 'Validations: @Positive'
+      unit:
+        type: string
+        enum:
+        - DAY
+        - HALF_YEAR
+        - MONTH
+        - QUARTER
+        - YEAR
+    title: Period
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort

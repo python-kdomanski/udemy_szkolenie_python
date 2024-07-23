@@ -1,0 +1,420 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Operations * Operational Services * Dunning
+host: 10.17.202.119:8580
+basePath: /application/api/dunning
+tags:
+- name: dunning-letters
+  description: Accrued items
+paths:
+  /dunning-letters:
+    get:
+      tags:
+      - dunning-letters
+      summary: Get all dunning letters
+      operationId: getAllOfDunningLetters
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: query
+        description: contractId
+        required: false
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: processId
+        in: query
+        description: processId
+        required: false
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfDunningLetter'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /dunning-letters/{id}:
+    get:
+      tags:
+      - dunning-letters
+      summary: Get dunning letter
+      operationId: getOneOfDunningLetters
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DunningLetter'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  DunningLetter:
+    type: object
+    properties:
+      allOwners:
+        type: string
+      assignedContractLimit:
+        type: number
+      baseCurrency:
+        type: string
+      businessUnit:
+        type: string
+        description: 'Dictionary: BusinessUnitItem (BANK_UNITS)'
+      contractId:
+        type: integer
+        format: int64
+      contractNo:
+        type: string
+      contractStartDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      currency:
+        type: string
+      dunningLetterFee:
+        $ref: '#/definitions/Money'
+      dunningLetterFeeInBaseCurrency:
+        $ref: '#/definitions/Money'
+      generationStatus:
+        type: string
+        description: 'Generation status  '
+        enum:
+        - FINISHED
+        - INTERRUPTED
+        - IN_PROGRESS
+        - UNDEFINED
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      invoiceId:
+        type: integer
+        format: int64
+      lastOrd:
+        type: integer
+        format: int32
+      log:
+        type: string
+      noOfDaysForRepayment:
+        type: integer
+        format: int32
+      noOfDaysInOverdue:
+        type: integer
+        format: int32
+      ord:
+        type: integer
+        format: int32
+      overdueFees:
+        $ref: '#/definitions/Money'
+      overdueInsurance:
+        $ref: '#/definitions/Money'
+      overdueInsuranceInBaseCurrency:
+        $ref: '#/definitions/Money'
+      overdueInterest:
+        $ref: '#/definitions/Money'
+      overduePrincipal:
+        $ref: '#/definitions/Money'
+      owner:
+        $ref: '#/definitions/DunningLetterPartyInfo'
+      penaltyInterest:
+        $ref: '#/definitions/Money'
+      penaltyInterestRate:
+        type: number
+      processId:
+        type: integer
+        format: int64
+      productId:
+        type: integer
+        format: int64
+      recipient:
+        $ref: '#/definitions/DunningLetterPartyInfo'
+      referenceNo:
+        type: string
+      template:
+        type: string
+        description: 'Dictionary: PrintTemplateItem (PRINT_TEMPLATES)'
+    title: DunningLetter
+  DunningLetterPartyInfo:
+    type: object
+    properties:
+      address:
+        type: string
+        description: 'Validations: @Length(max = 500, min = 0)'
+      name:
+        type: string
+        description: 'Validations: @Length(max = 200, min = 0)'
+    title: DunningLetterPartyInfo
+  Money:
+    type: object
+    properties:
+      amount:
+        type: number
+        description: Amount
+      currency:
+        type: string
+    title: Money
+  PageOfDunningLetter:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/DunningLetter'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfDunningLetter
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort

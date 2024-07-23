@@ -1,0 +1,611 @@
+### Get Oauth token
+POST {{CB_BASE_URL}}/application/oauth/token
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic R0w6cXFx
+
+grant_type=client_credentials
+
+> {%
+  client.global.set("auth_token", response.body.access_token);
+%}
+
+### Setup productId
+GET {{CB_BASE_URL}}/application/api/general-settings/dictionaries/ProductItem
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {%
+    isAnnuityMortgageLoan = function (product) {
+        return ('KHMO03_ANNUITET' === product.symbol);
+    };
+    let anuuitetKhmoProduct = response.body.find(isAnnuityMortgageLoan);
+    client.global.set("product_id", anuuitetKhmoProduct.id)
+ %}
+
+### Setup masterProductId
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {%
+    client.global.set("master_product_id", response.body.masterId)
+%}
+
+### Retrieve product additional properties
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}}/properties
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+### APO STEP POSITION 1
+POST {{CB_BASE_URL}}/application/api/party-data-management/customers/persons/328349/editable
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### APO STEP POSITION 2 Get client data by root number
+GET {{CB_BASE_URL}}/application/api/customer-agreement/root-numbers?involvedParties=%5B%7B%22customerId%22:%22328349%22,%22roles%22:%5B%22OWNER%22%5D%7D%5D&size=2147483647
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {%
+client.global.set("clientRootNumber", response.body.content[0].rootNumber)
+ %}
+
+### APO STEP POSITION 3 Get contract by contractNo
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts?contractNo=56823000072002000003470001&size=1
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+### APO STEP POSITION 3 Insert new loan contract
+POST {{CB_BASE_URL}}/application/api/loan/loans
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "amount": 50150.0,
+  "businessUnit": "ODDZIAL-PLONSK",
+  "currency": "PLN",
+  "intendedUsage": "25",
+  "intendedUsageDescription": "Kredyt na cele konsumpcyjne",
+  "interestRate":
+  {
+    "calculationWay": "TABLE",
+    "formula":
+    {
+      "factor": 1,
+      "offset": 3.1000,
+      "tableId": 838
+    },
+    "type": "VARIABLE"
+  },
+  "masterProductId": {{master_product_id}},
+  "paymentTransferInstruction":
+  {
+    "accountNo": "56823000072002000003470001",
+    "contractId": 749767,
+    "transferPaymentType": "INTERNAL_TRANSFER"
+  },
+  "period":
+  {
+    "quantity": 40,
+    "unit": "MONTH"
+  },
+  "productId": {{product_id}},
+  "repaymentTransferInstruction":
+  {
+    "transferRepaymentType": "OTHER"
+  },
+  "requestedSchedule":
+  {
+    "capitalFirstRepaymentDate": "2024-04-03",
+    "interestFirstRepaymentDate": "2024-04-03"
+  },
+  "rootNo": {{clientRootNumber}},
+  "startDate": "2024-03-27"
+}
+
+> {%
+client.global.set("contract_id", response.body.id)
+ %}
+
+### APO STEP POSITION 5 Update contract extra data step - REKS_PIERW_ZOB_KRED_INN_MSC_KL
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"REKS_PIERW_ZOB_KRED_INN_MSC_KL","value":"0.0"}
+
+### APO STEP POSITION 5 Update contract extra data step - REKS_PIERW_DOCH_MSC_KL
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"REKS_PIERW_DOCH_MSC_KL","value":"16500.0"}
+
+### APO STEP POSITION 5 Update contract extra data step - REKS_PIERW_ZOB_KRED_MSC_KL
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"REKS_PIERW_ZOB_KRED_MSC_KL","value":"785.03"}
+
+### APO STEP POSITION 5 Update contract extra data step - APO_OFFER_ID
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"APO_OFFER_ID","value":"OFF-2024-00000028"}
+
+### APO STEP POSITION 5 Update contract extra data step - REKS_PIERW_L_OSOB_W_RODZINE
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"REKS_PIERW_L_OSOB_W_RODZINE","value":"1"}
+
+### APO STEP POSITION 5 Update contract extra data step - BFG_R_DTI
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"BFG_R_DTI","value":"0.0879"}
+
+### APO STEP POSITION 5 Update contract extra data step - METOD_UPROSZCZ
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"METOD_UPROSZCZ","value":"215"}
+
+### APO STEP POSITION 5 Update contract extra data step - REKS_PIERW_ZOB_KRED_LIM_MSC_KL
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"REKS_PIERW_ZOB_KRED_LIM_MSC_KL","value":"50.0"}
+
+### APO STEP POSITION 5 Update contract extra data step - BFG_R_RATUDZKRE
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"BFG_R_RATUDZKRE","value":"CIF:328349,CR3:519.0,Kod:00,SD:547.0,Kod:00;"}
+
+### APO STEP POSITION 6 Add loan charges step - add charge
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "amount":
+  {
+    "amount": 1504.5,
+    "currency": "PLN"
+  },
+  "chargeCredit": false,
+  "chargeType": "CHARGE",
+  "commissionCharge": "1700",
+  "plannedDateOfPayment": "2024-03-27"
+}
+
+> {%
+  client.global.set("charge_id", response.body.id);
+  client.global.set("charge_version", response.body.version);
+%}
+
+### APO STEP POSITION 6 Add loan charges step - accept charge
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}/editable/accept
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+If-Match: {{charge_version}}
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### APO STEP POSITION 8 - Generate schedule step
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "capitalPeriod":
+  {
+    "dayOfMonth": 3,
+    "installmentQuantity": 40,
+    "isLastDay": false,
+    "period":
+    {
+      "quantity": 1,
+      "unit": "MONTH"
+    },
+    "startDate": "2024-04-03"
+  },
+  "denominator": 365,
+  "interestCalculationVariant": "ANNUITY",
+  "interestNumeratorDenominator": "EN_366_365",
+  "interestPeriod":
+  {
+    "dayOfMonth": 3,
+    "installmentQuantity": 40,
+    "isLastDay": false,
+    "period":
+    {
+      "quantity": 1,
+      "unit": "MONTH"
+    },
+    "startDate": "2024-04-03"
+  },
+  "interestRate":
+  {
+    "calculationWay": "TABLE",
+    "tableFormula":
+    {
+      "factor": 1,
+      "offset": 3.1000,
+      "tableId": 838
+    },
+    "type": "VARIABLE"
+  },
+  "isScheduleProlongEnabled": false,
+  "restToFirstInstallment": false,
+  "startDate": "2024-03-27",
+  "trancheAvailDate": "2024-04-02"
+}
+
+> {%
+  client.global.set("schedule_id", response.body.id);
+%}
+
+### APO STEP POSITION 9 - Insert interest rate change step
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/rate
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "formula": {
+    "factor": 1,
+    "offset": 0,
+    "tableId": 818
+  },
+  "rate": 0,
+  "resultRate": 0,
+  "validityPeriod": {
+    "from": "2024-04-03",
+    "to": "2024-06-03"
+  }
+}
+
+### APO STEP POSITION 9 - Update schedule version
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {%
+    client.global.set("schedule_version", response.body.version);
+%}
+
+#### APO STEP POSITION 10 - Insert surcharge period step
+PATCH {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+If-Match: {{schedule_version}}
+X-Correlation-ID: {{correlation_id}}
+
+{
+   "surchargePeriod": {
+    "from": "2025-07-19",
+    "to": "2026-07-17"
+  }
+}
+
+### APO STEP POSITION 11 - Recalculate costs step
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/costs/recalculate
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### APO STEP POSITION 12 - Add contract collateral step
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "actualValue":
+  {
+    "amount": 90000.0,
+    "currency": "PLN"
+  },
+  "collateralOwnerId": 328349,
+  "collateralType": "5101",
+  "collateralTypeStatus": "1",
+  "description": "Ubezpieczenie nieruchomości",
+  "exposureDate": "2024-03-27",
+  "finalDate": "2025-06-11",
+  "initialValue":
+  {
+    "amount": 90000.0,
+    "currency": "PLN"
+  },
+  "policyNumber": "85/2",
+  "position": null
+}
+
+> {%
+  client.global.set("collateral_id", response.body.id);
+%}
+
+### APO STEP POSITION 12 - Add contract collateral owners
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral/{{collateral_id}}/owners
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"customerId":328349}
+
+### APO STEP POSITION 12 - Add contract collateral extra data - BFG_R_ZABMIEJSC
+POST {{CB_BASE_URL}}/application/api/collateral-allocation/{{collateral_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"BFG_R_ZABMIEJSC","value":"10-200 Rzeszów"}
+
+### APO STEP POSITION 12 - Add contract collateral extra data - BFG_R_ZABNRULIC
+POST {{CB_BASE_URL}}/application/api/collateral-allocation/{{collateral_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"BFG_R_ZABNRULIC","value":"Rzeszów 15"}
+
+### APO STEP POSITION 12 - Add contract collateral extra data - BFG_R_ZABWYCMET
+POST {{CB_BASE_URL}}/application/api/collateral-allocation/{{collateral_id}}/extra-data
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"extraData":"BFG_R_ZABWYCMET","value":"BV"}
+
+### APO STEP POSITION 13 - Add insurances step
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/insurances
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "currency": "PLN",
+  "financedFromCredit": true,
+  "increaseCreditAmount": false,
+  "insuranceAmount":
+  {
+    "amount": 90000.0,
+    "currency": "PLN"
+  },
+  "insuranceDate": "2019-03-12",
+  "insuranceKind": "G_KREDYT",
+  "insurancePatternId": 741,
+  "insuranceProductId": 801,
+  "insuranceWithTranchePayment": true,
+  "policy":
+  {
+    "no": "8568/2",
+    "protectionPeriod":
+    {
+      "from": "2024-03-27",
+      "to": "2027-07-05"
+    }
+  },
+  "totalInsuranceAmount":
+  {
+    "amount": 150.0,
+    "currency": "PLN"
+  }
+}
+
+### APO STEP POSITION 13 - Add insurances step - charges 2024-03-27 (one by one till the end of credit period)
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{"amount":{"amount":20.0,"currency":"PLN"},"chargeCredit":false,"chargeType":"CHARGE","commissionCharge":"T07","plannedDateOfPayment":"2024-03-27"}
+
+> {% client.global.set("insurance_id", response.body.id)
+    client.global.set("insurance_version", response.body.version)%}
+
+### APO STEP POSITION 13 - Add insurances step - accept charge 2024-03-27 (one by one inserted in previous step)
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{insurance_id}}/editable/accept
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+If-Match: {{insurance_version}}
+
+{}
+
+### APO STEP POSITION 14 - Recalculate costs step
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/costs/recalculate
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### APO STEP POSITION 15 - Update pricing conditions step - get pricing conditions to update
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {%
+  client.global.set("pricing_cond_id", response.body.content[0].id);
+  client.global.set("pricing_cond_version", response.body.content[0].version);
+%}
+
+### APO STEP POSITION 15 - Update pricing conditions step - insert conditions
+PATCH {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions/{{pricing_cond_id}}/editable
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+If-Match: {{pricing_cond_version}}
+X-Correlation-ID: {{correlation_id}}
+
+{"dateFrom":"2024-03-27","pricingConditions":"BSOL_KR_OF_UKH"}
+
+### APO STEP POSITION 0 - Accept products, Get credit data
+GET {{CB_BASE_URL}}/application/api/credit-common/credits/{{contract_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+> {% client.global.set("credit_version", response.body.version)%}
+
+### APO STEP POSITION 0 - Accept products, Get booking date
+GET {{CB_BASE_URL}}/application/api/systems-operations/system-state/accounting
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+X-Correlation-ID: {{correlation_id}}
+
+### APO STEP POSITION 0 - Accept products, Update credit
+PATCH {{CB_BASE_URL}}/application/api/credit-common/credits/{{contract_id}}/editable
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+If-Match: {{credit_version}}
+X-Correlation-ID: {{correlation_id}}
+
+{
+  "amount": 50150,
+  "currency": "PLN",
+  "dateOfSigning": "2024-03-27",
+  "period":
+  {
+    "quantity": 40,
+    "unit": "MONTH"
+  },
+  "productId": {{product_id}},
+  "rootNo": {{clientRootNumber}}
+}
+
+### APO STEP POSITION 1 - Accept products, Bulk accept step
+POST {{CB_BASE_URL}}/application/api/systems-operations/api-operations/bulk-accept?correlationId={{correlation_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+
+{}
+
+### APO STEP POSITION 0 - Pay charges, Update charges at charge payment step - Get all charges for contract
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+
+> {%
+    let evidenceCharge = response.body.content.find((charge) => charge.evidence);
+    client.global.set("evidence_charge_id", evidenceCharge.id)
+%}
+
+### APO STEP POSITION 0 - Pay charges, Update charges at charge payment step - Get evidence charge details
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{evidence_charge_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+
+> {%
+  client.global.set("charge_id", response.body.id);
+  client.global.set("charge_version", response.body.version);
+%}
+
+### APO STEP POSITION 0 - Pay charges, Update charges at charge payment step - Delete evidence charge
+DELETE {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+If-Match: {{charge_version}}
+
+{}
+
+> {%
+  client.global.set("charge_version", response.body.version);
+%}
+
+### APO STEP POSITION 0 - Pay charges, Update charges at charge payment step - Accept evidence charge changes
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}/editable/accept
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+If-Match: {{charge_version}}
+
+{}
+
+### APO STEP POSITION 0 - Credit disposition, Transaction tranches step - Get tranches
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/positions?size=2147483647&type=TRANCHE
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+
+> {%
+  client.global.set("tranche_id", response.body.content[0].id);
+  client.global.set("tranche_version", response.body.content[0].version);
+%}
+
+### APO STEP POSITION 0 - Credit disposition, Transaction tranches step - Dispose tranche
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/tranches/{{tranche_id}}/payments
+X-Request-ID: {{$uuid}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+X-Correlation-ID: {{correlation_id}}
+If-Match: {{tranche_version}}
+
+{"beneficiaryAccount":"56823000072002000003470001","transferPaymentType":"INTERNAL_TRANSFER"}
+

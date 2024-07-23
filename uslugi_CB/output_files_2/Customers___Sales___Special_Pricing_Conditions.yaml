@@ -1,0 +1,5057 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Customers * Sales * Special Pricing Conditions
+host: 10.17.202.119:8580
+basePath: /application/api/special-pricing-conditions
+tags:
+- name: pricing-conditions
+  description: Packages
+- name: pricing-conditions / cards
+  description: Fee/commission package item exceptions
+- name: pricing-conditions / commissions
+  description: List of credit/debit commissions
+- name: pricing-conditions / fee-items
+  description: Fees and commissions in the package
+- name: pricing-conditions / fee-items / consortium
+  description: Consortium pricing conditions fee items
+- name: pricing-conditions / transfers
+  description: Fee/commission package item exceptions
+- name: pricing-conditions / turnovers
+  description: Fee/commission package exceptions
+- name: pricing-conditions-synchronization
+  description: Updating packet-based agreements
+- name: pricing-conditions-synchronization / logs
+  description: Updating package-based agreements
+paths:
+  /pricing-conditions:
+    get:
+      tags:
+      - pricing-conditions
+      summary: Get pricing conditions
+      operationId: getAllOfPricingConditions
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfPricingConditions'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - pricing-conditions
+      summary: Add pricing condition
+      operationId: addNewOfPricingConditions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/PricingConditions'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/PricingConditions'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions-synchronization:
+    get:
+      tags:
+      - pricing-conditions-synchronization
+      summary: Get pricing conditions
+      operationId: getAllOfPricingConditionsSynchronization
+      produces:
+      - '*/*'
+      parameters:
+      - name: onlyFailure
+        in: query
+        description: Only failure
+        required: false
+        type: boolean
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: synchronizationDate
+        in: query
+        description: Synchronization date
+        required: false
+        type: string
+        format: date
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfPricingConditionsSynchronization'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions-synchronization/{id}:
+    get:
+      tags:
+      - pricing-conditions-synchronization
+      summary: Get pricing condition
+      operationId: getOneOfPricingConditionsSynchronization
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsSynchronization'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions-synchronization/{pricingConditionsSynchronizationId}/logs:
+    get:
+      tags:
+      - pricing-conditions-synchronization / logs
+      summary: Get pricing condition logs
+      operationId: getAllOfPricingConditionsSynchronizationLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: onlyFailure
+        in: query
+        description: Only failure
+        required: false
+        type: boolean
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: pricingConditionsSynchronizationId
+        in: path
+        description: Pricing Condition Synchronization ID
+        required: true
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfPricingConditionsSynchronizationLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions-synchronization/{pricingConditionsSynchronizationId}/logs/{id}:
+    get:
+      tags:
+      - pricing-conditions-synchronization / logs
+      summary: Get pricing condition log
+      operationId: getOneOfPricingConditionsSynchronizationLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsSynchronizationId
+        in: path
+        description: Pricing Condition Synchronization ID
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsSynchronizationLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{id}:
+    get:
+      tags:
+      - pricing-conditions
+      summary: Get pricing condition
+      operationId: getOneOfPricingConditions
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditions'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - pricing-conditions
+      summary: Delete pricing condition
+      operationId: deleteOfPricingConditions
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditions'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - pricing-conditions
+      summary: Update pricing condition
+      operationId: updateEditableOfPricingConditions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/PricingConditions'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditions'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{id}/editable:
+    post:
+      tags:
+      - pricing-conditions
+      summary: Provide editable version of pricing condition
+      operationId: provideEditableOfPricingConditions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditions'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{id}/editable/accept:
+    post:
+      tags:
+      - pricing-conditions
+      summary: Accept new or edited pricing condition
+      operationId: acceptEditedOfPricingConditions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{id}/editable/reject:
+    post:
+      tags:
+      - pricing-conditions
+      summary: Reject new or edited pricing condition
+      operationId: rejectEditedOfPricingConditions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/cards:
+    get:
+      tags:
+      - pricing-conditions / cards
+      summary: Get special pricing condition cards
+      operationId: getAllOfPricingConditionsCards
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfSpecialPricingConditionCard'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/cards/{id}:
+    get:
+      tags:
+      - pricing-conditions / cards
+      summary: Get special pricing condition card
+      operationId: getOneOfPricingConditionsCards
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SpecialPricingConditionCard'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/commissions:
+    get:
+      tags:
+      - pricing-conditions / commissions
+      summary: Get pricing conditions commissions
+      operationId: getAllOfPricingConditionsCommissions
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: side
+        in: query
+        description: side
+        required: false
+        type: string
+        enum:
+        - CHARGING
+        - CREDITING
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfPricingConditionsCommission'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - pricing-conditions / commissions
+      summary: Add new pricing conditions commission
+      operationId: addNewOfPricingConditionsCommissions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/PricingConditionsCommission'
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/PricingConditionsCommission'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/commissions/{id}:
+    get:
+      tags:
+      - pricing-conditions / commissions
+      summary: Get pricing conditions commission
+      operationId: getOneOfPricingConditionsCommissions
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsCommission'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - pricing-conditions / commissions
+      summary: Remove pricing conditions commission
+      operationId: removeOfPricingConditionsCommissions
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsCommission'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/commissions/{id}/editable:
+    post:
+      tags:
+      - pricing-conditions / commissions
+      summary: Provide editable version of pricing conditions commission
+      operationId: provideEditableOfPricingConditionsCommissions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsCommission'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - pricing-conditions / commissions
+      summary: Update editable version of pricing conditions commission
+      operationId: updateEditableOfPricingConditionsCommissions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/PricingConditionsCommission'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsCommission'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/commissions/{id}/editable/accept:
+    post:
+      tags:
+      - pricing-conditions / commissions
+      summary: Accept new or edited pricing conditions commission
+      operationId: acceptEditedOfPricingConditionsCommissions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/commissions/{id}/editable/reject:
+    post:
+      tags:
+      - pricing-conditions / commissions
+      summary: Reject new or edited pricing conditions commission
+      operationId: rejectEditedOfPricingConditionsCommissions
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items:
+    get:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Get pricing conditions fee items
+      operationId: getAllOfPricingConditionsFeeItems
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: query
+        description: contractId
+        required: false
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfPricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Add new pricing conditions fee item
+      operationId: addNewOfPricingConditionsFeeItems
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/PricingConditionsFeeItem'
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/PricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{id}:
+    get:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Get pricing conditions fee item
+      operationId: getOneOfPricingConditionsFeeItems
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Remove pricing conditions fee item
+      operationId: removeOfPricingConditionsFeeItems
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsFeeItem'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{id}/editable:
+    post:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Provide editable version of pricing conditions fee item
+      operationId: provideEditableOfPricingConditionsFeeItems
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Update editable version of pricing conditions fee item
+      operationId: updateEditableOfPricingConditionsFeeItems
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/PricingConditionsFeeItem'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{id}/editable/accept:
+    post:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Accept new or edited pricing conditions fee item
+      operationId: acceptEditedOfPricingConditionsFeeItems
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{id}/editable/reject:
+    post:
+      tags:
+      - pricing-conditions / fee-items
+      summary: Reject new or edited pricing conditions fee item
+      operationId: rejectEditedOfPricingConditionsFeeItems
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{pricingConditionsFeeItemId}/consortium:
+    get:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Get consortium pricing conditions fee items
+      operationId: getAllOfPricingConditionsFeeItemsConsortium
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfConsortiumPricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Add new consortium pricing conditions fee item
+      operationId: addNewOfPricingConditionsFeeItemsConsortium
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{pricingConditionsFeeItemId}/consortium/{id}:
+    get:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Get consortium pricing conditions fee item
+      operationId: getOneOfPricingConditionsFeeItemsConsortium
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Remove consortium pricing conditions fee item
+      operationId: removeOfPricingConditionsFeeItemsConsortium
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{pricingConditionsFeeItemId}/consortium/{id}/editable:
+    post:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Provide editable version of consortium pricing conditions fee item
+      operationId: provideEditableOfPricingConditionsFeeItemsConsortium
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Update editable version of consortium pricing conditions fee item
+      operationId: updateEditableOfPricingConditionsFeeItemsConsortium
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{pricingConditionsFeeItemId}/consortium/{id}/editable/accept:
+    post:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Accept new or edited consortium pricing conditions fee item
+      operationId: acceptEditedOfPricingConditionsFeeItemsConsortium
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/fee-items/{pricingConditionsFeeItemId}/consortium/{id}/editable/reject:
+    post:
+      tags:
+      - pricing-conditions / fee-items / consortium
+      summary: Reject new or edited consortium pricing conditions fee item
+      operationId: rejectEditedOfPricingConditionsFeeItemsConsortium
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: pricingConditionsFeeItemId
+        in: path
+        description: pricingConditionsFeeItemId
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/transfers:
+    get:
+      tags:
+      - pricing-conditions / transfers
+      summary: Get special pricing conditions transfer
+      operationId: getAllOfPricingConditionsTransfers
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfSpecialPricingConditionTransfer'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/transfers/{id}:
+    get:
+      tags:
+      - pricing-conditions / transfers
+      summary: Get special pricing condition transfer
+      operationId: getOneOfPricingConditionsTransfers
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SpecialPricingConditionTransfer'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/turnovers:
+    get:
+      tags:
+      - pricing-conditions / turnovers
+      summary: Get special pricing condition turnovers
+      operationId: getAllOfPricingConditionsTurnovers
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfSpecialPricingConditionTurnover'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /pricing-conditions/{pricingConditionsId}/turnovers/{id}:
+    get:
+      tags:
+      - pricing-conditions / turnovers
+      summary: Get special pricing condition turnover
+      operationId: getOneOfPricingConditionsTurnovers
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: pricingConditionsId
+        in: path
+        description: pricingConditionsId
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/SpecialPricingConditionTurnover'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  AmountOrPercentageFee:
+    type: object
+    required:
+    - calculationWay
+    properties:
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @PositiveOrZero'
+      amountRange:
+        $ref: '#/definitions/AmountRange'
+      calculationWay:
+        type: string
+        description: 'Method of calculation
+
+          Validations: @NotNull'
+        enum:
+        - ACCORDING_TO_THE_ACT
+        - ALGORITHM
+        - BY_TABLE
+        - CHARGING_ON_DUE_DATE
+        - DT_TURNOVER_PERCENTAGE
+        - INTEREST
+        - NONE
+        - PERCENT
+        - PERCENTAGE_FOR_DAYS_UNTIL_REPAYMENT
+        - PERCENTAGE_OF_INVOICED_AMOUNT
+        - PERCENTAGE_ON_ORDER_PROCESSING
+        - QUOTA_BASED
+      interestRateTableId:
+        type: integer
+        format: int64
+        description: For table-based calculation way
+      percent:
+        type: number
+        description: 'Percent
+
+          Validations: @PositiveOrZero @DecimalMax(inclusive = true, value = 99.99)'
+        maximum: 99.99
+        exclusiveMaximum: false
+    title: AmountOrPercentageFee
+  AmountOrPercentageFeeExt:
+    type: object
+    required:
+    - calculationWay
+    properties:
+      amount:
+        type: number
+        description: 'Validations: @PositiveOrZero'
+      amountRange:
+        $ref: '#/definitions/AmountRange'
+      calculationBase:
+        type: string
+        enum:
+        - FINAL_AMOUNT
+        - PRINCIPAL_ONLY
+      calculationWay:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - ACCORDING_TO_THE_ACT
+        - ALGORITHM
+        - BY_TABLE
+        - CHARGING_ON_DUE_DATE
+        - DT_TURNOVER_PERCENTAGE
+        - INTEREST
+        - NONE
+        - PERCENT
+        - PERCENTAGE_FOR_DAYS_UNTIL_REPAYMENT
+        - PERCENTAGE_OF_INVOICED_AMOUNT
+        - PERCENTAGE_ON_ORDER_PROCESSING
+        - QUOTA_BASED
+      interestRateId:
+        type: integer
+        format: int64
+      percent:
+        type: number
+        description: 'Validations: @PositiveOrZero @DecimalMax(inclusive = true, value
+          = 99.99)'
+        maximum: 99.99
+        exclusiveMaximum: false
+      percentRange:
+        $ref: '#/definitions/PercentRange'
+    title: AmountOrPercentageFeeExt
+  AmountRange:
+    type: object
+    properties:
+      max:
+        type: number
+        description: 'Validations: @PositiveOrZero'
+      min:
+        type: number
+        description: 'Validations: @PositiveOrZero'
+    title: AmountRange
+  CardCriteria:
+    type: object
+    properties:
+      cardRank:
+        type: string
+        enum:
+        - ADDITIONAL
+        - PRIMARY
+      cardType:
+        type: string
+        description: 'Dictionary: CardTypeItem (DIC_CARD_TYPES)'
+    title: CardCriteria
+  ConsortiumPricingConditionsFeeItem:
+    type: object
+    required:
+    - consortiumContractId
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      amount:
+        type: number
+      consortiumContractId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      percentage:
+        type: number
+      pricingConditionsFeeItemId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+        readOnly: true
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: ConsortiumPricingConditionsFeeItem
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  DatePeriod:
+    type: object
+    properties:
+      from:
+        type: string
+        format: date
+        example: '2000-12-31'
+      to:
+        type: string
+        format: date
+        example: '2000-12-31'
+    title: DatePeriod
+  EntityState:
+    type: object
+    properties:
+      active:
+        type: boolean
+        readOnly: true
+      canceled:
+        type: boolean
+        readOnly: true
+      copy:
+        type: boolean
+        readOnly: true
+      finished:
+        type: boolean
+        readOnly: true
+      forAccept:
+        type: boolean
+        readOnly: true
+      new:
+        type: boolean
+        readOnly: true
+      source:
+        type: boolean
+        readOnly: true
+    title: EntityState
+  ExemptionSupport:
+    type: object
+    properties:
+      cycleType:
+        type: string
+        description: Cycle type
+        enum:
+        - DURING_WHOLE_PERIOD
+        - MONTHLY
+        - THROUGHOUT_THE_PERIOD_ACCORDING_TO_CYCLES
+      isEnabled:
+        type: boolean
+        description: Exemption support
+      period:
+        description: Free items handling period
+        $ref: '#/definitions/DatePeriod'
+      quantity:
+        type: integer
+        format: int64
+        description: Amount of free
+    title: ExemptionSupport
+  ExemptionSupportGlobal:
+    type: object
+    required:
+    - isEnabled
+    properties:
+      ctQuantity:
+        type: integer
+        format: int64
+        description: Amount of free discretionary commissions
+      cycleType:
+        type: string
+        description: Global cycle type
+        enum:
+        - DURING_WHOLE_PERIOD
+        - MONTHLY
+        - THROUGHOUT_THE_PERIOD_ACCORDING_TO_CYCLES
+      decreaseIfZero:
+        type: boolean
+        description: Decrease the number of free items for a zero commission
+      dtQuantity:
+        type: integer
+        format: int64
+        description: Amount of free charge commissions
+      isEnabled:
+        type: boolean
+        description: 'Global free item commission definition
+
+          Validations: @NotNull'
+      period:
+        description: Global period
+        $ref: '#/definitions/DatePeriod'
+    title: ExemptionSupportGlobal
+  FeeExemptionSupport:
+    type: object
+    properties:
+      amount:
+        type: number
+      cycleType:
+        type: string
+        enum:
+        - DURING_WHOLE_PERIOD
+        - MONTHLY
+        - THROUGHOUT_THE_PERIOD_ACCORDING_TO_CYCLES
+      isDecreaseIfZero:
+        type: boolean
+      isEnabled:
+        type: boolean
+      period:
+        $ref: '#/definitions/DatePeriod'
+      periodUnit:
+        type: string
+        enum:
+        - DAY
+        - HALF_YEAR
+        - MONTH
+        - QUARTER
+        - YEAR
+      quantity:
+        type: integer
+        format: int64
+    title: FeeExemptionSupport
+  InterestRate:
+    type: object
+    properties:
+      algorithmId:
+        type: integer
+        format: int64
+      calculationWay:
+        type: string
+        description: Calculate interest according to
+        enum:
+        - ALGORITHM
+        - TABLE
+      formula:
+        $ref: '#/definitions/InterestRateFormula'
+      type:
+        type: string
+        description: Interest rate type
+        enum:
+        - FIXED
+        - FLOATING
+        - VARIABLE
+    title: InterestRate
+  InterestRateFormula:
+    type: object
+    properties:
+      factor:
+        type: number
+        description: 'Validations: @PositiveOrZero'
+      offset:
+        type: number
+      tableId:
+        type: integer
+        format: int64
+    title: InterestRateFormula
+  PageOfConsortiumPricingConditionsFeeItem:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/ConsortiumPricingConditionsFeeItem'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfConsortiumPricingConditionsFeeItem
+  PageOfPricingConditions:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/PricingConditions'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfPricingConditions
+  PageOfPricingConditionsCommission:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/PricingConditionsCommission'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfPricingConditionsCommission
+  PageOfPricingConditionsFeeItem:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/PricingConditionsFeeItem'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfPricingConditionsFeeItem
+  PageOfPricingConditionsSynchronization:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/PricingConditionsSynchronization'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfPricingConditionsSynchronization
+  PageOfPricingConditionsSynchronizationLog:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/PricingConditionsSynchronizationLog'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfPricingConditionsSynchronizationLog
+  PageOfSpecialPricingConditionCard:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/SpecialPricingConditionCard'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfSpecialPricingConditionCard
+  PageOfSpecialPricingConditionTransfer:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/SpecialPricingConditionTransfer'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfSpecialPricingConditionTransfer
+  PageOfSpecialPricingConditionTurnover:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/SpecialPricingConditionTurnover'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfSpecialPricingConditionTurnover
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  PercentRange:
+    type: object
+    properties:
+      max:
+        type: number
+        description: 'Validations: @PositiveOrZero @DecimalMax(inclusive = true, value
+          = 100)'
+        maximum: 100
+        exclusiveMaximum: false
+      min:
+        type: number
+        description: 'Validations: @PositiveOrZero @DecimalMax(inclusive = true, value
+          = 100)'
+        maximum: 100
+        exclusiveMaximum: false
+    title: PercentRange
+  Period:
+    type: object
+    properties:
+      quantity:
+        type: integer
+        format: int64
+        description: 'Validations: @Positive'
+      unit:
+        type: string
+        enum:
+        - DAY
+        - HALF_YEAR
+        - MONTH
+        - QUARTER
+        - YEAR
+    title: Period
+  PeriodicActionPlan2:
+    type: object
+    required:
+    - period
+    properties:
+      dayOfMonth:
+        type: integer
+        format: int64
+        description: 'Day
+
+          Validations: @Max(value = 31)'
+        maximum: 31
+        exclusiveMaximum: false
+      isLastDay:
+        type: boolean
+        description: Last day
+      period:
+        description: 'Charge every
+
+          Validations: @NotNull'
+        $ref: '#/definitions/Period'
+      shiftType:
+        type: string
+        description: Day type
+        enum:
+        - ANY_DAY
+        - BUSINESS_SUBSEQUENT_IN_THE_MONTH
+        - WORKING_DAY_FOLLOWING
+        - WORKING_DAY_PREVIOUS
+      valid:
+        type: boolean
+        readOnly: true
+    title: PeriodicActionPlan2
+  PeriodicalFeeChargePlan:
+    type: object
+    properties:
+      dayOfMonth:
+        type: integer
+        format: int64
+        description: 'Validations: @Min(value = 1) @Max(value = 31)'
+        minimum: 1
+        maximum: 31
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      isLastDay:
+        type: boolean
+      month:
+        type: string
+        enum:
+        - APRIL
+        - AUGUST
+        - DECEMBER
+        - FEBRUARY
+        - JANUARY
+        - JULY
+        - JUNE
+        - MARCH
+        - MAY
+        - NOVEMBER
+        - OCTOBER
+        - SEPTEMBER
+      numberOfCharges:
+        type: integer
+        format: int64
+      period:
+        $ref: '#/definitions/Period'
+      shiftType:
+        type: string
+        enum:
+        - ANY_DAY
+        - BUSINESS_SUBSEQUENT_IN_THE_MONTH
+        - WORKING_DAY_FOLLOWING
+        - WORKING_DAY_PREVIOUS
+      valid:
+        type: boolean
+        readOnly: true
+    title: PeriodicalFeeChargePlan
+  PreferentialConditions:
+    type: object
+    properties:
+      amount:
+        type: number
+        description: Preferential fee
+      isEnabled:
+        type: boolean
+        description: Preferential values
+      period:
+        description: Periods handling
+        $ref: '#/definitions/DatePeriod'
+    title: PreferentialConditions
+  PreferentialConditionsPercent:
+    type: object
+    properties:
+      amount:
+        type: number
+        description: 'Validations: @PositiveOrZero'
+      amountRange:
+        $ref: '#/definitions/AmountRange'
+      isEnabled:
+        type: boolean
+      percent:
+        type: number
+        description: 'Validations: @PositiveOrZero @DecimalMax(inclusive = true, value
+          = 99.99)'
+        maximum: 99.99
+        exclusiveMaximum: false
+      percentRange:
+        $ref: '#/definitions/PercentRange'
+      period:
+        $ref: '#/definitions/DatePeriod'
+    title: PreferentialConditionsPercent
+  PricingConditions:
+    type: object
+    required:
+    - contractId
+    - currency
+    - maintenanceFeeChargePeriod
+    - symbol
+    - type
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      amDistributionNoSubordinate:
+        type: boolean
+        description: 'Administration module distribution without subordinates
+
+          Distribution to adm. module without subordinate items'
+      cmProfileId:
+        type: integer
+        format: int64
+        description: 'Profile of fees in the card system
+
+          ID of profile in card management system'
+      contractId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      ctInterestRate:
+        description: CT interest rate
+        $ref: '#/definitions/InterestRate'
+      currency:
+        type: string
+        description: 'Currency
+
+          Validations: @NotNull'
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      description:
+        type: string
+        description: 'Description
+
+          Validations: @Length(max = 100, min = 0)'
+      descriptionId:
+        description: Description
+        readOnly: true
+        $ref: '#/definitions/TranslationInfo'
+      dtInterestRate:
+        description: DT interest rate
+        $ref: '#/definitions/InterestRate'
+      entityType:
+        type: string
+        readOnly: true
+      exemptionSupport:
+        $ref: '#/definitions/ExemptionSupport'
+      exemptionSupportGlobal:
+        $ref: '#/definitions/ExemptionSupportGlobal'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      isChargeDisabled:
+        type: boolean
+        description: Is charge disabled
+      isInterestDefined:
+        type: boolean
+        description: Interest handling
+      isInterestEnabled:
+        type: boolean
+      isVAT:
+        type: boolean
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      maintenanceFeeAmount:
+        type: number
+        description: Fee
+      maintenanceFeeChargePeriod:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/PeriodicActionPlan2'
+      overdueInterestRate:
+        description: Penal interest rate
+        $ref: '#/definitions/InterestRateFormula'
+      preferentialConditions:
+        $ref: '#/definitions/PreferentialConditions'
+      purpose:
+        type: string
+        description: Type
+        enum:
+        - SMS_PACKAGE
+        - STANDARD_PACKAGE
+      quantity:
+        type: integer
+        format: int64
+        description: 'Amount of free
+
+          immutable: true'
+      symbol:
+        type: string
+        description: 'Symbol
+
+          Validations: @Length(max = 30, min = 0) @NotBlank'
+      translations:
+        type: object
+        description: 'Map of translations, e.g. {"EN": "Text","PL": "Tekst"}'
+        additionalProperties:
+          type: string
+      type:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - CONTRACT_PACKAGE
+        - GENERAL_PACKAGE
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PricingConditions
+  PricingConditionsCommission:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      commissionType:
+        type: string
+        description: 'Commission type
+
+          Dictionary: GeneralCommissionTypeItem (VDIC_CFEES)'
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      pricingConditionsId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+        readOnly: true
+      side:
+        type: string
+        description: Determining commission
+        enum:
+        - CHARGING
+        - CREDITING
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PricingConditionsCommission
+  PricingConditionsFeeItem:
+    type: object
+    required:
+    - mainKind
+    - value
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      accessChannel:
+        type: string
+        description: 'Access channel
+
+          Dictionary: AccessChannelItem (DIC_CHANNEL_CONTR_ACCESS)'
+      algorithmId:
+        type: integer
+        format: int64
+        description: Algorithm
+      chargeCircumstance:
+        type: string
+        description: Charge a fee
+        enum:
+        - AT_INITIATING_CONTRACT_AT_CASHDESK
+        - CASH
+        - FROM_FIRST_INCOME
+        - FROM_FIRST_INVOICES
+        - FROM_PAID_LOAN
+      chargePeriod:
+        $ref: '#/definitions/PeriodicalFeeChargePlan'
+      commissionType:
+        type: string
+        description: 'Commission type
+
+          Dictionary: GeneralCommissionTypeItem (VDIC_CFEES), Required when `mainKind`
+          is set to COMMISSION'
+      contractId:
+        type: integer
+        format: int64
+      copyKind:
+        type: string
+        description: Copying from a package position at the contract
+        enum:
+        - FEECFEEDEF
+        - FREEDEF
+        - NOCOPY
+      currency:
+        type: string
+        description: Currency
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      dayOfMonth:
+        type: integer
+        format: int64
+        description: Day
+      entityType:
+        type: string
+        readOnly: true
+      exemptionSupport:
+        $ref: '#/definitions/FeeExemptionSupport'
+      feeAndCommissionAlgorithmId:
+        type: integer
+        format: int64
+        description: Algorithm
+      feeCalculationBase:
+        type: string
+        description: Fee calculation base
+        enum:
+        - NONE
+        - PRINCIPAL_BALANCE
+        - PRINCIPAL_BEFORE_MATURITY_BALANCE
+      feeFundsSource:
+        type: string
+        description: Collection source
+        enum:
+        - ACCOUNT
+        - CASHDESK
+      feeType:
+        type: string
+        description: 'Fee type
+
+          Dictionary: GeneralFeeTypeItem (VDIC_FEES), Required when `mainKind` is
+          set to FEE'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      isCalculationBasedOnTrancheAmount:
+        type: boolean
+        description: Tranche amount is the base of calculation
+      isChargeForOneTransfer:
+        type: boolean
+        description: Charged for one transfer
+      isChargeInInterestInstallment:
+        type: boolean
+        description: Charging on interest rate installment maturity date
+      isChargedFromOutside:
+        type: boolean
+        description: Handling the external system
+      isCommissionDefinitionInherited:
+        type: boolean
+      isCredited:
+        type: boolean
+        description: Financed with a loan
+      isExemptionSupportInherited:
+        type: boolean
+      isLastDay:
+        type: boolean
+        description: The last day
+      isVAT:
+        type: boolean
+        description: VAT
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      linearCalculationPeriod:
+        description: Period of non-standard straight-line settlement
+        $ref: '#/definitions/Period'
+      mainKind:
+        type: string
+        description: 'Kind
+
+          Validations: @NotNull'
+        enum:
+        - COMMISSION
+        - EXTRA
+        - FEE
+      month:
+        type: string
+        description: Month
+        enum:
+        - APRIL
+        - AUGUST
+        - DECEMBER
+        - FEBRUARY
+        - JANUARY
+        - JULY
+        - JUNE
+        - MARCH
+        - MAY
+        - NOVEMBER
+        - OCTOBER
+        - SEPTEMBER
+      onAnniversaryContract:
+        type: boolean
+        description: Charge on contract signing anniversary
+      preferentialConditions:
+        $ref: '#/definitions/PreferentialConditionsPercent'
+      pricingConditionsId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+        readOnly: true
+      transactionAreaTypeVisible:
+        type: boolean
+        readOnly: true
+      unique:
+        type: string
+      validityPeriod:
+        description: Validity period
+        $ref: '#/definitions/DatePeriod'
+      value:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/AmountOrPercentageFeeExt'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PricingConditionsFeeItem
+  PricingConditionsSynchronization:
+    type: object
+    required:
+    - noOfFailed
+    - noOfSynchronizedContracts
+    - noOfSynchronizedPricingConditions
+    - synchronizationDate
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      entityType:
+        type: string
+        readOnly: true
+      faultDetails:
+        type: string
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      noOfFailed:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      noOfSynchronizedContracts:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      noOfSynchronizedPricingConditions:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      startTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Started
+      stopTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Finished
+      synchronizationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Validations: @NotNull'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PricingConditionsSynchronization
+  PricingConditionsSynchronizationLog:
+    type: object
+    required:
+    - error
+    - pricingConditionsSynchronizationId
+    properties:
+      entryTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: Date
+      error:
+        type: boolean
+        description: 'Validations: @NotNull'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      logDescription:
+        type: string
+      pricingConditionsSynchronizationId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+    title: PricingConditionsSynchronizationLog
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort
+  SpecialPricingConditionCard:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      cardCriteria:
+        $ref: '#/definitions/CardCriteria'
+      commissionType:
+        type: string
+        description: 'Dictionary: CommissionTypeItem (VDIC_CFEES)'
+      entityType:
+        type: string
+        readOnly: true
+      exemptionQuantity:
+        type: integer
+        format: int64
+        description: 'Amount of free
+
+          Number of exempted fee charges'
+      feeType:
+        type: string
+        description: 'Dictionary: FeeTypeItem (VDIC_FEES)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      mainKind:
+        type: string
+        enum:
+        - COMMISSION
+        - EXTRA
+        - FEE
+      pricingConditionsFeeItemId:
+        type: integer
+        format: int64
+      pricingConditionsId:
+        type: integer
+        format: int64
+      useDefault:
+        type: boolean
+        description: Use default fee if condition isn't met
+      value:
+        $ref: '#/definitions/AmountOrPercentageFee'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: SpecialPricingConditionCard
+  SpecialPricingConditionTransfer:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      commissionType:
+        type: string
+        description: 'Dictionary: CommissionTypeItem (VDIC_CFEES)'
+      entityType:
+        type: string
+        readOnly: true
+      exemptionQuantity:
+        type: integer
+        format: int64
+        description: Number of exempted fee charges
+      feeType:
+        type: string
+        description: 'Dictionary: FeeTypeItem (VDIC_FEES)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      mainKind:
+        type: string
+        enum:
+        - COMMISSION
+        - EXTRA
+        - FEE
+      pricingConditionsFeeItemId:
+        type: integer
+        format: int64
+      pricingConditionsId:
+        type: integer
+        format: int64
+      transferCriteria:
+        description: 'Validations: @DestinationAccountOrCustomerOwnAccount'
+        $ref: '#/definitions/TransferCriteria'
+      useDefault:
+        type: boolean
+        description: 'Charge default fee when criterium is not met
+
+          Use default fee if condition isn''t met'
+      value:
+        $ref: '#/definitions/AmountOrPercentageFee'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: SpecialPricingConditionTransfer
+  SpecialPricingConditionTurnover:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      commissionType:
+        type: string
+        description: 'Dictionary: CommissionTypeItem (VDIC_CFEES)'
+      entityType:
+        type: string
+        readOnly: true
+      exemptionQuantity:
+        type: integer
+        format: int64
+        description: Number of exempted fee charges
+      feeType:
+        type: string
+        description: 'Type
+
+          Dictionary: FeeTypeItem (VDIC_FEES)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      mainKind:
+        type: string
+        enum:
+        - COMMISSION
+        - EXTRA
+        - FEE
+      pricingConditionsFeeItemId:
+        type: integer
+        format: int64
+      pricingConditionsId:
+        type: integer
+        format: int64
+      turnoverCriteria:
+        $ref: '#/definitions/TurnoverCriteria'
+      useDefault:
+        type: boolean
+        description: 'Charge default fee when criterium is not met
+
+          Use default fee if condition isn''t met'
+      value:
+        $ref: '#/definitions/AmountOrPercentageFee'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: SpecialPricingConditionTurnover
+  TransferCriteria:
+    type: object
+    properties:
+      beneficiaryBankNo:
+        type: integer
+        format: int64
+        description: 'Beneficiary''s bank settlement no.
+
+          Validations: @Min(value = 10000000) @Max(value = 99999999)'
+        minimum: 10000000
+        maximum: 99999999
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      clearingTransferType:
+        type: string
+        description: Kind of way
+        enum:
+        - FROM_SETTLEMENTS_CENTER
+        - INTERBANK
+        - INTERBRANCH
+        - INTERNAL
+        - INTRAGROUP
+      destinationAccountType:
+        type: string
+        description: Recipient account type
+        enum:
+        - CURRENT_ACCOUNT
+        - LOAN
+        - OWN_ACCOUNT
+        - TERM_DEPOSIT
+      earlyRepaymentKind:
+        type: string
+        description: Kind of early repayment
+        enum:
+        - DECLARED
+        - UNDECLARED
+      isCustomerOwnAccount:
+        type: boolean
+        description: Own account transfer
+      isInternal:
+        type: boolean
+        description: Internal
+      transactionAreaType:
+        type: string
+        enum:
+        - TRANS_AREA_TYPE_CROSS_B
+        - TRANS_AREA_TYPE_DOMESTIC
+      transferType:
+        type: string
+        description: Order type
+        enum:
+        - PAYMENT_ORDER
+        - SEPA_TRANSFER
+        - SORBNET_TRANSFER
+        - TRANSFER
+        - TRANSFER_TO_OWN_ACCOUNT
+        - TRANSFER_TO_SOCIAL_SECURITY_ZUS
+        - TRANSFER_TO_TO
+    title: TransferCriteria
+  TranslationInfo:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      property:
+        type: string
+    title: TranslationInfo
+  TurnoverCriteria:
+    type: object
+    properties:
+      criteriaOperator:
+        type: string
+        enum:
+        - GREATER_OR_EQUAL
+        - LESS_OR_EQUAL
+      turnoverType:
+        type: string
+        enum:
+        - CT_TURNOVERS
+        - DR_AND_CR_TURNOVER
+        - DT_TURNOVERS
+    title: TurnoverCriteria

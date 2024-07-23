@@ -1,0 +1,1862 @@
+REQUEST POST /schedules
+{
+    "disbursementDate": "2032-01-10",
+    "creditPeriod":
+    {
+        "quantity": 60,
+        "unit": "MONTH"
+    },
+    "installmentsScheduleParameters":
+    {
+        "productSymbol": "KGO_ANNUITY",
+        "tranches":
+        [
+            {
+                "amount":
+                {
+                    "currency": "PLN",
+                    "value": 10000.0
+                },
+                "date": "2032-01-10"
+            }
+        ],
+        "interestRate": 0.116,
+        "interestRateType": "VARIABLE",
+        "interestRateChange": null,
+        "calculationVariant": "EQUAL_INSTALLMENTS",
+        "calculationVariantChange": null,
+        "capitalPeriod":
+        {
+            "dayOfMonth": 20,
+            "frequency":
+            {
+                "quantity": 60,
+                "unit": "MONTH"
+            },
+            "startDate": "2032-01-31",
+            "gracePeriod":
+            {
+                "quantity": 0,
+                "unit": "MONTH"
+            },
+            "surchargePeriod": null
+        },
+        "interestPeriod":
+        {
+            "dayOfMonth": 20,
+            "frequency":
+            {
+                "quantity": 60,
+                "unit": "MONTH"
+            },
+            "startDate": "2032-01-31",
+            "gracePeriod":
+            {
+                "quantity": 0,
+                "unit": "MONTH"
+            },
+            "surchargePeriod": null
+        }
+    },
+    "commissionFeeScheduleParameters":
+    {
+        "feeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "period":
+        {
+            "dayOfMonth": null,
+            "frequency": null,
+            "startDate": "2032-01-10"
+        },
+        "amount":
+        {
+            "value": 300.0,
+            "currency": "PLN"
+        },
+        "isCredited": true
+    },
+    "insuranceFeeScheduleParameters": null,
+    "currentAccountFeeScheduleParameters": null
+}
+
+RESPONSE
+{
+    "tranches":
+    [
+        {
+            "amount":
+            {
+                "currency": "PLN",
+                "value": 10000.0
+            },
+            "date": "2032-01-10"
+        }
+    ],
+    "installmentsSchedule":
+    [
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 187.28
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 10000.0
+            },
+            "date": "2032-01-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 31.78
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 122.38
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 9812.72
+            },
+            "date": "2032-02-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 96.68
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 123.59
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 9690.34
+            },
+            "date": "2032-03-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 95.47
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 130.89
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 9566.75
+            },
+            "date": "2032-04-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 88.17
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 129.1
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 9435.86
+            },
+            "date": "2032-05-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 89.96
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 124.41
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 9306.76
+            },
+            "date": "2032-06-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 94.65
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 134.43
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 9182.35
+            },
+            "date": "2032-07-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 84.63
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 129.92
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 9047.92
+            },
+            "date": "2032-08-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 89.14
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 131.2
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 8918.0
+            },
+            "date": "2032-09-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 87.86
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 135.28
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 8786.8
+            },
+            "date": "2032-10-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 83.78
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 128.33
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 8651.52
+            },
+            "date": "2032-11-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 90.73
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 143.22
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 8523.19
+            },
+            "date": "2032-12-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 75.84
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 136.5
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 8379.97
+            },
+            "date": "2033-01-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 82.56
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 135.23
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 8243.47
+            },
+            "date": "2033-02-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 83.83
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 146.91
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 8108.24
+            },
+            "date": "2033-03-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 72.15
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 143.15
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 7961.33
+            },
+            "date": "2033-04-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 75.91
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 144.52
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 7818.18
+            },
+            "date": "2033-05-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 74.54
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 143.46
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 7673.66
+            },
+            "date": "2033-06-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 75.6
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 147.27
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 7530.2
+            },
+            "date": "2033-07-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 71.79
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 141.63
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 7382.93
+            },
+            "date": "2033-08-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 77.43
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 152.32
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 7241.3
+            },
+            "date": "2033-09-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 66.74
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 151.47
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 7088.98
+            },
+            "date": "2033-10-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 67.59
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 148.51
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 6937.51
+            },
+            "date": "2033-11-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 70.55
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 156.49
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 6789.0
+            },
+            "date": "2033-12-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 62.57
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 153.72
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 6632.51
+            },
+            "date": "2034-01-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 65.34
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 155.23
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 6478.79
+            },
+            "date": "2034-02-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 63.83
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 162.79
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 6323.56
+            },
+            "date": "2034-03-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 56.27
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 158.36
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 6160.77
+            },
+            "date": "2034-04-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 60.7
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 158.02
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 6002.41
+            },
+            "date": "2034-05-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 61.04
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 165.2
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 5844.39
+            },
+            "date": "2034-06-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 53.86
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 164.91
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 5679.19
+            },
+            "date": "2034-07-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 54.15
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 162.98
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 5514.28
+            },
+            "date": "2034-08-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 56.08
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 168.04
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 5351.3
+            },
+            "date": "2034-09-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 51.02
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 169.64
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 5183.26
+            },
+            "date": "2034-10-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 49.42
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 169.67
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 5013.62
+            },
+            "date": "2034-11-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 49.39
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 172.88
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 4843.95
+            },
+            "date": "2034-12-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 46.18
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 170.07
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 4671.07
+            },
+            "date": "2035-01-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 48.99
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 177.58
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 4501.0
+            },
+            "date": "2035-02-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 41.48
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 180.59
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 4323.42
+            },
+            "date": "2035-03-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 38.47
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 178.24
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 4142.83
+            },
+            "date": "2035-04-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 40.82
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 180.0
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 3964.59
+            },
+            "date": "2035-05-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 39.06
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 182.98
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 3784.59
+            },
+            "date": "2035-06-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 36.08
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 184.72
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 3601.61
+            },
+            "date": "2035-07-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 34.34
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 185.4
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 3416.89
+            },
+            "date": "2035-08-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 33.66
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 187.22
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 3231.49
+            },
+            "date": "2035-09-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 31.84
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 188.1
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 3044.27
+            },
+            "date": "2035-10-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 30.96
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 192.74
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 2856.17
+            },
+            "date": "2035-11-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 26.32
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 193.67
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 2663.43
+            },
+            "date": "2035-12-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 25.39
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 193.94
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 2469.76
+            },
+            "date": "2036-01-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 25.12
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 197.36
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 2275.82
+            },
+            "date": "2036-02-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 21.7
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 199.9
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 2078.46
+            },
+            "date": "2036-03-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 19.16
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 199.96
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 1878.56
+            },
+            "date": "2036-04-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 19.1
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 203.59
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 1678.6
+            },
+            "date": "2036-05-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 15.47
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 204.53
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 1475.01
+            },
+            "date": "2036-06-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 14.53
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 206.54
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 1270.48
+            },
+            "date": "2036-07-21",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 12.52
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 208.92
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 1063.94
+            },
+            "date": "2036-08-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 10.14
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 210.09
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 855.02
+            },
+            "date": "2036-09-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 8.97
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 213.32
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 644.93
+            },
+            "date": "2036-10-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 5.74
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 214.81
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 431.61
+            },
+            "date": "2036-11-20",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 4.25
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.06
+            }
+        },
+        {
+            "capitalAmount":
+            {
+                "currency": "PLN",
+                "value": 216.8
+            },
+            "capitalRemaining":
+            {
+                "currency": "PLN",
+                "value": 216.8
+            },
+            "date": "2036-12-22",
+            "interestAmount":
+            {
+                "currency": "PLN",
+                "value": 2.2
+            },
+            "surchargeAmount":
+            {
+                "currency": "PLN",
+                "value": 0.0
+            },
+            "totalAmount":
+            {
+                "currency": "PLN",
+                "value": 219.0
+            }
+        }
+    ],
+    "commissionFeeSchedule":
+    [
+        {
+            "fee_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "schedule":
+            [
+                {
+                    "date": "2024-03-25",
+                    "amount":
+                    {
+                        "value": 0,
+                        "currency": "string"
+                    }
+                }
+            ]
+        }
+    ],
+    "insuranceFeeSchedule":
+    [
+        {
+            "fee_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "schedule":
+            [
+                {
+                    "date": "2032-01-10",
+                    "amount":
+                    {
+                        "value": 300.0,
+                        "currency": "PLN"
+                    }
+                }
+            ]
+        }
+    ],
+    "currentAccountFeeSchedule":
+    [],
+    "creditSchedulesIndicators":
+    {
+        "rrso": 0.137777,
+        "totalCosts":
+        {
+            "value": 3443.54,
+            "currency": "PLN"
+        },
+        "totalAmountToPay":
+        {
+            "value": 13443.54,
+            "currency": "PLN"
+        },
+        "totalInsurances":
+        {
+            "value": 0.0,
+            "currency": "PLN"
+        },
+        "totalInterestInstallments":
+        {
+            "value": 3143.54,
+            "currency": "PLN"
+        },
+        "totalCommissionsFees":
+        {
+            "value": 300.0,
+            "currency": "PLN"
+        },
+        "totalCurrentAccountFees":
+        {
+            "value": 0.0,
+            "currency": "PLN"
+        },
+        "nonInterestCosts":
+        {
+            "value": 300.0,
+            "currency": "PLN"
+        },
+        "maxInstallment":
+        {
+            "value": 219.06,
+            "currency": "PLN"
+        },
+        "totalSurchargeAmount":
+        {
+            "value": 0.0,
+            "currency": "PLN"
+        }
+    }
+}

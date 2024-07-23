@@ -1,0 +1,6 @@
+#GET http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/positions?size=2147483647&type=TRANCHE

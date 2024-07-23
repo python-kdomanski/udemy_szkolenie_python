@@ -1,0 +1,38 @@
+URL - REST CB;Typ;Sciezka bazowa;Nazwa uslugi;Nazwa pliku z usluga;Ilosc param WE
+POST {{CB_BASE_URL}}/application/oauth/token;post;/application/oauth;token;Nie znaleziono uslugi;-1
+GET {{CB_BASE_URL}}/application/api/general-settings/dictionaries/ProductItem;get;application/api/general-settings;dictionaries;Business_Development___Product_Management___General_Settings.yaml;2
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}};get;/application/api/product-directory;products;Business_Development___Product_Management___Product_Directory.yaml;15
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}}/properties;get;/application/api/product-directory;products / properties;Business_Development___Product_Management___Product_Directory.yaml;3
+POST {{CB_BASE_URL}}/application/api/party-data-management/customers/persons/328349/editable;post;/application/api/party-data-management;customers / persons;Customers___Party_Reference___Party_Data_Management.yaml;23
+GET {{CB_BASE_URL}}/application/api/customer-agreement/root-numbers?involvedParties=%5B%7B%22customerId%22:%22328349%22,%22roles%22:%5B%22OWNER%22%5D%7D%5D&size=2147483647;get;/application/api/customer-agreement;root-numbers;Customers___Relationship_Management___Customer_Agreement.yaml;8
+GET {{CB_BASE_URL}}/application/api/credit-common/credits/{{contract_id}};get;/application/api/credit-common;credits;Products___Loans_and_Deposits___Credit_Common.yaml;18
+POST {{CB_BASE_URL}}/application/api/systems-operations/api-operations/bulk-accept?correlationId={{correlation_id}};post;/application/api/systems-operations;api-operations;Resource_Management___Platform_Operations___Systems_Operations.yaml;7
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/tranches/{{tranche_id}}/payments;post;/application/api/loan;loans / tranches / payments  ;Nie znaleziono uslugi;-1
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/rate;post;/application/api/loan;loans / payment-schedules / rate;Products___Loans_and_Deposits___Loan.yaml;-1
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules;post;/application/api/loan;loans / payment-schedules;Products___Loans_and_Deposits___Loan.yaml;7
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/costs/recalculate;post;/application/api/loan;loans / costs / recalculatet;Nie znaleziono uslugi;-1
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{insurance_id}}/editable/accept;post;/application/api/loan;loans / charges / esitable / accept;Nie znaleziono uslugi;-1
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}}/editable/accept;post;/application/api/loan;loans / charges / esitable / accept;Nie znaleziono uslugi;-1
+POST {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges;post;/application/api/loan;loans / charges;Products___Loans_and_Deposits___Loan.yaml;6
+POST {{CB_BASE_URL}}/application/api/loan/loans;post;/application/api/loan;loans;Products___Loans_and_Deposits___Loan.yaml;3
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/insurances;post;/application/api/contract-common;contracts / insurances ;Products___Loans_and_Deposits___Contract_Common.yaml;-1
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/extra-data;post;/application/api/contract-common;contracts / extra-data;Products___Loans_and_Deposits___Contract_Common.yaml;6
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral/{{collateral_id}}/owners;post;/application/api/contract-common;contracts / collateral / owners;Nie znaleziono uslugi;-1
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/collateral;post;/application/api/contract-common;contracts / collateral;Nie znaleziono uslugi;-1
+POST {{CB_BASE_URL}}/application/api/contract-common/contracts/753180/extra-data;post;/application/api/contract-common;contracts / extra-data;Products___Loans_and_Deposits___Contract_Common.yaml;6
+POST {{CB_BASE_URL}}/application/api/collateral-allocation/{{collateral_id}}/extra-data;post;/application/api/;collateral-allocation / extra-data ;Nie znaleziono uslugi;-1
+POST http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/rate;post;/application/api/loan;loans / payment-schedules ;Products___Loans_and_Deposits___Loan.yaml;-1
+PATCH {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};patch;/application/api/loan;loans / payment-schedules ;Products___Loans_and_Deposits___Loan.yaml;-1
+PATCH {{CB_BASE_URL}}/application/api/credit-common/credits/{{contract_id}}/editable;patch;/application/api/credit-common;credits;Products___Loans_and_Deposits___Credit_Common.yaml;18
+PATCH {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions/{{pricing_cond_id}}/editable;patch;/application/api/contract-common;contracts;Products___Loans_and_Deposits___Contract_Common.yaml;17
+GET {{CB_BASE_URL}}/application/api/systems-operations/system-state/accounting;get;/application/api/loan;loans / payment-schedules / positions  ;Nie znaleziono uslugi;-1
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/positions?size=2147483647&type=TRANCHE;get;/application/api/loan;loans / payment-schedules / positions;Products___Loans_and_Deposits___Loan.yaml;10
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};get;/application/api/loan;loans / payment-schedules;Products___Loans_and_Deposits___Loan.yaml;7
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{evidence_charge_id}};get;/application/api/loan;loans / charges ;Nie znaleziono uslugi;-1
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}};get;/application/api/loan;loans / charges;Products___Loans_and_Deposits___Loan.yaml;6
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges;get;/application/api/loan;loans / charges;Products___Loans_and_Deposits___Loan.yaml;6
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts?contractNo=56823000072002000003470001&size=1;get;/application/api/contract-common;contracts;Products___Loans_and_Deposits___Contract_Common.yaml;17
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions;get;/application/api/contract-common;contracts / pricing-conditions;Products___Loans_and_Deposits___Contract_Common.yaml;6
+DELETE {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{charge_id}};delete;/application/api/loan;loans / charges / delete;Nie znaleziono uslugi;-1
+#PATCH http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};patch;/application/api/loan;loans / payment-schedules;Products___Loans_and_Deposits___Loan.yaml;7
+#GET http://{{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}};get;/application/api/loan;loans / payment-schedules;Products___Loans_and_Deposits___Loan.yaml;7

@@ -1,0 +1,5484 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Finance and Risk * Regulatory Compliance * Regulatory Compliance
+host: 10.17.202.119:8580
+basePath: /application/api/regulatory-compliance
+tags:
+- name: event-orderers / companies
+  description: Entity's data
+- name: event-orderers / parties
+  description: Ordering the order
+- name: event-orderers / persons
+  description: Persons giving instruction
+- name: laundry-entries
+  description: Browsing laundry entries
+- name: laundry-entries / v3
+  description: Browsing laundry entries
+- name: laundry-entry-cleaning-logs
+  description: Laundry entry cleaning logs
+- name: laundry-exports
+  description: 2019 laundry data export
+- name: laundry-exports / logs
+  description: Laundry data export - Log
+- name: laundry-white-list-entries
+  description: Modulo/contracts/own accounts are exempted from the liability of registering
+    the laundry
+paths:
+  /event-orderers/companies:
+    get:
+      tags:
+      - event-orderers / companies
+      summary: Get companies ordering the order
+      operationId: getAllOfEventOrderersCompanies
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: query
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfCompanyEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - event-orderers / companies
+      summary: Add new company ordering the order
+      operationId: addNewOfEventOrderersCompanies
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/CompanyEventOrder'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/CompanyEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/companies/{id}:
+    get:
+      tags:
+      - event-orderers / companies
+      summary: Get company ordering tho order
+      operationId: getOneOfEventOrderersCompanies
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CompanyEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - event-orderers / companies
+      summary: Remove company ordering the order
+      operationId: removeOfEventOrderersCompanies
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CompanyEventOrder'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/companies/{id}/editable:
+    post:
+      tags:
+      - event-orderers / companies
+      summary: Provide editable version of company ordering the order
+      operationId: provideEditableOfEventOrderersCompanies
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CompanyEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - event-orderers / companies
+      summary: Update editable version of company ordering the order
+      operationId: updateEditableOfEventOrderersCompanies
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/CompanyEventOrder'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CompanyEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/companies/{id}/editable/accept:
+    post:
+      tags:
+      - event-orderers / companies
+      summary: Accept new or edited company ordering the order
+      operationId: acceptEditedOfEventOrderersCompanies
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/companies/{id}/editable/reject:
+    post:
+      tags:
+      - event-orderers / companies
+      summary: Reject new or edited company ordering the order
+      operationId: rejectEditedOfEventOrderersCompanies
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/parties:
+    get:
+      tags:
+      - event-orderers / parties
+      summary: Get persons ordering the order
+      operationId: getAllOfEventOrderersParties
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: query
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfPartyEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/parties/{id}:
+    get:
+      tags:
+      - event-orderers / parties
+      summary: Get person ordering tho order
+      operationId: getOneOfEventOrderersParties
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PartyEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/persons:
+    get:
+      tags:
+      - event-orderers / persons
+      summary: Get persons ordering the order
+      operationId: getAllOfEventOrderersPersons
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: query
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfPersonEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - event-orderers / persons
+      summary: Add new person ordering the order
+      operationId: addNewOfEventOrderersPersons
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/PersonEventOrder'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/PersonEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/persons/{id}:
+    get:
+      tags:
+      - event-orderers / persons
+      summary: Get person ordering tho order
+      operationId: getOneOfEventOrderersPersons
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PersonEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - event-orderers / persons
+      summary: Remove person ordering the order
+      operationId: removeOfEventOrderersPersons
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PersonEventOrder'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/persons/{id}/editable:
+    post:
+      tags:
+      - event-orderers / persons
+      summary: Provide editable version of Person ordering the order
+      operationId: provideEditableOfEventOrderersPersons
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PersonEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - event-orderers / persons
+      summary: Update editable version of person ordering the order
+      operationId: updateEditableOfEventOrderersPersons
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/PersonEventOrder'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PersonEventOrder'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/persons/{id}/editable/accept:
+    post:
+      tags:
+      - event-orderers / persons
+      summary: Accept new or edited operson ordering the order
+      operationId: acceptEditedOfEventOrderersPersons
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /event-orderers/persons/{id}/editable/reject:
+    post:
+      tags:
+      - event-orderers / persons
+      summary: Reject new or edited person ordering the order
+      operationId: rejectEditedOfEventOrderersPersons
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-entries:
+    get:
+      tags:
+      - laundry-entries
+      summary: Get laundry entries
+      operationId: getAllOfLaundryEntries
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - laundry-entries
+      summary: Add new laundry entry
+      operationId: addNewOfLaundryEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/LaundryEntry'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/LaundryEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-entries/{id}:
+    get:
+      tags:
+      - laundry-entries
+      summary: Get laundry entry
+      operationId: getOneOfLaundryEntries
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - laundry-entries
+      summary: Cancel laundry entry
+      operationId: cancelLaundryEntryOfLaundryEntries
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entry
+        description: entry
+        required: true
+        schema:
+          $ref: '#/definitions/LaundryEntry'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-entries/{id}/adjustment:
+    put:
+      tags:
+      - laundry-entries
+      summary: Make adjustment for laundry entry
+      operationId: adjustmentLaundryEntryOfLaundryEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entry
+        description: entry
+        required: true
+        schema:
+          $ref: '#/definitions/LaundryEntry'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-entries/{id}/editable:
+    post:
+      tags:
+      - laundry-entries
+      summary: Provide laundry entry to make adjustment
+      operationId: provideLaundryEntryToEffectAdjustmentOfLaundryEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-entry-cleaning-logs:
+    get:
+      tags:
+      - laundry-entry-cleaning-logs
+      summary: Get laundry entry cleaning logs
+      operationId: getAllOfLaundryEntryCleaningLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: dateFrom
+        in: query
+        description: dateFrom
+        required: false
+        type: string
+        format: date
+      - name: dateTo
+        in: query
+        description: dateTo
+        required: false
+        type: string
+        format: date
+      - name: deleteDate
+        in: query
+        description: deleteDate
+        required: false
+        type: string
+        format: date
+      - name: numberOfEntries
+        in: query
+        description: numberOfEntries
+        required: false
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: result
+        in: query
+        description: result
+        required: false
+        type: string
+        enum:
+        - DELETED
+        - INTERRUPTION
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryEntryCleaningLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-entry-cleaning-logs/{id}:
+    get:
+      tags:
+      - laundry-entry-cleaning-logs
+      summary: Get laundry entry cleaning log
+      operationId: getOneOfLaundryEntryCleaningLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntryCleaningLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-exports:
+    get:
+      tags:
+      - laundry-exports
+      summary: Get laundry exports
+      operationId: getAllOfLaundryExports
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryExport'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-exports/{exportId}/logs:
+    get:
+      tags:
+      - laundry-exports / logs
+      summary: Get laundry export logs
+      operationId: getAllOfLaundryExportsLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: exportId
+        in: path
+        description: exportId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryExportLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-exports/{exportId}/logs/{id}:
+    get:
+      tags:
+      - laundry-exports / logs
+      summary: Get laundry export log
+      operationId: getOneOfLaundryExportsLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: exportId
+        in: path
+        description: exportId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryExportLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-exports/{id}:
+    get:
+      tags:
+      - laundry-exports
+      summary: Get laundry export
+      operationId: getOneOfLaundryExports
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryExport'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-white-list-entries:
+    get:
+      tags:
+      - laundry-white-list-entries
+      summary: Get laundry white list entries
+      operationId: getAllOfLaundryWhiteListEntries
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryWhiteListEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - laundry-white-list-entries
+      summary: Add new laundry white list entry
+      operationId: addNewOfLaundryWhiteListEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/LaundryWhiteListEntry'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/LaundryWhiteListEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-white-list-entries/{id}:
+    get:
+      tags:
+      - laundry-white-list-entries
+      summary: Get laundry white list entry
+      operationId: getOneOfLaundryWhiteListEntries
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryWhiteListEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - laundry-white-list-entries
+      summary: Remove laundry white list entry
+      operationId: removeOfLaundryWhiteListEntries
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryWhiteListEntry'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-white-list-entries/{id}/editable:
+    post:
+      tags:
+      - laundry-white-list-entries
+      summary: Provide editable version of laundry white list entry
+      operationId: provideEditableOfLaundryWhiteListEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryWhiteListEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - laundry-white-list-entries
+      summary: Update editable version of laundry white list entry
+      operationId: updateEditableOfLaundryWhiteListEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/LaundryWhiteListEntry'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryWhiteListEntry'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-white-list-entries/{id}/editable/accept:
+    post:
+      tags:
+      - laundry-white-list-entries
+      summary: Accept new or edited laundry white list entry
+      operationId: acceptEditedOfLaundryWhiteListEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /laundry-white-list-entries/{id}/editable/reject:
+    post:
+      tags:
+      - laundry-white-list-entries
+      summary: Reject new or edited laundry white list entry
+      operationId: rejectEditedOfLaundryWhiteListEntries
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-entries:
+    get:
+      tags:
+      - laundry-entries / v3
+      summary: Get laundry entries
+      operationId: getAllOfLaundryEntriesV3
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryEntry-v3'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - laundry-entries / v3
+      summary: Add new laundry entry
+      operationId: addNewOfLaundryEntriesV3
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entry
+        description: entry
+        required: true
+        schema:
+          $ref: '#/definitions/LaundryEntry-v3'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/LaundryEntry-v3'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-entries/{id}:
+    get:
+      tags:
+      - laundry-entries / v3
+      summary: Get laundry entry
+      operationId: getOneOfLaundryEntriesV3
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry-v3'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - laundry-entries / v3
+      summary: Cancel laundry entry
+      operationId: cancelLaundryEntryOfLaundryEntriesV3
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry-v3'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-entries/{id}/adjustment:
+    put:
+      tags:
+      - laundry-entries / v3
+      summary: Make adjustment for laundry entry
+      operationId: adjustmentLaundryEntryOfLaundryEntriesV3
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entry
+        description: entry
+        required: true
+        schema:
+          $ref: '#/definitions/LaundryEntry-v3'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry-v3'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-entries/{id}/editable:
+    post:
+      tags:
+      - laundry-entries / v3
+      summary: Provide laundry entry to make adjustment
+      operationId: provideLaundryEntryToEffectAdjustmentOfLaundryEntriesV3
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryEntry-v3'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-exports:
+    get:
+      tags:
+      - laundry-exports
+      summary: Get laundry exports
+      operationId: getAllOfLaundryExports
+      produces:
+      - '*/*'
+      parameters:
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryExport'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-exports/{exportId}/logs:
+    get:
+      tags:
+      - laundry-exports / logs
+      summary: Get laundry export logs
+      operationId: getAllOfLaundryExportsLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: exportId
+        in: path
+        description: exportId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfLaundryExportLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-exports/{exportId}/logs/{id}:
+    get:
+      tags:
+      - laundry-exports / logs
+      summary: Get laundry export log
+      operationId: getOneOfLaundryExportsLogs
+      produces:
+      - '*/*'
+      parameters:
+      - name: exportId
+        in: path
+        description: exportId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryExportLog'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /v3/laundry-exports/{id}:
+    get:
+      tags:
+      - laundry-exports
+      summary: Get laundry export
+      operationId: getOneOfLaundryExports
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/LaundryExport'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  CompanyEventOrder:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      addressCountry:
+        type: string
+        description: 'Country
+
+          Dictionary: CountryItem (DIC_COUNTRIES)'
+      bookingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Validations: @NotNull'
+        readOnly: true
+      comments:
+        type: string
+        description: Comments
+      companyOwnerId:
+        type: integer
+        format: int64
+      contractId:
+        type: integer
+        format: int64
+      countryOfRegistration:
+        type: string
+        description: 'Country of registration
+
+          Dictionary: CountryItem (DIC_COUNTRIES)'
+      customerId:
+        type: integer
+        format: int64
+        description: Customer
+      directDebitId:
+        type: integer
+        format: int64
+      documentId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      error:
+        type: string
+        description: Data requirement
+      firm:
+        type: string
+        description: 'Entity name
+
+          Validations: @Length(max = 200, min = 0)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      instantPaymentOrderId:
+        type: integer
+        format: int64
+      ipAddress:
+        type: string
+        description: 'Validations: @Length(max = 40, min = 0)'
+      isOriginalData:
+        type: boolean
+        description: Original data
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      laundryEntryId:
+        type: integer
+        format: int64
+      laundryPartyType:
+        type: string
+        description: Organization form
+        enum:
+        - ASSOCIATION
+        - CO_OPERATIVE
+        - FOREIGN_COMPANY
+        - FOREIGN_COMPANY_S_BRANCH_OFFICE
+        - FOUNDATION
+        - FREELANCER
+        - GENERAL_PARTNERSHIP
+        - HEAD_OFFICE_OF_FOREIGN_INSURANCE_COMPANY
+        - INDIVIDUAL
+        - JOINT_STOCK_COMPANY
+        - JOINT_STOCK_COMPANY_UNDER_INCORPORATION
+        - LIMITED_LIABILITY_COMPANY_UNDER_INCORPORATION
+        - LIMITED_PARTNERSHIP
+        - LIMITED_PARTNERSHIP_JOINT_STOCK_COMPANY
+        - LTD
+        - MUTUAL_ASSURANCE_COMPANY
+        - NON_COMMERCIAL_PARTNERSHIP
+        - OTHERS
+        - PARTNERSHIP
+        - RESEARCH_AND_DEVELOPMENT_COMPANY
+        - SELF_EMPLOYED_INDIVIDUAL_WITH_BUSINESS_ACTIVITY
+        - SIMPLE_JOINT_STOCK_COMPANY
+        - SIMPLE_JOINT_STOCK_COMPANY_UNDER_INCORPORATION
+        - SOCIAL_AND_TRADE_ORGANISATION
+        - STATE_OWNED_ENTERPRISE
+      oneOffTransactionId:
+        type: integer
+        format: int64
+      postCode:
+        type: string
+        description: 'Postcode
+
+          Validations: @Length(max = 25, min = 0)'
+      role:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - AUTHORIZED_BENEFICIARY
+        - BENEFICIARY
+        - SENDER
+        - SUBMITTER
+      sepaPaymentId:
+        type: integer
+        format: int64
+      standingOrderId:
+        type: integer
+        format: int64
+      street:
+        type: string
+        description: 'Street
+
+          Validations: @Length(max = 80, min = 0)'
+      swiftPaymentId:
+        type: integer
+        format: int64
+      taxRef:
+        type: string
+        description: 'Tax ID no.
+
+          Validations: @TaxRef(allowedSameSigns = false) @Length(max = 10, min = 0)'
+      town:
+        type: string
+        description: 'City/Town
+
+          Validations: @Length(max = 35, min = 0)'
+      tradeRegisterDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Registration date
+      tradeRegisterName:
+        type: string
+        description: 'Trade register name
+
+          Validations: @Length(max = 120, min = 0)'
+      tradeRegisterNumber:
+        type: string
+        description: 'Number in a register
+
+          Validations: @Length(max = 30, min = 0)'
+      type:
+        type: string
+        enum:
+        - COMPANY
+        - CONSOLIDATION
+        - PERSON
+        - TYPE_NONE
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: CompanyEventOrder
+  ConsolidationEventOrder:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      bookingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Validations: @NotNull'
+        readOnly: true
+      contractId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      directDebitId:
+        type: integer
+        format: int64
+      documentId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      error:
+        type: string
+        description: Data requirement
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      instantPaymentOrderId:
+        type: integer
+        format: int64
+      ipAddress:
+        type: string
+        description: 'Validations: @Length(max = 40, min = 0)'
+      isOriginalData:
+        type: boolean
+        description: Original data
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      laundryEntryId:
+        type: integer
+        format: int64
+      oneOffTransactionId:
+        type: integer
+        format: int64
+      role:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - AUTHORIZED_BENEFICIARY
+        - BENEFICIARY
+        - SENDER
+        - SUBMITTER
+      sepaPaymentId:
+        type: integer
+        format: int64
+      standingOrderId:
+        type: integer
+        format: int64
+      swiftPaymentId:
+        type: integer
+        format: int64
+      type:
+        type: string
+        enum:
+        - COMPANY
+        - CONSOLIDATION
+        - PERSON
+        - TYPE_NONE
+      unstructuredAddress:
+        type: string
+        description: 'Address data
+
+          Validations: @Length(max = 300, min = 0)'
+      unstructuredName:
+        type: string
+        description: 'Name
+
+          Validations: @Length(max = 300, min = 0)'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: ConsolidationEventOrder
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  DatePeriod:
+    type: object
+    properties:
+      from:
+        type: string
+        format: date
+        example: '2000-12-31'
+      to:
+        type: string
+        format: date
+        example: '2000-12-31'
+    title: DatePeriod
+  EntityState:
+    type: object
+    properties:
+      active:
+        type: boolean
+        readOnly: true
+      canceled:
+        type: boolean
+        readOnly: true
+      copy:
+        type: boolean
+        readOnly: true
+      finished:
+        type: boolean
+        readOnly: true
+      forAccept:
+        type: boolean
+        readOnly: true
+      new:
+        type: boolean
+        readOnly: true
+      source:
+        type: boolean
+        readOnly: true
+    title: EntityState
+  LaundryAccount:
+    type: object
+    properties:
+      accountNo:
+        type: string
+        description: 'Validations: @Length(max = 34, min = 0)'
+      basicAccountNo:
+        type: string
+        description: 'Validations: @Length(max = 50, min = 0)'
+      countryCode:
+        type: string
+        description: 'Validations: @Length(max = 2, min = 0)'
+      countryDescription:
+        type: string
+        readOnly: true
+    title: LaundryAccount
+  LaundryEntry:
+    type: object
+    required:
+    - transactionCode
+    - transactionDate
+    - transactionPlace
+    - transactionValue
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      amount:
+        description: Amount
+        readOnly: true
+        $ref: '#/definitions/LaundryMoney'
+      autoRegistration:
+        type: boolean
+      beneficiary:
+        $ref: '#/definitions/LaundryEntryParty'
+      beneficiarySameAsSubmitter:
+        type: boolean
+        description: Identical to the entity giving instruction
+      channel:
+        type: string
+        description: 'Dictionary: AccessChannelItem (DIC_CHANNEL_CONTR_ACCESS)'
+      documentId:
+        type: integer
+        format: int64
+        description: Doc.ID
+      documentNo:
+        type: string
+        description: Document no.
+      entityType:
+        type: string
+        readOnly: true
+      entryStatus:
+        type: string
+        description: Status
+        enum:
+        - ADJUSTEMENT
+        - NEW
+      exchangedTransactionValue:
+        description: Amount after changing the currency
+        $ref: '#/definitions/LaundryMoney'
+      expClass:
+        type: string
+        enum:
+        - B
+        - D
+        - G
+        - K
+        - P
+        - W
+        - Z
+      exportToGIIFId:
+        type: integer
+        format: int64
+      exportToSZOPId:
+        type: integer
+        format: int64
+      exportedToGIIF:
+        type: boolean
+        description: Indicate for export
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      internalInformation:
+        type: string
+        description: 'Validations: @Length(max = 500, min = 0)'
+      isGIIFReserved:
+        type: boolean
+        description: Exclude from deletion
+      isLinked:
+        type: boolean
+        description: Associated transaction
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      originator:
+        $ref: '#/definitions/LaundryEntryParty'
+      originatorSameAsSubmitter:
+        type: boolean
+        description: Identical to the entity giving instruction
+      registrationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Registration date
+      registrationNo:
+        type: integer
+        format: int64
+        description: Registration no.
+      registrationNoOnDay:
+        type: string
+        description: Registration no. on
+      remarks:
+        description: Comments
+        $ref: '#/definitions/LaundryEntryRemarks'
+      sourceAccountNo:
+        type: string
+        description: Source account
+      submitKind:
+        type: string
+        description: Instruction method
+        enum:
+        - BY_MAIL
+        - BY_TELEPHONE
+        - DEPOSIT_TOSSER
+        - ELECTRONIC
+        - IN_PERSON
+        - OTHERS
+      submitter:
+        $ref: '#/definitions/LaundryEntrySubmitter'
+      suspicionCategory:
+        type: string
+        description: Suspected
+        enum:
+        - ASSETS_MAY_BE_USED_TO_FINANCE_TERRORISM
+        - ASSETS_MAY_ORIGINATE_FROM_ILLEGAL_SOURCE
+        - SUSPECTED_FUNDING_OF_PROLIFERATION_OF_NUCLEAR_MATERIALS
+        - TRANSFER_FROM_TO_IRAN
+        - TRANSFER_FROM_TO_IRAN_SUSPECTED_FUNDING_OF_TERRORISM
+        - TRANSFER_FROM_TO_IRAN_SUSPECTED_MONEY_LAUNDERING
+      targetAccountNo:
+        type: string
+        description: Target account
+      transactionCode:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/LaundryTransactionCode'
+      transactionDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Completion date
+
+          Validations: @NotNull'
+      transactionPlace:
+        type: string
+        description: 'Place of completion
+
+          Validations: @Length(max = 35, min = 1) @NotBlank'
+      transactionValue:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/LaundryMoney'
+      unitNo:
+        type: integer
+        format: int64
+        description: Unit no.
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: LaundryEntry
+  LaundryEntry-v3:
+    type: object
+    required:
+    - description
+    - sourceAccount
+    - submitKind
+    - targetAccount
+    - transactionDate
+    - transactionKind
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      authorizedBeneficiaries:
+        type: array
+        items:
+          $ref: '#/definitions/PersonEventOrder'
+      beneficiaries:
+        type: array
+        items:
+          $ref: '#/definitions/PartyEventOrder'
+      businessUnit:
+        type: string
+        description: 'Dictionary: BusinessUnitItem (BANK_UNITS)'
+      changedOverTransaction:
+        type: boolean
+        readOnly: true
+      changedOverTransactionValue:
+        $ref: '#/definitions/LaundryMoney'
+      channel:
+        type: string
+        description: 'Dictionary: AccessChannelItem (DIC_CHANNEL_CONTR_ACCESS)'
+        readOnly: true
+      description:
+        type: string
+        description: 'Validations: @Length(max = 1800, min = 0) @NotNull'
+      documentAmountByLaundryExchange:
+        type: number
+      documentId:
+        type: integer
+        format: int64
+      documentNo:
+        type: string
+        description: 'Validations: @Length(max = 12, min = 0)'
+      entityType:
+        type: string
+        readOnly: true
+      entryError:
+        type: boolean
+        readOnly: true
+      entryStatus:
+        type: string
+        description: 'Validations: @NotNull'
+        readOnly: true
+        enum:
+        - ADJUSTEMENT
+        - NEW
+      errorList:
+        type: array
+        readOnly: true
+        items:
+          type: string
+      exchangedTransactionValue:
+        $ref: '#/definitions/LaundryMoney'
+      expClass:
+        type: string
+        enum:
+        - B
+        - D
+        - G
+        - K
+        - P
+        - W
+        - Z
+      exportToGIIFId:
+        type: integer
+        format: int64
+        readOnly: true
+      exportedToGIIF:
+        type: boolean
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      independent:
+        type: boolean
+        readOnly: true
+      internalInformation:
+        type: string
+        description: 'Validations: @Length(max = 500, min = 0)'
+      isGIIFReserved:
+        type: boolean
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      laundryExchangeValue:
+        type: number
+      mapToRowType:
+        type: object
+        readOnly: true
+      registrationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      registrationNo:
+        type: integer
+        format: int64
+        readOnly: true
+      registrationNoOnDay:
+        type: integer
+        format: int64
+        readOnly: true
+      remarks:
+        type: string
+        description: 'Validations: @Length(max = 1500, min = 0)'
+      senders:
+        type: array
+        items:
+          $ref: '#/definitions/PartyEventOrder'
+      sourceAccount:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/LaundryAccount'
+      submitKind:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - BY_MAIL
+        - BY_TELEPHONE
+        - DEPOSIT_TOSSER
+        - ELECTRONIC
+        - IN_PERSON
+        - OTHERS
+      submitters:
+        type: array
+        items:
+          $ref: '#/definitions/PersonEventOrder'
+      suspicionCategory:
+        type: string
+        enum:
+        - ASSETS_MAY_BE_USED_TO_FINANCE_TERRORISM
+        - ASSETS_MAY_ORIGINATE_FROM_ILLEGAL_SOURCE
+        - SUSPECTED_FUNDING_OF_PROLIFERATION_OF_NUCLEAR_MATERIALS
+        - TRANSFER_FROM_TO_IRAN
+        - TRANSFER_FROM_TO_IRAN_SUSPECTED_FUNDING_OF_TERRORISM
+        - TRANSFER_FROM_TO_IRAN_SUSPECTED_MONEY_LAUNDERING
+      syndicatedOperationId:
+        type: integer
+        format: int64
+      targetAccount:
+        description: 'Validations: @NotNull'
+        $ref: '#/definitions/LaundryAccount'
+      transactionDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: 'Validations: @NotNull'
+      transactionError:
+        type: string
+        description: 'Validations: @Length(max = 2000, min = 0)'
+        readOnly: true
+      transactionKind:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - CASH_TO_BILL
+        - CASH_TO_CASH
+        - DEPOSIT_PAYMENT
+        - INBOUND_CROSS_BORDER_MONEY_TRANSFER
+        - INCOMING_DIFFERENT_FROM_ABROAD
+        - INCOMING_FOREIGN_TRANSFER
+        - INVOICE_TO_CASH
+        - INVOICE_TO_INVOICE
+        - OUTGOING_CROSS_BORDER_MONEY_TRANSFER
+        - OUTGOING_DIFFERENT
+        - OUTGOING_DIRECT_DEBIT
+        - OUTGOING_DOMESTIC_MONEY_ORDER
+        - OUTGOING_ELECTRONIC_MONEY
+        - OUTGOING_PAYMENT_CARD
+        - OUTGOING_TELEPHONE_INTERNET
+        - OUTGOING_TRANSFER_ORDER
+        - PAYMENT_FROM_THE_ACCOUNT
+        - PAYMENT_FROM_THE_CASH_REGISTER
+        - PAYMENT_TO_CASH
+      transactionPlace:
+        type: string
+        description: 'Validations: @Length(max = 35, min = 0)'
+      transactionValue:
+        $ref: '#/definitions/LaundryMoney'
+      unitNo:
+        type: integer
+        format: int64
+        readOnly: true
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: LaundryEntry-v3
+  LaundryEntryCleaningLog:
+    type: object
+    properties:
+      deleteTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      errorMessage:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      log:
+        type: string
+        description: 'Validations: @Length(max = 2000, min = 0)'
+      noOfEntries:
+        type: integer
+        format: int64
+      period:
+        $ref: '#/definitions/DatePeriod'
+      result:
+        type: string
+        enum:
+        - DELETED
+        - INTERRUPTION
+      userId:
+        type: integer
+        format: int64
+    title: LaundryEntryCleaningLog
+  LaundryEntryParty:
+    type: object
+    properties:
+      country:
+        type: string
+        description: 'Dictionary: CountryItem (DIC_COUNTRIES)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      name:
+        type: string
+        description: 'Validations: @Length(max = 140, min = 0)'
+      postCode:
+        type: string
+        description: 'Validations: @Length(max = 10, min = 0)'
+      street:
+        type: string
+        description: 'Validations: @Length(max = 35, min = 0)'
+      town:
+        type: string
+        description: 'Validations: @Length(max = 35, min = 0)'
+      type:
+        type: string
+        enum:
+        - ASSOCIATION
+        - CO_OPERATIVE
+        - FOREIGN_COMPANY
+        - FOREIGN_COMPANY_S_BRANCH_OFFICE
+        - FOUNDATION
+        - FREELANCER
+        - GENERAL_PARTNERSHIP
+        - HEAD_OFFICE_OF_FOREIGN_INSURANCE_COMPANY
+        - INDIVIDUAL
+        - JOINT_STOCK_COMPANY
+        - JOINT_STOCK_COMPANY_UNDER_INCORPORATION
+        - LIMITED_LIABILITY_COMPANY_UNDER_INCORPORATION
+        - LIMITED_PARTNERSHIP
+        - LIMITED_PARTNERSHIP_JOINT_STOCK_COMPANY
+        - LTD
+        - MUTUAL_ASSURANCE_COMPANY
+        - NON_COMMERCIAL_PARTNERSHIP
+        - OTHERS
+        - PARTNERSHIP
+        - RESEARCH_AND_DEVELOPMENT_COMPANY
+        - SELF_EMPLOYED_INDIVIDUAL_WITH_BUSINESS_ACTIVITY
+        - SIMPLE_JOINT_STOCK_COMPANY
+        - SIMPLE_JOINT_STOCK_COMPANY_UNDER_INCORPORATION
+        - SOCIAL_AND_TRADE_ORGANISATION
+        - STATE_OWNED_ENTERPRISE
+    title: LaundryEntryParty
+  LaundryEntryRemarks:
+    type: object
+    properties:
+      map:
+        type: object
+        additionalProperties:
+          type: string
+    title: LaundryEntryRemarks
+  LaundryEntrySubmitter:
+    type: object
+    required:
+    - name
+    - street
+    - town
+    - type
+    properties:
+      country:
+        type: string
+        description: 'Dictionary: CountryItem (DIC_COUNTRIES)'
+      documentNo:
+        type: string
+        description: 'Validations: @Length(max = 25, min = 0)'
+      documentType:
+        type: string
+        description: 'Dictionary: IdentityDocumentTypeItem (DIC_IDENTITY_TYPE)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      krs:
+        type: string
+      name:
+        type: string
+        description: 'Validations: @NotBlank @Length(max = 140, min = 1)'
+      nationality:
+        type: string
+        description: 'Dictionary: CountryItem (DIC_COUNTRIES)'
+      pesel:
+        type: string
+        description: 'Validations: @Length(max = 11, min = 0) @LaundryPESEL'
+      postCode:
+        type: string
+        description: 'Validations: @Length(max = 10, min = 0)'
+      regon:
+        type: string
+        description: 'Validations: @REGON'
+      street:
+        type: string
+        description: 'Validations: @NotBlank @Length(max = 35, min = 1)'
+      swift:
+        type: string
+        description: 'Validations: @Length(max = 15, min = 0)'
+      taxRef:
+        type: string
+        description: 'Validations: @NIP @Length(max = 10, min = 0)'
+      town:
+        type: string
+        description: 'Validations: @NotBlank @Length(max = 35, min = 1)'
+      type:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - ASSOCIATION
+        - CO_OPERATIVE
+        - FOREIGN_COMPANY
+        - FOREIGN_COMPANY_S_BRANCH_OFFICE
+        - FOUNDATION
+        - FREELANCER
+        - GENERAL_PARTNERSHIP
+        - HEAD_OFFICE_OF_FOREIGN_INSURANCE_COMPANY
+        - INDIVIDUAL
+        - JOINT_STOCK_COMPANY
+        - JOINT_STOCK_COMPANY_UNDER_INCORPORATION
+        - LIMITED_LIABILITY_COMPANY_UNDER_INCORPORATION
+        - LIMITED_PARTNERSHIP
+        - LIMITED_PARTNERSHIP_JOINT_STOCK_COMPANY
+        - LTD
+        - MUTUAL_ASSURANCE_COMPANY
+        - NON_COMMERCIAL_PARTNERSHIP
+        - OTHERS
+        - PARTNERSHIP
+        - RESEARCH_AND_DEVELOPMENT_COMPANY
+        - SELF_EMPLOYED_INDIVIDUAL_WITH_BUSINESS_ACTIVITY
+        - SIMPLE_JOINT_STOCK_COMPANY
+        - SIMPLE_JOINT_STOCK_COMPANY_UNDER_INCORPORATION
+        - SOCIAL_AND_TRADE_ORGANISATION
+        - STATE_OWNED_ENTERPRISE
+    title: LaundryEntrySubmitter
+  LaundryExport:
+    type: object
+    required:
+    - exportStatus
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      containsCashTransactions:
+        type: boolean
+        description: Cash tran.
+        readOnly: true
+      containsExchangeTransactions:
+        type: boolean
+        description: Exchange tran.
+        readOnly: true
+      containsTransferTransactions:
+        type: boolean
+        description: Transfer tran.
+        readOnly: true
+      entityType:
+        type: string
+        readOnly: true
+      entriesPeriod:
+        readOnly: true
+        $ref: '#/definitions/DatePeriod'
+      exportDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Export data
+      exportStatus:
+        type: string
+        description: 'Status
+
+          Validations: @NotNull'
+        enum:
+        - EXECUTED
+        - FINISHED
+        - PREPARED
+      exportType:
+        type: string
+        description: Export type
+        enum:
+        - ADJUSTING
+        - GROUP
+        - MARKED
+        - QUICK
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      positionsNo:
+        type: integer
+        format: int64
+        description: Number of entries
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: LaundryExport
+  LaundryExportLog:
+    type: object
+    required:
+    - exportId
+    properties:
+      dateTime:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+      description:
+        type: string
+        description: 'Validations: @Length(max = 200, min = 0)'
+      encodedMessage:
+        type: string
+        description: 'Validations: @Length(max = 2000, min = 0)'
+      error:
+        type: boolean
+      exportId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      message:
+        type: string
+        readOnly: true
+      second:
+        type: integer
+        format: int64
+    title: LaundryExportLog
+  LaundryMoney:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+        description: 'Validations: @NotNull'
+      currency:
+        type: string
+        description: 'Validations: @NotNull'
+    title: LaundryMoney
+  LaundryTransactionCode:
+    type: object
+    required:
+    - category
+    - type
+    properties:
+      category:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - CASH_DEPOSIT
+        - CASH_WITHDRAWAL
+        - EXCHANGING_FOREIGN_CURRENCY_VALUES
+        - INCOMING_FOREIGN_TRANSFER
+        - INTERNAL_TRANSFER
+        - OUTGOING_TRANSFER
+        - TRANSACTIONS_WITHOUT_VISIBLE_CASH_TURNOVER
+      type:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - ACCOUNT_CHECK_PROCESSING
+        - ACCOUNT_CONTRACT
+        - BILL_OPERATIONS
+        - BONDS_BUY
+        - CASH_CHECK_PROCESSING
+        - COMMISSION_CONTRACT
+        - CREDIT_CONTRACT
+        - CREDIT_SECURITY_EXECUTION
+        - CURRENCY_TRADING
+        - DIRECT_DEBIT
+        - DOCUMENTARY_COLLECTION
+        - EXCHANGING_LIABILITIES_TO_SHARES
+        - EXCHANGING_REAL_ESTATES
+        - EXCHANGING_RECEIVABLES_INTO_SHARES
+        - EXCHANGING_SECURITIES
+        - FACTORING_CONTRACT
+        - FINANCIAL_COLLECTION
+        - FINANCIAL_TERM_OPERATIONS
+        - FLOW_OF_ASSETS_RELATED_TO_BETTING
+        - FLOW_OF_ASSETS_RELATED_TO_CHANCE_GAMES
+        - FLOW_OF_ASSETS_RELATED_TO_GAMBLING_MACHINES
+        - GUARANTEE_EXECUTION
+        - LEASE_CONTRACT
+        - LETTER_OF_CREDIT
+        - LOAN_CONTRACT
+        - LOAN_SECURITY_EXECUTION
+        - MOVABLE_PROPERTY_OWNERSHIP_TRANSFER_CONTRACT
+        - MOVABLE_PROPERTY_TRANSFER_CONTRACT
+        - OTHER_SPECIFY_IN_COMMENTS_FIELD
+        - PAYMENT_CARD_TRANSACTION
+        - PAYMENT_ORDER
+        - PERSONAL_INSURANCE_POLICY_EXECUTION
+        - PERSONAL_INSURANCE_PREMIUM
+        - PROPERTY_INSURANCE_POLICY_EXECUTION
+        - PROPERTY_INSURANCE_PREMIUM
+        - PURCHASE_OF_OTHER_SECURITIES
+        - REAL_ESTATE_OWNERSHIP_TRANSFER_CONTRACT_UNDER_NOTARIAL_DEED
+        - REAL_ESTATE_TRANSFER_CONTRACT
+        - SALE_OF_BONDS
+        - SALE_OF_OTHER_SECURITIES
+        - SECURITY_EXECUTION
+        - SHARES_BUY
+        - SHARE_SELL
+        - SHARE_TRADING
+        - TRADING_DEPOSITS_SHARES_IN_CO_OPERATIVE_SAVINGS_BANKS
+        - TRADING_INVESTMENT_FUNDS_PARTICIPATING_UNITS
+        - TRAVELLERS_CHECKS_TURNOVER
+    title: LaundryTransactionCode
+  LaundryWhiteListEntry:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      contractId:
+        type: integer
+        format: int64
+        description: Contract
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      laundryExclusionSide:
+        type: string
+        enum:
+        - ANY
+        - CT
+        - DT
+      laundryWhiteListEntryType:
+        type: string
+        description: The exclusion concerns
+        enum:
+        - All_CONTRACTS_FOR_ROOT_NO
+        - CONTRACT
+        - OWN_ACCOUNT
+        - OWN_ACCOUNT_TYPE
+      ownAccountId:
+        type: integer
+        format: int64
+        description: Own account
+      ownAccountType:
+        type: string
+        description: 'Own account type
+
+          Dictionary: OwnAccountTypeItem (ACCOUNTS_OWN_TYPES)'
+      rootNumberId:
+        type: integer
+        format: int64
+        description: Modulo
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: LaundryWhiteListEntry
+  PageOfCompanyEventOrder:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/CompanyEventOrder'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfCompanyEventOrder
+  PageOfLaundryEntry:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/LaundryEntry'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfLaundryEntry
+  PageOfLaundryEntry-v3:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/LaundryEntry-v3'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfLaundryEntry-v3
+  PageOfLaundryEntryCleaningLog:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/LaundryEntryCleaningLog'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfLaundryEntryCleaningLog
+  PageOfLaundryExport:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/LaundryExport'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfLaundryExport
+  PageOfLaundryExportLog:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/LaundryExportLog'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfLaundryExportLog
+  PageOfLaundryWhiteListEntry:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/LaundryWhiteListEntry'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfLaundryWhiteListEntry
+  PageOfPartyEventOrder:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/PartyEventOrder'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfPartyEventOrder
+  PageOfPersonEventOrder:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/PersonEventOrder'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfPersonEventOrder
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  PartyEventOrder:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      bookingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Validations: @NotNull'
+        readOnly: true
+      contractId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      directDebitId:
+        type: integer
+        format: int64
+      documentId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      error:
+        type: string
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      instantPaymentOrderId:
+        type: integer
+        format: int64
+      ipAddress:
+        type: string
+        description: 'Validations: @Length(max = 40, min = 0)'
+      isOriginalData:
+        type: boolean
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      laundryEntryId:
+        type: integer
+        format: int64
+      oneOffTransactionId:
+        type: integer
+        format: int64
+      role:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - AUTHORIZED_BENEFICIARY
+        - BENEFICIARY
+        - SENDER
+        - SUBMITTER
+      sepaPaymentId:
+        type: integer
+        format: int64
+      standingOrderId:
+        type: integer
+        format: int64
+      swiftPaymentId:
+        type: integer
+        format: int64
+      type:
+        type: string
+        enum:
+        - COMPANY
+        - CONSOLIDATION
+        - PERSON
+        - TYPE_NONE
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PartyEventOrder
+    description: 'PartyEventOrder is supertype for: PersonEventOrder, CompanyEventOrder,
+      ConsolidationEventOrder. Discriminator property is `type`'
+  PersonEventOrder:
+    type: object
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      addressCountry:
+        type: string
+        description: 'Country
+
+          Dictionary: CountryItem (DIC_COUNTRIES)'
+      anyKindOfEventOrderSourceType:
+        type: boolean
+        readOnly: true
+      birthDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of birth
+      bookingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Validations: @NotNull'
+        readOnly: true
+      citizenship:
+        type: string
+        description: 'Citizenship
+
+          Dictionary: CountryItem (DIC_COUNTRIES)'
+      comments:
+        type: string
+        description: Comments
+      contractId:
+        type: integer
+        format: int64
+      customerId:
+        type: integer
+        format: int64
+        description: Customer
+      directDebitId:
+        type: integer
+        format: int64
+      documentId:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      error:
+        type: string
+        description: Data requirement
+      forename:
+        type: string
+        description: 'First name
+
+          Validations: @Length(max = 30, min = 0)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      identityCardNo:
+        type: string
+        description: 'Series and number
+
+          Validations: @IdentityCardNo @Length(max = 40, min = 4)'
+      identityDocumentType:
+        type: string
+        description: 'Type of identity document
+
+          Dictionary: IdentityDocumentTypeItem (DIC_IDENTITY_TYPE)'
+      instantPaymentOrderId:
+        type: integer
+        format: int64
+      ipAddress:
+        type: string
+        description: 'Validations: @Length(max = 40, min = 0)'
+      isOriginalData:
+        type: boolean
+        description: Original data
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      laundryEntryId:
+        type: integer
+        format: int64
+      nationality:
+        type: string
+        description: 'country of birth
+
+          Dictionary: CountryItem (DIC_COUNTRIES)'
+      oneOffTransactionId:
+        type: integer
+        format: int64
+      pesel:
+        type: string
+        description: 'PESEL
+
+          Validations: @Pesel @Length(max = 11, min = 0)'
+      postCode:
+        type: string
+        description: 'Postcode
+
+          Validations: @Length(max = 25, min = 0)'
+      role:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - AUTHORIZED_BENEFICIARY
+        - BENEFICIARY
+        - SENDER
+        - SUBMITTER
+      secondForename:
+        type: string
+        description: 'Middle name
+
+          Validations: @Length(max = 30, min = 0)'
+      sepaPaymentId:
+        type: integer
+        format: int64
+      standingOrderId:
+        type: integer
+        format: int64
+      street:
+        type: string
+        description: 'Street
+
+          Validations: @Length(max = 80, min = 0)'
+      surname:
+        type: string
+        description: 'Surname
+
+          Validations: @Length(max = 40, min = 0)'
+      swiftPaymentId:
+        type: integer
+        format: int64
+      town:
+        type: string
+        description: 'City/Town
+
+          Validations: @Length(max = 35, min = 0)'
+      type:
+        type: string
+        enum:
+        - COMPANY
+        - CONSOLIDATION
+        - PERSON
+        - TYPE_NONE
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PersonEventOrder
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort

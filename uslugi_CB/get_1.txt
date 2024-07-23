@@ -1,0 +1,12 @@
+GET {{CB_BASE_URL}}/application/api/general-settings/dictionaries/ProductItem
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}}
+GET {{CB_BASE_URL}}/application/api/product-directory/products/{{product_id}}/properties
+GET {{CB_BASE_URL}}/application/api/customer-agreement/root-numbers?involvedParties=%5B%7B%22customerId%22:%22328349%22,%22roles%22:%5B%22OWNER%22%5D%7D%5D&size=2147483647
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts?contractNo=56823000072002000003470001&size=1
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}
+GET {{CB_BASE_URL}}/application/api/contract-common/contracts/{{contract_id}}/pricing-conditions
+GET {{CB_BASE_URL}}/application/api/credit-common/credits/{{contract_id}}
+GET {{CB_BASE_URL}}/application/api/systems-operations/system-state/accounting
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/charges/{{evidence_charge_id}}
+GET {{CB_BASE_URL}}/application/api/loan/loans/{{contract_id}}/payment-schedules/{{schedule_id}}/positions?size=2147483647&type=TRANCHE

@@ -1,0 +1,313 @@
+openapi: 3.0.3
+info:
+  title: Swagger defBank
+  description: |-
+    Przykładowe REST API do kalkulacji harmonogramów i RRSO
+  version: 0.0.1
+paths:
+  /schedules:
+    post:
+      tags:
+        - Schedules
+      summary: Generate schedules
+      description: Generate all schedules required to calculate RRSO - schedule of tranches, credit schedule, insurances schedule, current account fees schedule and commission fees schedule.
+      requestBody:
+        description: Basic parameters required do generate schedules
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchedulesRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchedulesResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponse'
+
+components:
+  schemas:
+    SchedulesRequest:
+      type: object
+      properties:
+        disbursementDate:
+          $ref: '#/components/schemas/Date'
+        creditPeriod:
+          $ref: '#/components/schemas/Period'
+        installmentsScheduleParameters:
+          $ref: '#/components/schemas/InstallmentsScheduleParameters'
+        commissionFeeScheduleParameters:
+          $ref: '#/components/schemas/FeeScheduleParameters'
+        insuranceFeeScheduleParameters:
+          $ref: '#/components/schemas/FeeScheduleParameters'
+        currentAccountFeeScheduleParameters:
+          $ref: '#/components/schemas/CurrentAccountFeeScheduleParameters'
+
+    SchedulesResponse:
+      type: object
+      properties:
+        tranches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tranche'
+        installmentsSchedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/Installment'
+        commissionFeeSchedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeSchedule'
+        insuranceFeeSchedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeSchedule'
+        currentAccountFeeSchedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrentAccountFeeSchedule'
+        creditSchedulesIndicators:
+          $ref: '#/components/schemas/CreditSchedulesIndicators'
+
+    Tranche:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/Date'
+        amount:
+          $ref: '#/components/schemas/AmountCurrency'
+
+    Installment:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/Date'
+        totalAmount: # sum of capitalAmount and interestAmount
+          $ref: '#/components/schemas/AmountCurrency'
+        capitalAmount:
+          $ref: '#/components/schemas/AmountCurrency'
+        interestAmount:
+          $ref: '#/components/schemas/AmountCurrency'
+        capitalRemaining:
+          $ref: '#/components/schemas/AmountCurrency'
+        surchargeAmount: # for surcharge loan products, not empty if surchargePeriod parameters provided at installmentsScheduleParameters
+          $ref: '#/components/schemas/AmountCurrency'
+
+    CurrentAccountFeeSchedule:
+      type: object
+      properties:
+        currentAccountId:
+          type: string
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeSchedule'
+
+    FeeSchedule:
+      type: object
+      properties:
+        feeId:
+          $ref: '#/components/schemas/Id'
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeScheduleItem'
+
+    FeeScheduleItem:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/Date'
+        amount:
+          $ref: '#/components/schemas/AmountCurrency'
+
+    CreditSchedulesIndicators:
+      type: object
+      properties:
+        rrso:
+          type: number
+        totalCosts:
+          $ref: "#/components/schemas/AmountCurrency"
+        totalAmountToPay:
+          $ref: "#/components/schemas/AmountCurrency"
+        totalInsurances:
+          $ref: "#/components/schemas/AmountCurrency"
+        totalInterestInstallments:
+          $ref: "#/components/schemas/AmountCurrency"
+        totalCommissionsFees:
+          $ref: "#/components/schemas/AmountCurrency"
+        totalCurrentAccountFees:
+          $ref: "#/components/schemas/AmountCurrency"
+        nonInterestCosts:
+          $ref: "#/components/schemas/AmountCurrency"
+        maxInstallment:
+          $ref: "#/components/schemas/AmountCurrency"
+        totalSurchargeAmount:
+          $ref: "#/components/schemas/AmountCurrency"
+
+    CurrentAccountFeeScheduleParameters:
+      allOf:
+        - $ref: '#/components/schemas/FeeScheduleParameters'
+      properties:
+        currentAccountId:
+          $ref: '#/components/schemas/Id'
+
+    FeeScheduleParameters:
+      type: object
+      required:
+        - feeId
+        - period
+        - amount
+      properties:
+        feeId:
+          $ref: '#/components/schemas/Id'
+        period:
+          $ref: '#/components/schemas/RepaymentPeriod'
+        amount:
+          $ref: '#/components/schemas/AmountCurrency'
+        isCredited:
+          type: boolean
+
+    InstallmentsScheduleParameters:
+      type: object
+      properties:
+        productSymbol:
+          type: string
+        tranches:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tranche'
+          description: Credit amount divided into one or more tranches
+        interestRate:
+          $ref: '#/components/schemas/InterestRate'
+        interestRateType:
+          $ref: '#/components/schemas/InterestRateType'
+        interestRateChange:
+          $ref: '#/components/schemas/InterestRateChange'
+        calculationVariant:
+          $ref: '#/components/schemas/InstallmentCalculationVariant'
+        calculationVariantChange:
+          $ref: '#/components/schemas/CalculationVariantChange'
+        capitalPeriod:
+          $ref: '#/components/schemas/InstallmentRepaymentPeriod'
+        interestPeriod:
+          $ref: '#/components/schemas/InstallmentRepaymentPeriod'
+
+    CalculationVariantChange:
+      type: object
+      properties:
+        calculationVariant:
+          $ref: '#/components/schemas/InstallmentCalculationVariant'
+        validFrom:
+          $ref: '#/components/schemas/Date'
+        validTo:
+          $ref: '#/components/schemas/Date'
+
+    InterestRateChange:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/InterestRateType'
+        value:
+          $ref: '#/components/schemas/InterestRate'
+        validFrom:
+          $ref: '#/components/schemas/Date'
+        validTo:
+          $ref: '#/components/schemas/Date'
+
+    InstallmentCalculationVariant:
+      type: string
+      enum: [DECREASING_INSTALLMENTS, EQUAL_INSTALLMENTS, BALLOON_INSTALLMENTS]
+
+    RepaymentPeriod:
+      type: object
+      required:
+        - startDate
+      properties:
+        dayOfMonth:
+          $ref: '#/components/schemas/SmallInt'
+          # if null - then last day of month
+        frequency:
+          $ref: '#/components/schemas/Period'
+          # gaps between installments, if null then repayment takes place once
+        startDate:
+          $ref: '#/components/schemas/Date'
+
+    InstallmentRepaymentPeriod:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RepaymentPeriod'
+      required:
+        - gracePeriod
+      properties:
+        gracePeriod:
+          $ref: '#/components/schemas/Period'
+        surchargePeriod:
+          $ref: '#/components/schemas/SurchargePeriod'
+
+    SurchargePeriod:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/Date'
+        to:
+          $ref: '#/components/schemas/Date'
+
+    Period:
+      type: object
+      properties:
+        quantity:
+          $ref: '#/components/schemas/SmallInt'
+        unit:
+          $ref: '#/components/schemas/PeriodUnit'
+
+    PeriodUnit:
+      type: string
+      enum: [MONTH, QUARTER, HALF_YEAR, YEAR]
+
+    AmountCurrency:
+      type: object
+      required:
+        - value
+        - currency
+      properties:
+        value:
+          type: number
+          format: currency
+        currency:
+          type: string
+
+
+    Id:
+      type: string
+      format: uuid
+
+    Date:
+      type: string
+      format: date
+
+    SmallInt:
+      type: integer
+      format: int32
+
+    InterestRate:
+      type: number
+
+    InterestRateType:
+      type: string
+      enum: [FIXED, VARIABLE]
+
+    ApiErrorResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/SmallInt'
+        message:
+          type: string

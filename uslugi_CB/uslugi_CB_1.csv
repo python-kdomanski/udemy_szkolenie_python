@@ -1,0 +1,1 @@
+POST {{CB_BASE_URL}}/application/api/systems-operations/api-operations/bulk-accept?correlationId={{correlation_id}};post;/application/api/systems-operations;api-operations

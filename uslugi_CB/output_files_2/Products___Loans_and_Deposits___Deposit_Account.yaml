@@ -1,0 +1,4273 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Products * Loans and Deposits * Deposit Account
+host: 10.17.202.119:8580
+basePath: /application/api/deposit-account
+tags:
+- name: deposits
+  description: Deposits
+- name: deposits / forecast-interest-schedules
+  description: Schedule of forecast deposit interest
+- name: deposits / payments
+  description: Browsing withdrawals/liquidations
+paths:
+  /deposits:
+    get:
+      tags:
+      - deposits
+      summary: Downloading deposit agreements
+      description: Downloading deposit agreements
+      operationId: getAllOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: businessUnit
+        in: query
+        description: Symbol of the agreement business unit
+        required: false
+        type: string
+      - name: contractNo
+        in: query
+        description: Agreement BBAN
+        required: false
+        type: string
+      - name: currency
+        in: query
+        description: Agreement currency symbol
+        required: false
+        type: string
+      - name: customerId
+        in: query
+        description: Customer identifier
+        required: false
+        type: integer
+        format: int64
+      - name: dateFrom
+        in: query
+        description: Agreement start date
+        required: false
+        type: string
+        format: date
+      - name: dateTo
+        in: query
+        description: Agreement end date
+        required: false
+        type: string
+        format: date
+      - name: fromMigrationNo
+        in: query
+        description: Agreement identifier in the external system
+        required: false
+        type: string
+      - name: involvedParties
+        in: query
+        description: Search by indicated customer roles, e.g. [{"customerId":1,roles:[OWNER]},{"customerId":2,roles:[OWNER]}]".
+        required: false
+        type: string
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: referenceNo
+        in: query
+        description: Agreement reference No.
+        required: false
+        type: string
+      - name: rootNo
+        in: query
+        description: Modulo
+        required: false
+        type: integer
+        format: int64
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: status
+        in: query
+        description: List of agreement statuses, e.g. 2,5 (-1 - canceled, 1 - for
+          approval, 2 - active, 5 - completed)
+        required: false
+        type: array
+        items:
+          type: integer
+          format: int32
+        collectionFormat: multi
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfDepositBrief'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - deposits
+      summary: Inserting deposit agreement
+      description: Inserting deposit agreement
+      operationId: addNewOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: entity
+        description: Input parameters
+        required: true
+        schema:
+          $ref: '#/definitions/Deposit'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/Deposit'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/interest-rate/CT:
+    get:
+      tags:
+      - deposits
+      summary: Downloading information about the value of the effective interest rate
+      description: Downloading information about the value of the effective interest
+        rate
+      operationId: getEffectiveInterestRateValueOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: amount
+        in: query
+        description: Amount
+        required: true
+        type: number
+      - name: businessUnit
+        in: query
+        description: Symbol of the agreement business unit
+        required: false
+        type: string
+      - name: currency
+        in: query
+        description: Agreement currency symbol
+        required: false
+        type: string
+      - name: factor
+        in: query
+        description: Multiplier
+        required: false
+        type: number
+      - name: offset
+        in: query
+        description: Fixed
+        required: false
+        type: number
+      - name: productId
+        in: query
+        description: Product identifier
+        required: true
+        type: integer
+        format: int64
+      - name: quantity
+        in: query
+        description: quantity
+        required: true
+        type: integer
+        format: int64
+      - name: unit
+        in: query
+        description: unit
+        required: true
+        type: string
+        enum:
+        - DAY
+        - HALF_YEAR
+        - MONTH
+        - QUARTER
+        - YEAR
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EffectiveInterestRateValue'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/forecast-interest-schedules:
+    get:
+      tags:
+      - deposits / forecast-interest-schedules
+      summary: Get all deposit forecast interest schedules
+      operationId: getAllOfDepositsForecastInterestSchedules
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfDepositForecastInterestSchedule'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/forecast-interest-schedules/{id}:
+    get:
+      tags:
+      - deposits / forecast-interest-schedules
+      summary: Get deposit forecast interest schedule
+      operationId: getOneOfDepositsForecastInterestSchedules
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DepositForecastInterestSchedule'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/payments:
+    get:
+      tags:
+      - deposits / payments
+      summary: Get deposit payments
+      operationId: getAllOfDepositsPayments
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: page
+        in: query
+        description: Number of page to retrieve (0..N)
+        required: false
+        type: integer
+        format: int32
+      - name: size
+        in: query
+        description: Number of records per page
+        required: false
+        type: integer
+        format: int32
+      - name: sort
+        in: query
+        description: 'Sorting criteria in the format: attrName,asc|desc. Order is
+          optional, default ascending. Multiple sort criteria are supported.'
+        required: false
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/PageOfDepositPayment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    post:
+      tags:
+      - deposits / payments
+      summary: Add new deposit payment
+      operationId: addNewDepositPaymentOfDepositsPayments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: entity
+        description: entity
+        required: true
+        schema:
+          $ref: '#/definitions/DepositPayment'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '201':
+          description: Created. The new resource has been created
+          schema:
+            $ref: '#/definitions/DepositPayment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/payments/calculation:
+    post:
+      tags:
+      - deposits / payments
+      summary: Make payment calculation
+      operationId: makePaymentCalculationOfDepositsPayments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: params
+        description: params
+        required: true
+        schema:
+          $ref: '#/definitions/DepositPaymentInputParameters'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DepositPaymentCalculation'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/payments/{id}:
+    get:
+      tags:
+      - deposits / payments
+      summary: Get deposit payment
+      operationId: getOneOfDepositsPayments
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DepositPayment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - deposits / payments
+      summary: Remove deposit payment
+      operationId: removeOfDepositsPayments
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DepositPayment'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/payments/{id}/editable:
+    post:
+      tags:
+      - deposits / payments
+      summary: Provide editable version of deposit payment
+      operationId: provideEditableOfDepositsPayments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DepositPayment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - deposits / payments
+      summary: Update editable version of deposit payment
+      operationId: updateEditableOfDepositsPayments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: edited
+        description: edited
+        required: true
+        schema:
+          $ref: '#/definitions/DepositPayment'
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DepositPayment'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/payments/{id}/editable/accept:
+    post:
+      tags:
+      - deposits / payments
+      summary: Accept new or edited deposit payment
+      operationId: acceptEditedOfDepositsPayments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{contractId}/payments/{id}/editable/reject:
+    post:
+      tags:
+      - deposits / payments
+      summary: Reject new or edited deposit payment
+      operationId: rejectEditedOfDepositsPayments
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: contractId
+        in: path
+        description: contractId
+        required: true
+        type: integer
+        format: int64
+      - name: id
+        in: path
+        description: id
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}:
+    get:
+      tags:
+      - deposits
+      summary: Downloading deposit agreement
+      description: Downloading deposit agreement
+      operationId: getOneOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Deposit'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - deposits
+      summary: Canceling a deposit agreement
+      description: Canceling a deposit agreement
+      operationId: cancelWrongDepositOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Deposit'
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/current-assets:
+    get:
+      tags:
+      - deposits
+      summary: Downloading information about current deposit assets
+      description: Downloading information about current deposit assets
+      operationId: depositAssetsInfoOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DepositAssetsAggregatedInfo'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable:
+    post:
+      tags:
+      - deposits
+      summary: Preparing deposit agreement for edition
+      description: Preparing deposit agreement for edition
+      operationId: provideEditableOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Deposit'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    patch:
+      tags:
+      - deposits
+      summary: Deposit agreement edition
+      description: Deposit agreement edition
+      operationId: updateEditableOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: edited
+        description: Entry parameters
+        required: true
+        schema:
+          $ref: '#/definitions/Deposit'
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Deposit'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable/accept:
+    post:
+      tags:
+      - deposits
+      summary: Acceptance of changes
+      description: Acceptance of changes
+      operationId: acceptEditedOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable/capital-account:
+    put:
+      tags:
+      - deposits
+      summary: Setting up a related agreement for principal withdrawal
+      description: Setting up a related agreement for principal withdrawal
+      operationId: setCapitalContractAccountOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - in: body
+        name: settlementOrder
+        description: Input parameters
+        required: true
+        schema:
+          $ref: '#/definitions/SettlementOrder'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable/interest-account:
+    put:
+      tags:
+      - deposits
+      summary: Setting up a related agreement for interest withdrawal
+      description: Setting up a related agreement for interest withdrawal
+      operationId: setInterestContractAccountOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - in: body
+        name: settlementOrder
+        description: Entry parameters
+        required: true
+        schema:
+          $ref: '#/definitions/SettlementOrder'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+    delete:
+      tags:
+      - deposits
+      summary: Deleting a related agreement for interest withdrawal
+      description: Deleting a related agreement for interest withdrawal
+      operationId: disassembleOtherAccountInterestTransferOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable/interest-rate:
+    put:
+      tags:
+      - deposits
+      summary: Interest change
+      description: Interest change
+      operationId: changeInterestFormulaOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - in: body
+        name: formula
+        description: Input parameters
+        required: true
+        schema:
+          $ref: '#/definitions/InterestRateFormula'
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable/linked-account:
+    put:
+      tags:
+      - deposits
+      summary: Setting up a related agreement for principal withdrawal
+      description: Setting up a related agreement for principal withdrawal
+      operationId: setLinkedContractAccountOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - in: body
+        name: settlementOrder
+        description: Input parameters
+        required: true
+        schema:
+          $ref: '#/definitions/SettlementOrder'
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable/reject:
+    post:
+      tags:
+      - deposits
+      summary: Rejection of changes
+      description: Rejection of changes
+      operationId: rejectEditedOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/editable/resources-disposition-kind:
+    put:
+      tags:
+      - deposits
+      summary: Change of deposit funds disposal method after the end of the agreement
+      description: Change of deposit funds disposal method after the end of the agreement
+      operationId: changeDepositSettlementWayOfDeposits
+      consumes:
+      - application/json
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: If-Match
+        in: header
+        description: If-Match
+        required: true
+        type: string
+      - name: settlementWay
+        in: query
+        description: 'Funds disposal method '
+        required: true
+        type: string
+        enum:
+        - CAPITAL_AND_INTEREST_TO_CURRENT_ACCOUNT
+        - MAKE_DEPOSIT_SUBSCRIPTION
+        - OUTBOOKING
+        - RENEW_DEPOSIT_WIHT_CAPITAL_AND_TRANSFER_INTERESTS
+        - RENEW_DEPOSIT_WITH_CAPITAL_AND_INTERESTS
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: true
+        type: string
+      responses:
+        '204':
+          description: No Content. Successful operation (response has no payload)
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '409':
+          description: com.asseco.cb.foundation.api.server.swagger.SwaggerDocketGenerator.CONFLICT_DESC
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '412':
+          description: Precondition Failed. Object version incompatibility
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '422':
+          description: Unprocessable Entity. One or more constraints have been violated.
+            Validation error(s) occur
+          schema:
+            $ref: '#/definitions/ProblemResponseWithViolations'
+        '425':
+          description: Too Early. Request repeated while the original one is still
+            processed
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/interest-rate-effective:
+    get:
+      tags:
+      - deposits
+      summary: 'Downloading interest rates: nominal and current'
+      description: 'Downloading interest rates: nominal and current'
+      operationId: getInterestRateOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/DepositInterestRateVO'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/interest-rate/CT:
+    get:
+      tags:
+      - deposits
+      summary: Downloading information about the value of the effective interest rate
+      description: Downloading information about the value of the effective interest
+        rate
+      operationId: getEffectiveInterestRateValueOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EffectiveInterestRateValue'
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+  /deposits/{id}/minimal-amount-after-payout:
+    get:
+      tags:
+      - deposits
+      summary: Downloading information about the minimum deposit amount after withdrawal
+      description: Downloading information about the minimum deposit amount after
+        withdrawal
+      operationId: getMinimalAmountAfterPayoutPropertyOfDeposits
+      produces:
+      - '*/*'
+      parameters:
+      - name: id
+        in: path
+        description: Agreement identifier
+        required: true
+        type: integer
+        format: int64
+      - name: X-Correlation-ID
+        in: header
+        description: 'Correlation ID (maxLength: 300)'
+        required: false
+        type: string
+      - name: X-Request-ID
+        in: header
+        description: 'Request ID (maxLength: 300)'
+        required: false
+        type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: number
+        '400':
+          description: Bad Request. Invalid body or parameters of request
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '401':
+          description: Unauthorized. Request needs authentication
+        '404':
+          description: Not Found. A resource indicated by URI does not exist in the
+            API
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '406':
+          description: Not Acceptable. A data type unsupported by the resource was
+            indicated in the Accept header
+        '415':
+          description: Unsupported Media Type. A data type unsupported by the resource
+            was transferred in the Content-Type header
+        '500':
+          description: Internal Server Error. Other error (exception) reported by
+            the server
+          schema:
+            $ref: '#/definitions/ProblemResponse'
+        '503':
+          description: Service Unavailable. The connection with the service is currently
+            impossible
+      security:
+      - oauth2schema:
+        - read
+        - write
+securityDefinitions:
+  oauth2schema:
+    type: oauth2
+    tokenUrl: http://10.17.202.119:8580/application/oauth/token
+    flow: application
+    scopes:
+      read: '''read all'' scope'
+      write: '''write all'' scope. Note that server generates ''read write'' as a
+        default scope if none is passed'
+definitions:
+  CollateralRole:
+    type: object
+    properties:
+      isCollateral:
+        type: boolean
+      securedContractType:
+        type: string
+        enum:
+        - CREDIT
+        - CREDIT_CARD
+        - CURRENT_ACCOUNT
+        - LETTER_OF_CREDIT
+    title: CollateralRole
+  ConstraintViolation:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Violation code
+      message:
+        type: string
+        description: Message in the user’s language intended to be displayed to the
+          user
+      property:
+        type: string
+        description: Attribute (field) which the validation pertains to (optional
+          information, exists only for validations directly connected with fields)
+      reference:
+        type: string
+        description: Object reference
+    title: ConstraintViolation
+  ContractAddressData:
+    type: object
+    properties:
+      address:
+        type: string
+        description: 'Address
+
+          Validations: @Length(max = 48, min = 0)'
+        readOnly: true
+      apartmentNumber:
+        type: string
+        description: 'Apartment no
+
+          Validations: @Length(max = 4, min = 0)'
+      builtAddress:
+        type: string
+        readOnly: true
+      commune:
+        type: string
+        description: 'Municipality
+
+          Validations: @Length(max = 24, min = 0)'
+      country:
+        type: string
+        description: 'Country
+
+          Dictionary: CountryItem (DIC_COUNTRIES)'
+      houseNumber:
+        type: string
+        description: 'Building no
+
+          Validations: @Length(max = 10, min = 0)'
+      locationDataId:
+        type: integer
+        format: int64
+      post:
+        type: string
+        description: 'Post office
+
+          Validations: @Length(max = 24, min = 0)'
+      postCode:
+        type: string
+        description: 'Postal code
+
+          Validations: @Length(max = 10, min = 0)'
+      province:
+        type: string
+        description: 'Voivodship
+
+          Dictionary: ProvinceItem (DIC_PROVINCES)'
+      provincePart:
+        type: string
+        description: 'Poviat
+
+          Dictionary: ProvincePartItem (VDIC_PROVINCE_PARTS)'
+      street:
+        type: string
+        description: 'Street
+
+          Validations: @Length(max = 35, min = 0)'
+      streetPrefix:
+        type: string
+        description: Prefix
+        enum:
+        - AV
+        - EMPTY
+        - PL
+        - SQ
+        - ST
+      town:
+        type: string
+        description: 'Town
+
+          Validations: @TownLength'
+    title: ContractAddressData
+  Deposit:
+    type: object
+    required:
+    - amount
+    - currency
+    - period
+    - productId
+    - rootNo
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      accessChannel:
+        type: string
+        description: 'Dictionary: AccessChannelItem (DIC_CHANNEL_CONTR_ACCESS)'
+      addPaymentAmount:
+        type: number
+        description: Amount of additional payments
+      addPeriodical:
+        $ref: '#/definitions/DepositAddPeriodical'
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @NotNull'
+      amountInBaseCurrency:
+        type: number
+        readOnly: true
+      annualBalanceConfirmation:
+        type: boolean
+        description: Annual balance confirmation
+      applicationSignDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Application signing date
+      autoReclassificationAllowed:
+        type: boolean
+      balanceConfirmation:
+        type: string
+        enum:
+        - 'NO'
+        - 'YES'
+      blockadeCtDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      bookingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Transaction date
+        readOnly: true
+      businessUnit:
+        type: string
+        description: 'Bank Unit
+
+          Validations: @NotNull
+
+
+          Dictionary: BusinessUnitItem (BANK_UNITS)'
+      capitalSettlementOrder:
+        description: Method of capital withdrawal
+        $ref: '#/definitions/SettlementOrder'
+      channelContractId:
+        type: integer
+        format: int64
+        readOnly: true
+      collateralRole:
+        $ref: '#/definitions/CollateralRole'
+      commissionContractId:
+        type: integer
+        format: int64
+      consortiumAgreement:
+        type: string
+        enum:
+        - BANK_IS_THE_ORGANIZER_OF_THE_CONSORTIUM
+        - BANK_IS_THE_PARTY_TO_THE_CONSORTIUM
+        - REGULAR_NOT_IN_CONSORTIUM
+      consortiumAgreementInfo:
+        type: string
+        enum:
+        - BANK_IS_A_CONSORTIUM_ORGANIZER_HANDLING_OFF_THE_SYSTEM
+        - BANK_IS_A_CONSORTIUM_PARTICIPANT_HANDLING_OFF_THE_SYSTEM
+        - STANDARD_NOT_IN_CONSORTIUM
+      consortiumContractId:
+        type: integer
+        format: int64
+      consortiumRole:
+        type: string
+        enum:
+        - CUSTOMER
+        - ORGANIZER
+        - PARTICIPANT
+      contractId:
+        type: integer
+        format: int64
+        description: Internal account number
+        readOnly: true
+      contractNo:
+        type: string
+        description: 'BAN
+
+          Validations: @Length(max = 30, min = 0)'
+        readOnly: true
+      correspondenceAddress:
+        $ref: '#/definitions/ContractAddressData'
+      costCenter:
+        type: string
+        description: 'Cost center
+
+          Validations: @Length(max = 20, min = 0)'
+      countTaxWay:
+        type: string
+        description: Calculate interest tax
+        enum:
+        - GENERAL_PRINCIPLES
+        - 'NO'
+        - 'YES'
+      creationDateOfAnyKindOfArrears:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      creationDateOfArrears:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      creationDateOfArrearsFee:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      creditLineContractId:
+        type: integer
+        format: int64
+        readOnly: true
+      currency:
+        type: string
+        description: 'Currency
+
+          Validations: @NotNull'
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      deactivationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      denominator:
+        type: integer
+        format: int64
+      depositFormerAvailabilityDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      depositProlongetedCount:
+        type: integer
+        format: int64
+        readOnly: true
+      depositState:
+        $ref: '#/definitions/DepositState'
+      email:
+        type: string
+        description: 'E-mail
+
+          Validations: @Length(max = 200, min = 0) @Pattern(flags = [], regexp = ([a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9._%+-]+@[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9.-]+\.[a-zA-Z]{2,4}[
+          ]*[,|;]?[ ]*)+)'
+        pattern: ([a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9._%+-]+@[a-zA-ZżźćńółęąśŻŹĆĄŚĘŁÓŃ0-9.-]+\.[a-zA-Z]{2,4}[
+          ]*[,|;]?[ ]*)+
+      endDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: End date
+      entityType:
+        type: string
+        readOnly: true
+      excludedFromAutoProcessing:
+        type: boolean
+        description: Contract excluded from an automatic processing of foreign orders
+          and Sorbnet2
+      fromMigrationNo:
+        type: string
+        description: 'Migration no.
+
+          Validations: @Length(max = 50, min = 0)'
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      incomeDocumentId:
+        type: integer
+        format: int64
+        readOnly: true
+      incomeTransferInstruction:
+        $ref: '#/definitions/TransferInstruction'
+      initialAmount:
+        type: number
+        description: 'Amount of the initial deposit
+
+          Amount on initial date'
+      initialAmountIncomeDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of receipt of funds
+      initialDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Initial deposit date
+
+          First term start date'
+      insurancerId:
+        type: integer
+        format: int64
+        description: Insured party
+      interestCtTabAlgVersionDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      interestCtTabAlgVersionId:
+        type: integer
+        format: int64
+      interestCtTabBeforeChange:
+        type: integer
+        format: int64
+      interestExpected:
+        type: number
+        description: Amount of expected interests
+      interestRate:
+        $ref: '#/definitions/InterestRate'
+      interestSettlementOrder:
+        description: Method of interest withdrawal
+        $ref: '#/definitions/SettlementOrder'
+      interestTaxExpected:
+        type: number
+        description: Expected interest tax
+      interestValueOnStartDate:
+        type: number
+      internalInterestRateTable:
+        type: string
+        description: 'Table of calculating internal interest
+
+          Dictionary: InterestRateTableItem (VINTEREST_RATE_TAB)'
+      investmentFund:
+        $ref: '#/definitions/InvestmentFund'
+      isAcknowledgedBonus:
+        type: boolean
+        description: Bonus awarded
+      isAcknowledgedTopBonus:
+        type: boolean
+        description: Additional "Top Bonus" bonus
+      isOtherAccountCapinterTransfer:
+        type: boolean
+        description: For interest transfer account is different than for capital transfers
+      isPartPaymentAllowed:
+        type: boolean
+        readOnly: true
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      lastPaymentReminderDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      lastPaymentReminderNo:
+        type: integer
+        format: int64
+        description: 'Validations: @Max(value = 99) @Min(value = 0)'
+        readOnly: true
+        minimum: 0
+        maximum: 99
+        exclusiveMinimum: false
+        exclusiveMaximum: false
+      letterOfCredit:
+        type: string
+        description: 'Collateral
+
+          Validations: @Length(max = 35, min = 0)'
+      letterOfCreditRefNo:
+        type: string
+        description: 'Own references
+
+          Validations: @Length(max = 16, min = 0)'
+      letterOfCreditStatus:
+        type: string
+        description: Status
+        enum:
+        - ACTIVE
+        - CANCELLED
+        - FINISHED
+      linkedCurrentAccount:
+        $ref: '#/definitions/SettlementOrder'
+      liquidationReason:
+        type: string
+        description: 'Reason for closing the agreement
+
+          Dictionary: ContractLiquidationReasonItem (DIC_LIQ_CONTRACT_REASONS)'
+      managedExternally:
+        type: boolean
+      migrationId:
+        type: integer
+        format: int64
+      minArrearsAmount:
+        type: number
+      minArrearsAmountAllowed:
+        type: boolean
+      nameAddress:
+        type: string
+        description: 'Addressee name
+
+          Validations: @Length(max = 200, min = 0)'
+      negotiatedInterestRate:
+        type: boolean
+      nextAddingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Next adding
+      nextBonusDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of the next bonus
+      nextSurchargeDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of the next surcharge
+      noOfContractPages:
+        type: integer
+        format: int64
+        description: Number of contract pages
+      notes:
+        type: string
+        description: 'Comments on contract
+
+          Validations: @Length(max = 2000, min = 0)'
+      numerator:
+        type: integer
+        format: int64
+      oldContractNo:
+        type: string
+        description: Old account number
+        readOnly: true
+      oldNo:
+        type: string
+        description: 'Contract no.
+
+          Validations: @Length(max = 50, min = 0)'
+      orderCustomerId:
+        type: integer
+        format: int64
+      originalCreationDateOfArrears:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      overdraftDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      parentContractId:
+        type: integer
+        format: int64
+      partOfSyndicatedContract:
+        type: boolean
+        readOnly: true
+      partialWithdrawals:
+        $ref: '#/definitions/PartialWithdrawals'
+      period:
+        description: 'Periods handling
+
+          Validations: @NotNull'
+        $ref: '#/definitions/Period'
+      personalTitle:
+        type: string
+        description: 'Return
+
+          Dictionary: PersonalTitleItem (DIC_RETURNS)'
+      plannedEndDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Planned end date
+      preceditorId:
+        type: integer
+        format: int64
+      primaryOwnerId:
+        type: integer
+        format: int64
+      probabilityOfBadDebt:
+        type: boolean
+      product:
+        type: string
+        description: 'Dictionary: ProductItem (PRODUCTS)'
+        readOnly: true
+      productId:
+        type: integer
+        format: int64
+        description: 'Product
+
+          Validations: @NotNull'
+      recentAddingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: The most recent adding
+      recentBonusDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Previous bonus date
+      recentCapitalizationDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: The most recent capitalization
+      recentSurchargeDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of the last subsidy
+      referenceNo:
+        type: string
+        description: 'Reference number
+
+          Validations: @Length(max = 20, min = 0)'
+        readOnly: true
+      registrationDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: '(System) transaction date
+
+          Validations: @NotNull'
+        readOnly: true
+      renewUntilDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Contract renewal limit date
+      resourcesDispositionKind:
+        type: string
+        description: Deposit settlement mode
+        enum:
+        - CAPITAL_AND_INTEREST_TO_CURRENT_ACCOUNT
+        - MAKE_DEPOSIT_SUBSCRIPTION
+        - OUTBOOKING
+        - RENEW_DEPOSIT_WIHT_CAPITAL_AND_TRANSFER_INTERESTS
+        - RENEW_DEPOSIT_WITH_CAPITAL_AND_INTERESTS
+      rightsLevel:
+        type: integer
+        format: int64
+        description: Security level
+      riskGroupOnStartDate:
+        type: string
+        readOnly: true
+        enum:
+        - BELOW_STANDARD
+        - DOUBTFUL
+        - LOST
+        - NORMAL
+        - UNDER_OBSERVATION
+      rootNo:
+        type: integer
+        format: int64
+        description: 'Modulo
+
+          Root number Validations: @NotNull'
+      rootNoId:
+        type: integer
+        format: int64
+        description: Modulo
+        readOnly: true
+      signingEmployeeLoginId:
+        type: integer
+        format: int64
+        description: ID of employee in unit
+      startDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Currency date
+
+          Validations: @NotNull'
+      subType:
+        type: string
+        enum:
+        - CASH_LOAN
+        - CONSUMMER_CREDIT
+        - CREDIT_2PRC
+        - CREDIT_CARD
+        - CREDIT_INDEXED
+        - CREDIT_RESTRUCTURING
+        - DEPOSIT_INTEREST_PAYABLE_UP_FRONT
+        - FACTORING
+        - FDP_CREDIT_CARD
+        - GUARANTEE
+        - IKE_DEPOSIT
+        - INVESTMENT_LOAN
+        - INVESTMENT_POLICY
+        - LEASING
+        - ORDERED_CREDIT
+        - PROGRESSIVE_DEPOSIT
+        - RENTIER_DEPOSIT
+        - STANDARD_DEPOSIT
+        - SURCHARGE_CREDIT
+        - SURCHARGE_DEPOSIT
+        - TURNOVER_CREDIT
+      syndicatedCustomerContract:
+        type: boolean
+        readOnly: true
+      terminationInProgress:
+        type: boolean
+        readOnly: true
+      topBonusAvailabilityDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of Top Bonus availability
+      transferContractId:
+        type: integer
+        format: int64
+        readOnly: true
+      type:
+        type: string
+        description: 'Interest rate type
+
+          Validations: @NotNull'
+        readOnly: true
+        enum:
+        - CREDIT
+        - CREDIT_LINE
+        - CURRENT_ACCOUNT
+        - DEPOSIT
+        - FACTORING
+        - SPECIAL_ACCOUNT
+      unifiedWithContractId:
+        type: integer
+        format: int64
+      useCtFactorBaseFromProduct:
+        type: boolean
+        description: Credit factor based on a product
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+      wasSurchargeDelayed:
+        type: boolean
+        description: Delayed surcharges
+    title: Deposit
+  DepositAddPeriodical:
+    type: object
+    properties:
+      active:
+        type: boolean
+      addingByTransfer:
+        type: boolean
+        readOnly: true
+      kind:
+        type: string
+        enum:
+        - CAPITALISATION
+        - NEW_DEPOSIT
+        - OUTBOOKING
+        - PAYMENT
+        - TRANSFER
+        - WRITE_IN
+    title: DepositAddPeriodical
+  DepositAssetsAggregatedInfo:
+    type: object
+    properties:
+      depositBalanceInfo:
+        $ref: '#/definitions/DepositBalanceInfo'
+    title: DepositAssetsAggregatedInfo
+  DepositBalanceInfo:
+    type: object
+    properties:
+      amount:
+        type: number
+      assignedBonusAmount:
+        type: number
+      blockedAssets:
+        type: number
+      currency:
+        type: string
+      currentBalance:
+        type: number
+      currentInterest:
+        type: number
+      initialAmount:
+        type: number
+      intValueCt:
+        type: number
+      interestAvailable:
+        type: number
+      interestExpected:
+        type: number
+      lastPaymentAmount:
+        type: number
+      nextPaymentAmount:
+        type: number
+      overpaymentAmount:
+        type: number
+      totalInterestAmount:
+        type: number
+      totalTaxAmount:
+        type: number
+      valueOfShares:
+        type: number
+    title: DepositBalanceInfo
+  DepositBrief:
+    type: object
+    properties:
+      contractNo:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      rootNoId:
+        type: integer
+        format: int64
+        readOnly: true
+    title: DepositBrief
+  DepositForecastInterestSchedule:
+    type: object
+    required:
+    - amount
+    - ordinalNumber
+    - scheduleDate
+    - type
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @NotNull'
+      capitalizeAmount:
+        type: number
+        description: Capitalization
+      contractId:
+        type: integer
+        format: int64
+        description: 'Validations: @NotNull'
+        readOnly: true
+      ctInterestRate:
+        $ref: '#/definitions/InterestRate'
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      denominator:
+        type: integer
+        format: int64
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      interestAmount:
+        type: number
+        description: Interest
+      internalInterestRateTable:
+        type: string
+        description: 'Dictionary: InterestRateTableItem (VINTEREST_RATE_TAB)'
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      negotiatedInterestValue:
+        type: number
+      numerator:
+        type: integer
+        format: int64
+      ordinalNumber:
+        type: integer
+        format: int64
+        description: 'Number
+
+          Validations: @NotNull'
+      period:
+        $ref: '#/definitions/Period'
+      scheduleDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: "Date  \nValidations: @NotNull"
+      type:
+        type: string
+        description: 'Validations: @NotNull'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: DepositForecastInterestSchedule
+  DepositGroupPayment:
+    type: object
+    properties:
+      amountPaidAtCashDesk:
+        type: number
+      amountPaidAtCashDeskInContractCurrency:
+        type: number
+      amountPaidAtCashDeskWithoutRest:
+        type: number
+      cashExchangeRate:
+        type: number
+      cashExchangeRateSuggested:
+        type: number
+      cashExchangeRateType:
+        type: string
+        enum:
+        - AVERAGE
+        - CASH_BUY
+        - CURRENCY_BUY
+        - CURRENCY_SALE
+        - MONEY_SALE
+      cashExchangeTableId:
+        type: integer
+        format: int64
+      cashRestAmount:
+        type: number
+      cashRestAmountInBaseCurrency:
+        type: number
+      cashRestExchangeRate:
+        type: number
+      cashRestExchangeRateType:
+        type: string
+        enum:
+        - AVERAGE
+        - CASH_BUY
+        - CURRENCY_BUY
+        - CURRENCY_SALE
+        - MONEY_SALE
+      cashRestExchangeTableId:
+        type: integer
+        format: int64
+      cashTransactionCommission:
+        type: number
+      cashTransactionDocumentId:
+        type: integer
+        format: int64
+      createdContractAmount:
+        type: number
+      createdContractAmountInContractCurrency:
+        type: number
+      createdContractDocumentId:
+        type: integer
+        format: int64
+      createdContractId:
+        type: integer
+        format: int64
+      createdContractTransferCommission:
+        type: number
+      currency:
+        type: string
+      documentId:
+        type: integer
+        format: int64
+      exchangePromptWay:
+        type: boolean
+      exchangeRate:
+        type: number
+      exchangeRateCtCash:
+        type: number
+      exchangeRateCtNoCash:
+        type: number
+      exchangeRateDtCash:
+        type: number
+      exchangeRateDtNoCash:
+        type: number
+      exchangeRateSuggested:
+        type: number
+      exchangeRateType:
+        type: string
+        enum:
+        - AVERAGE
+        - CASH_BUY
+        - CURRENCY_BUY
+        - CURRENCY_SALE
+        - MONEY_SALE
+      exchangeTableId:
+        type: integer
+        format: int64
+      existingContractAmount:
+        type: number
+      existingContractAmountInContractCurrency:
+        type: number
+      existingContractDocumentId:
+        type: integer
+        format: int64
+      existingContractId:
+        type: integer
+        format: int64
+      existingContractTransferCommission:
+        type: number
+      externalAccountNo:
+        type: string
+      externalTransfer:
+        type: boolean
+        readOnly: true
+      externalTransferAmount:
+        type: number
+      externalTransferAmountInContractCurrency:
+        type: number
+      externalTransferBeneficiaryName:
+        type: string
+      externalTransferCommission:
+        type: number
+      externalTransferDocumentId:
+        type: integer
+        format: int64
+      internalTransfer:
+        type: boolean
+        readOnly: true
+      isCollectiveTransfer:
+        type: boolean
+      isCreateContract:
+        type: boolean
+      paymentAmount:
+        $ref: '#/definitions/Money'
+      paymentAtCashDesk:
+        type: boolean
+        readOnly: true
+    title: DepositGroupPayment
+  DepositInterestRateVO:
+    type: object
+    properties:
+      currentRate:
+        type: number
+      nominalRate:
+        type: number
+    title: DepositInterestRateVO
+  DepositPayment:
+    type: object
+    required:
+    - payment
+    - paymentReason
+    - paymentType
+    properties:
+      _state:
+        readOnly: true
+        $ref: '#/definitions/EntityState'
+      bookingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Booking date
+
+          Validations: @NotNull'
+      contractBalance:
+        type: number
+      contractId:
+        type: integer
+        format: int64
+        description: 'Contract
+
+          Validations: @NotNull'
+        readOnly: true
+      contractInterestBookOut:
+        type: number
+      customerId:
+        type: integer
+        format: int64
+        readOnly: true
+      depositAddingDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Adding date
+      depositFormerAvailabilityDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Previous availability date
+      depositGroupPayment:
+        $ref: '#/definitions/DepositGroupPayment'
+      depositIncomeDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of income
+      documentId:
+        type: integer
+        format: int64
+        description: Document
+      endDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Date of availability
+      entityType:
+        type: string
+        readOnly: true
+      id:
+        type: integer
+        format: int64
+        readOnly: true
+      intPayOutType:
+        type: string
+        description: Type of interest withdrawal
+        enum:
+        - ADVANCE
+        - ALL
+        - PREVIOUS_PERIOD
+      interestAmount:
+        type: number
+        description: Entered interest correction
+      isCountTax:
+        type: boolean
+        description: Count tax
+      lastChangesDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        readOnly: true
+      liquidationReason:
+        type: string
+        description: Reason for liquidation
+        enum:
+        - RETURN
+        - TRANSFER_PAYMENT
+        - WITHDRAWAL
+      partialReturn:
+        $ref: '#/definitions/PartialReturn'
+      payIntAmount:
+        description: Interest for payment
+        $ref: '#/definitions/Money'
+      payment:
+        description: 'Withdrawn amount
+
+          Validations: @NotNull'
+        $ref: '#/definitions/Money'
+      paymentProperties:
+        $ref: '#/definitions/DepositPaymentProperties'
+      paymentReason:
+        type: string
+        description: 'Liquidation
+
+          Validations: @NotNull'
+        enum:
+        - IKE_PART_RETURN
+        - INTEREST_PAID_AHEAD
+        - LIQUIDATION
+        - STANDARD
+      paymentRevisedId:
+        type: integer
+        format: int64
+      paymentSign:
+        type: integer
+        format: int64
+      paymentSourceId:
+        type: integer
+        format: int64
+      paymentType:
+        type: string
+        description: 'Kind of withdrawal
+
+          Validations: @NotNull, Required when value of `payment` is greather than
+          0'
+        enum:
+        - CASH
+        - COLLECTIVE_TRANSFER
+        - EXTERNAL_TRANSFER
+        - INTERNAL_TRANSFER
+        - LOAN_REPAYMENT
+        - TRANSFER_TO_OWN_ACCOUNT
+      registrationDate:
+        type: string
+        format: date-time
+        example: '2000-12-31T23:59:59'
+        description: 'Registration date
+
+          Validations: @NotNull'
+      startDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: Transaction date
+      valueDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        description: 'Validations: @NotNull'
+      version:
+        type: integer
+        format: int32
+        readOnly: true
+    title: DepositPayment
+  DepositPaymentCalculation:
+    type: object
+    properties:
+      commissionForDepositLiquidation:
+        type: number
+      commissionForDepositLiquidationInBaseCurrency:
+        type: number
+      depositAmount:
+        type: number
+      giftLiquidationCost:
+        type: number
+      giftLiquidationCostInBaseCurrency:
+        type: number
+      interestAddedBookedOut:
+        type: number
+      interestAddedCapitalized:
+        type: number
+      interestAdjustmentAmount:
+        type: number
+      interestAdvance:
+        type: number
+      interestFromBalance:
+        type: number
+      interestFromInterest:
+        type: number
+      interestPaidBefore:
+        type: number
+      interestPreviousPeriodBookedOut:
+        type: number
+      interestPreviousPeriodCapitalized:
+        type: number
+      interestToBookOut:
+        type: number
+      interestsAtTheEnd:
+        type: number
+      overpayment:
+        type: number
+      previousTaxAmount:
+        type: number
+      taxAmount:
+        type: number
+      taxAmountFromAdvanceInterestInBaseCurrency:
+        type: number
+      taxAmountInBaseCurrency:
+        type: number
+      taxAtTheEnd:
+        type: number
+      taxBaseAmountInBaseCurrency:
+        type: number
+      taxExchangeRate:
+        type: number
+      taxFromInterestFromInterest:
+        type: number
+      taxFromInterestFromInterestInBaseCurrency:
+        type: number
+      taxRate:
+        type: number
+    title: DepositPaymentCalculation
+  DepositPaymentInputParameters:
+    type: object
+    properties:
+      businessUnit:
+        type: string
+        description: 'Dictionary: BusinessUnitItem (BANK_UNITS)'
+      commissionForDepositLiquidation:
+        type: number
+      contractCurrency:
+        type: string
+      countTax:
+        type: boolean
+        readOnly: true
+      fromCash:
+        type: boolean
+        readOnly: true
+      interestAmount:
+        type: number
+      liquidationReason:
+        type: string
+        enum:
+        - RETURN
+        - TRANSFER_PAYMENT
+        - WITHDRAWAL
+      paymentReason:
+        type: string
+        enum:
+        - IKE_PART_RETURN
+        - INTEREST_PAID_AHEAD
+        - LIQUIDATION
+        - STANDARD
+    title: DepositPaymentInputParameters
+  DepositPaymentProperties:
+    type: object
+    properties:
+      amount:
+        $ref: '#/definitions/Money'
+      amountOfTaxCollected:
+        type: number
+        readOnly: true
+      anyCustomerUseAlternativeTaxRate:
+        type: boolean
+      commissionForDepositLiquidation:
+        type: number
+      commissionForDepositLiquidationInBaseCurrency:
+        type: number
+      depositAmount:
+        type: number
+      feeExchangeRate:
+        type: number
+      giftLiquidationCost:
+        type: number
+      giftLiquidationCostInBaseCurrency:
+        type: number
+      interestAddedBookedOut:
+        type: number
+      interestAddedCapitalized:
+        type: number
+      interestAdjustmentAmount:
+        type: number
+      interestAdvance:
+        type: number
+      interestAdvanceLimit:
+        type: number
+      interestAmount:
+        type: number
+      interestFromBalance:
+        type: number
+      interestFromBalanceCalc:
+        type: number
+      interestFromInterest:
+        type: number
+      interestPaidBefore:
+        type: number
+      interestPreviousPeriodBookedOut:
+        type: number
+      interestPreviousPeriodCapitalized:
+        type: number
+      interestPreviousPeriodCapitalizedLimit:
+        type: number
+      interestToBookOut:
+        type: number
+      interestsAtTheEnd:
+        type: number
+      isIntAdvanceFullPayout:
+        type: boolean
+      overpayment:
+        type: number
+      paymentAmount:
+        readOnly: true
+        $ref: '#/definitions/Money'
+      previousTaxAmount:
+        type: number
+      taxAmount:
+        type: number
+      taxAmountCalc:
+        type: number
+      taxAmountFromAdvanceInterest:
+        type: number
+      taxAmountFromAdvanceInterestInBaseCurrency:
+        type: number
+      taxAmountInBaseCurrency:
+        type: number
+      taxAtTheEnd:
+        type: number
+      taxBaseAmountInBaseCurrency:
+        type: number
+      taxExchangeRate:
+        type: number
+      taxFromInterestFromInterest:
+        type: number
+      taxFromInterestFromInterestInBaseCurrency:
+        type: number
+      taxRate:
+        type: number
+      undeterminedAmount:
+        type: number
+    title: DepositPaymentProperties
+  DepositState:
+    type: object
+    properties:
+      recentStateChangeDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+        readOnly: true
+      state:
+        type: string
+        description: 'Dictionary: ContractStateItem (DIC_CONTRACT_STATES)'
+    title: DepositState
+  EffectiveInterestRateValue:
+    type: object
+    properties:
+      algorithmId:
+        type: integer
+        format: int64
+      currency:
+        type: string
+      factor:
+        type: number
+      nominalValue:
+        type: number
+      offset:
+        type: number
+      resultValue:
+        type: number
+      source:
+        type: string
+        enum:
+        - ALGORITHM
+        - TABLE
+      tableId:
+        type: integer
+        format: int64
+      type:
+        type: string
+        enum:
+        - FIXED
+        - FLOATING
+        - VARIABLE
+    title: EffectiveInterestRateValue
+  EntityState:
+    type: object
+    properties:
+      active:
+        type: boolean
+        readOnly: true
+      canceled:
+        type: boolean
+        readOnly: true
+      copy:
+        type: boolean
+        readOnly: true
+      finished:
+        type: boolean
+        readOnly: true
+      forAccept:
+        type: boolean
+        readOnly: true
+      new:
+        type: boolean
+        readOnly: true
+      source:
+        type: boolean
+        readOnly: true
+    title: EntityState
+  InterestRate:
+    type: object
+    properties:
+      algorithmId:
+        type: integer
+        format: int64
+      calculationWay:
+        type: string
+        description: Calculate interest according to
+        enum:
+        - ALGORITHM
+        - TABLE
+      formula:
+        $ref: '#/definitions/InterestRateFormula'
+      type:
+        type: string
+        description: Interest rate type
+        enum:
+        - FIXED
+        - FLOATING
+        - VARIABLE
+    title: InterestRate
+  InterestRateFormula:
+    type: object
+    properties:
+      factor:
+        type: number
+        description: 'Validations: @PositiveOrZero'
+      offset:
+        type: number
+      tableId:
+        type: integer
+        format: int64
+    title: InterestRateFormula
+  InvestmentFund:
+    type: object
+    properties:
+      numberOfUnits:
+        type: number
+      payment:
+        type: integer
+        format: int64
+      valueOfShares:
+        type: number
+    title: InvestmentFund
+  Money:
+    type: object
+    required:
+    - amount
+    - currency
+    properties:
+      amount:
+        type: number
+        description: 'Amount
+
+          Validations: @NotNull'
+      currency:
+        type: string
+        description: 'Validations: @NotNull'
+    title: Money
+  PageOfDepositBrief:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/DepositBrief'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfDepositBrief
+  PageOfDepositForecastInterestSchedule:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/DepositForecastInterestSchedule'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfDepositForecastInterestSchedule
+  PageOfDepositPayment:
+    type: object
+    properties:
+      content:
+        type: array
+        readOnly: true
+        items:
+          $ref: '#/definitions/DepositPayment'
+      empty:
+        type: boolean
+        readOnly: true
+      first:
+        type: boolean
+        readOnly: true
+      last:
+        type: boolean
+        readOnly: true
+      number:
+        type: integer
+        format: int32
+        readOnly: true
+      numberOfElements:
+        type: integer
+        format: int32
+        readOnly: true
+      pageable:
+        readOnly: true
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+        readOnly: true
+      totalPages:
+        type: integer
+        format: int32
+        readOnly: true
+    title: PageOfDepositPayment
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+        readOnly: true
+      pageNumber:
+        type: integer
+        format: int32
+        readOnly: true
+      pageSize:
+        type: integer
+        format: int32
+        readOnly: true
+      paged:
+        type: boolean
+        readOnly: true
+      sort:
+        readOnly: true
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+        readOnly: true
+    title: Pageable
+  PartialReturn:
+    type: object
+    properties:
+      beneficiaryAccountNo:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0) @NRB'
+      beneficiaryContractId:
+        type: integer
+        format: int64
+      beneficiaryName:
+        type: string
+        description: 'Validations: @MultiLine(count = 4, length = 35, separator =
+          |) @MultiLineMin(min = 1)'
+    title: PartialReturn
+  PartialWithdrawals:
+    type: object
+    properties:
+      beneficiaryContractId:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0)'
+      beneficiaryContractNo:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0) @NRB'
+      beneficiaryName:
+        type: string
+        description: 'Validations: @Length(max = 148, min = 0)'
+      contractState:
+        type: string
+        enum:
+        - PAYMENT_PERIOD
+        - PAYOUT_PERIOD_BY_AUTHORIZED_PERSON
+        - PAYOUT_PERIOD_BY_SAV
+      instalmentAmount:
+        type: number
+      interestScope:
+        type: string
+        enum:
+        - ADVANCE
+        - ALL
+        - PREVIOUS_PERIOD
+      nextPaymentDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      paymentWay:
+        type: string
+        enum:
+        - ONE_TIME_PAYMENT
+        - PAYMENT_IN_INSTALLMENTS
+      recentInstalmentAmountChangeDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      recentPaymentDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      startPaymentDate:
+        type: string
+        format: date
+        example: '2000-12-31'
+      transferType:
+        type: string
+        enum:
+        - CASH
+        - COLLECTIVE_TRANSFER
+        - EXTERNAL_TRANSFER
+        - INTERNAL_TRANSFER
+        - LOAN_REPAYMENT
+        - TRANSFER_TO_OWN_ACCOUNT
+    title: PartialWithdrawals
+  Period:
+    type: object
+    properties:
+      quantity:
+        type: integer
+        format: int64
+        description: 'Validations: @Positive'
+      unit:
+        type: string
+        enum:
+        - DAY
+        - HALF_YEAR
+        - MONTH
+        - QUARTER
+        - YEAR
+    title: Period
+  ProblemResponse:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+    title: ProblemResponse
+  ProblemResponseWithViolations:
+    type: object
+    properties:
+      description:
+        type: string
+        description: Wider explanation of the problem
+      detail:
+        type: string
+        description: Details of the error in the form intended for inclusion in the
+          log
+      instance:
+        type: string
+        description: Content of X-Request-ID header
+      status:
+        type: integer
+        format: int32
+        description: HTTP status
+      title:
+        type: string
+        description: Short description of the problem in the user’s language
+      type:
+        type: string
+        description: Code of the problem
+      violations:
+        type: array
+        description: Validation errors
+        items:
+          $ref: '#/definitions/ConstraintViolation'
+    title: ProblemResponseWithViolations
+  SettlementOrder:
+    type: object
+    properties:
+      accountBank:
+        type: integer
+        format: int64
+      accountId:
+        type: integer
+        format: int64
+      accountNo:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0)'
+      accountType:
+        type: string
+        enum:
+        - EXTERNAL
+        - INTERNAL
+        - NEW_DEPOSIT
+        - OWN_ACCOUNT
+      customerName:
+        type: string
+        description: 'Validations: @Length(max = 148, min = 0)'
+    title: SettlementOrder
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+        readOnly: true
+      sorted:
+        type: boolean
+        readOnly: true
+      unsorted:
+        type: boolean
+        readOnly: true
+    title: Sort
+  TransferInstruction:
+    type: object
+    required:
+    - transferPaymentType
+    properties:
+      accountNo:
+        type: string
+        description: 'Validations: @Length(max = 30, min = 0)'
+      contractId:
+        type: integer
+        format: int64
+      customerName:
+        type: string
+        description: 'Validations: @Length(max = 155, min = 0)'
+      externalAccount:
+        type: boolean
+        readOnly: true
+      transferPaymentType:
+        type: string
+        description: 'Validations: @NotNull'
+        enum:
+        - CASH_DESK_PAYMENT_IN
+        - CASH_DESK_PAYMENT_OUT
+        - EXTERNAL_TRANSFER
+        - INTERNAL_TRANSFER
+        - TRANSFER_FROM_OWN_ACCOUNT
+        - TRANSFER_TO_OWN_ACCOUNT
+      virtualAccount:
+        type: boolean
+        readOnly: true
+    title: TransferInstruction
